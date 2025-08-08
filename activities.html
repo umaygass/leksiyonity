@@ -132,111 +132,144 @@
         .colorful-section-dark {
             background-color: var(--accent-bg-dark-color);
         }
+        
+        /* Mobile-specific adjustments */
+        @media (max-width: 640px) {
+            .font-pixel {
+                font-size: 0.7rem; /* Smaller pixel font for mobile */
+                line-height: 1.2;
+            }
+            .header-title {
+                font-size: 1.5rem; /* Smaller header title */
+            }
+            .activity-title {
+                font-size: 0.9rem; /* Smaller activity titles */
+            }
+            .activity-description {
+                font-size: 0.8rem; /* Smaller descriptions */
+            }
+            .activity-date {
+                font-size: 0.7rem; /* Smaller date text */
+            }
+            .btn-text {
+                font-size: 0.7rem; /* Smaller button text */
+            }
+            .nav-icon {
+                font-size: 1.5rem; /* Slightly smaller nav icons */
+            }
+            .nav-text {
+                font-size: 0.6rem; /* Smaller nav text */
+            }
+            .modal-content {
+                width: 90%; /* Wider modal on mobile */
+                max-width: none;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen font-inter flex flex-col" data-theme="day">
     <!-- Header section, consistent with the app's branding -->
     <header class="shadow-pixel border-b-2 p-4" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-        <h1 class="text-2xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">LEKSIYONITY</h1>
+        <h1 class="header-title text-xl md:text-2xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">LEKSIYONITY</h1>
     </header>
 
-    <main class="flex-grow p-4">
+    <main class="flex-grow p-2 md:p-4">
         <!-- Activities Section -->
-        <div class="p-4 rounded-lg shadow-pixel border-2 mb-4 colorful-section-light" style="border-color: var(--card-border-color);">
-            <h2 class="text-2xl font-pixel mb-4 text-center" style="color: var(--theme-text-color);">My Activities</h2>
+        <div class="p-3 md:p-4 rounded-lg shadow-pixel border-2 mb-4 colorful-section-light" style="border-color: var(--card-border-color);">
+            <h2 class="text-xl md:text-2xl font-pixel mb-4 text-center" style="color: var(--theme-text-color);">My Activities</h2>
             
-            <div class="flex justify-between items-center mb-6">
-                <button onclick="showComingSoonModal()" class="bg-pixel-blue text-white py-2 px-4 rounded-lg font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600">
-                    <span class="text-xl">⚙️</span> <span class="font-pixel">Filter</span>
+            <div class="flex justify-between items-center mb-4 md:mb-6">
+                <button onclick="showComingSoonModal()" class="bg-pixel-blue text-white py-1 px-2 md:py-2 md:px-4 rounded-lg font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600">
+                    <span class="text-lg md:text-xl">⚙️</span> <span class="font-pixel btn-text">Filter</span>
                 </button>
-                <button onclick="showComingSoonModal()" class="bg-pixel-green text-white py-2 px-4 rounded-lg font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-green-600">
-                    <span class="text-xl">➕</span> <span class="font-pixel">New Activity</span>
+                <button onclick="showComingSoonModal()" class="bg-pixel-green text-white py-1 px-2 md:py-2 md:px-4 rounded-lg font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-green-600">
+                    <span class="text-lg md:text-xl">➕</span> <span class="font-pixel btn-text">New Activity</span>
                 </button>
             </div>
 
             <!-- Activity Tabs -->
-            <div class="mb-6 border-b-2 colorful-section-dark" style="border-color: var(--card-border-color);">
-                <div class="flex justify-around space-x-2">
-                    <button class="py-2 px-4 border-b-2 border-pixel-blue font-pixel font-medium text-sm text-pixel-blue btn-pixel">
+            <div class="mb-4 md:mb-6 border-b-2 colorful-section-dark" style="border-color: var(--card-border-color);">
+                <div class="flex justify-around space-x-1 md:space-x-2 overflow-x-auto">
+                    <button class="py-1 px-2 md:py-2 md:px-4 border-b-2 border-pixel-blue font-pixel font-medium text-xs md:text-sm text-pixel-blue btn-pixel whitespace-nowrap">
                         All Activities
                     </button>
-                    <button class="py-2 px-4 border-b-2 border-transparent font-pixel font-medium text-sm hover:text-pixel-blue hover:border-pixel-blue btn-pixel" style="color: var(--secondary-text-color);">
+                    <button class="py-1 px-2 md:py-2 md:px-4 border-b-2 border-transparent font-pixel font-medium text-xs md:text-sm hover:text-pixel-blue hover:border-pixel-blue btn-pixel whitespace-nowrap" style="color: var(--secondary-text-color);">
                         Upcoming
                     </button>
-                    <button class="py-2 px-4 border-b-2 border-transparent font-pixel font-medium text-sm hover:text-pixel-blue hover:border-pixel-blue btn-pixel" style="color: var(--secondary-text-color);">
+                    <button class="py-1 px-2 md:py-2 md:px-4 border-b-2 border-transparent font-pixel font-medium text-xs md:text-sm hover:text-pixel-blue hover:border-pixel-blue btn-pixel whitespace-nowrap" style="color: var(--secondary-text-color);">
                         Completed
                     </button>
-                    <button class="py-2 px-4 border-b-2 border-transparent font-pixel font-medium text-sm hover:text-pixel-blue hover:border-pixel-blue btn-pixel" style="color: var(--secondary-text-color);">
+                    <button class="py-1 px-2 md:py-2 md:px-4 border-b-2 border-transparent font-pixel font-medium text-xs md:text-sm hover:text-pixel-blue hover:border-pixel-blue btn-pixel whitespace-nowrap" style="color: var(--secondary-text-color);">
                         Overdue
                     </button>
                 </div>
             </div>
 
             <!-- Activity List -->
-            <div class="space-y-4">
+            <div class="space-y-3 md:space-y-4">
                 <!-- Activity 1 -->
-                <div class="activity-item p-4 rounded-lg border-2 shadow-pixel-sm flex items-start colorful-section-dark">
-                    <div class="activity-icon-bg w-12 h-12 rounded-lg p-2 mr-4 flex-shrink-0 flex items-center justify-center border-2">
-                        <span class="activity-icon text-2xl">📚</span>
+                <div class="activity-item p-3 md:p-4 rounded-lg border-2 shadow-pixel-sm flex items-start colorful-section-dark">
+                    <div class="activity-icon-bg w-10 h-10 md:w-12 md:h-12 rounded-lg p-2 mr-3 md:mr-4 flex-shrink-0 flex items-center justify-center border-2">
+                        <span class="activity-icon text-xl md:text-2xl">📚</span>
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="flex justify-between items-center">
-                            <h3 class="font-pixel text-lg" style="color: var(--theme-text-color);">Read Chapter 5 - Biology</h3>
+                            <h3 class="font-pixel activity-title" style="color: var(--theme-text-color);">Read Chapter 5 - Biology</h3>
                             <span class="activity-due-tag text-xs px-2 py-1 rounded-full font-semibold">Due Tomorrow</span>
                         </div>
-                        <p class="mt-1 text-sm" style="color: var(--secondary-text-color);">Biology 101 - Cell Structure and Function</p>
-                        <div class="mt-2 flex items-center text-sm" style="color: var(--secondary-text-color);">
+                        <p class="mt-1 activity-description" style="color: var(--secondary-text-color);">Biology 101 - Cell Structure and Function</p>
+                        <div class="mt-2 flex items-center activity-date" style="color: var(--secondary-text-color);">
                             <span class="text-pixel-green mr-2 text-lg">🗓️</span> Due: Oct 15, 2023
                         </div>
                     </div>
                 </div>
 
                 <!-- Activity 2 -->
-                <div class="activity-item p-4 rounded-lg border-2 shadow-pixel-sm flex items-start colorful-section-light">
-                    <div class="activity-icon-bg w-12 h-12 rounded-lg p-2 mr-4 flex-shrink-0 flex items-center justify-center border-2">
-                        <span class="activity-icon text-2xl">✍️</span>
+                <div class="activity-item p-3 md:p-4 rounded-lg border-2 shadow-pixel-sm flex items-start colorful-section-light">
+                    <div class="activity-icon-bg w-10 h-10 md:w-12 md:h-12 rounded-lg p-2 mr-3 md:mr-4 flex-shrink-0 flex items-center justify-center border-2">
+                        <span class="activity-icon text-xl md:text-2xl">✍️</span>
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="flex justify-between items-center">
-                            <h3 class="font-pixel text-lg" style="color: var(--theme-text-color);">Essay Assignment</h3>
+                            <h3 class="font-pixel activity-title" style="color: var(--theme-text-color);">Essay Assignment</h3>
                             <span class="activity-due-tag text-xs px-2 py-1 rounded-full font-semibold">Due in 3 days</span>
                         </div>
-                        <p class="mt-1 text-sm" style="color: var(--secondary-text-color);">History 101 - Industrial Revolution Impact</p>
-                        <div class="mt-2 flex items-center text-sm" style="color: var(--secondary-text-color);">
+                        <p class="mt-1 activity-description" style="color: var(--secondary-text-color);">History 101 - Industrial Revolution Impact</p>
+                        <div class="mt-2 flex items-center activity-date" style="color: var(--secondary-text-color);">
                             <span class="text-pixel-green mr-2 text-lg">🗓️</span> Due: Oct 18, 2023
                         </div>
                     </div>
                 </div>
 
                 <!-- Activity 3 -->
-                <div class="activity-item p-4 rounded-lg border-2 shadow-pixel-sm flex items-start colorful-section-dark">
-                    <div class="activity-icon-bg w-12 h-12 rounded-lg p-2 mr-4 flex-shrink-0 flex items-center justify-center border-2">
-                        <span class="activity-icon text-2xl">🧪</span>
+                <div class="activity-item p-3 md:p-4 rounded-lg border-2 shadow-pixel-sm flex items-start colorful-section-dark">
+                    <div class="activity-icon-bg w-10 h-10 md:w-12 md:h-12 rounded-lg p-2 mr-3 md:mr-4 flex-shrink-0 flex items-center justify-center border-2">
+                        <span class="activity-icon text-xl md:text-2xl">🧪</span>
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="flex justify-between items-center">
-                            <h3 class="font-pixel text-lg" style="color: var(--theme-text-color);">Lab Report</h3>
+                            <h3 class="font-pixel activity-title" style="color: var(--theme-text-color);">Lab Report</h3>
                             <span class="activity-due-tag text-xs px-2 py-1 rounded-full font-semibold">Due in 1 week</span>
                         </div>
-                        <p class="mt-1 text-sm" style="color: var(--secondary-text-color);">Chemistry 101 - Chemical Reactions</p>
-                        <div class="mt-2 flex items-center text-sm" style="color: var(--secondary-text-color);">
+                        <p class="mt-1 activity-description" style="color: var(--secondary-text-color);">Chemistry 101 - Chemical Reactions</p>
+                        <div class="mt-2 flex items-center activity-date" style="color: var(--secondary-text-color);">
                             <span class="text-pixel-green mr-2 text-lg">🗓️</span> Due: Oct 22, 2023
                         </div>
                     </div>
                 </div>
 
                 <!-- Activity 4 (Overdue) -->
-                <div class="activity-item p-4 rounded-lg border-2 shadow-pixel-sm flex items-start colorful-section-light">
-                    <div class="activity-icon-bg w-12 h-12 rounded-lg p-2 mr-4 flex-shrink-0 flex items-center justify-center border-2">
-                        <span class="activity-icon text-2xl">🧮</span>
+                <div class="activity-item p-3 md:p-4 rounded-lg border-2 shadow-pixel-sm flex items-start colorful-section-light">
+                    <div class="activity-icon-bg w-10 h-10 md:w-12 md:h-12 rounded-lg p-2 mr-3 md:mr-4 flex-shrink-0 flex items-center justify-center border-2">
+                        <span class="activity-icon text-xl md:text-2xl">🧮</span>
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="flex justify-between items-center">
-                            <h3 class="font-pixel text-lg" style="color: var(--theme-text-color);">Math Problem Set</h3>
+                            <h3 class="font-pixel activity-title" style="color: var(--theme-text-color);">Math Problem Set</h3>
                             <span class="activity-overdue-tag text-xs px-2 py-1 rounded-full font-semibold">Overdue</span>
                         </div>
-                        <p class="mt-1 text-sm" style="color: var(--secondary-text-color);">Calculus 101 - Derivatives</p>
-                        <div class="mt-2 flex items-center text-sm" style="color: var(--secondary-text-color);">
+                        <p class="mt-1 activity-description" style="color: var(--secondary-text-color);">Calculus 101 - Derivatives</p>
+                        <div class="mt-2 flex items-center activity-date" style="color: var(--secondary-text-color);">
                             <span class="text-pixel-green mr-2 text-lg">🗓️</span> Due: Oct 10, 2023
                         </div>
                     </div>
@@ -248,34 +281,34 @@
     <!-- Bottom Navigation, consistent with the dashboard -->
     <nav class="border-t-2 shadow-pixel flex justify-around p-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
         <a href="dashboard.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🏠</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Home</span>
+            <span class="nav-icon" style="color: var(--secondary-text-color);">🏠</span>
+            <span class="nav-text" style="color: var(--secondary-text-color);">Home</span>
         </a>
         <a href="music.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🎵</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Music</span>
+            <span class="nav-icon" style="color: var(--secondary-text-color);">🎵</span>
+            <span class="nav-text" style="color: var(--secondary-text-color);">Music</span>
         </a>
         <a href="explore.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🗺️</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Explore</span>
+            <span class="nav-icon" style="color: var(--secondary-text-color);">🗺️</span>
+            <span class="nav-text" style="color: var(--secondary-text-color);">Explore</span>
         </a>
         <a href="tools.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🛠️</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Tools</span>
+            <span class="nav-icon" style="color: var(--secondary-text-color);">🛠️</span>
+            <span class="nav-text" style="color: var(--secondary-text-color);">Tools</span>
         </a>
         <a href="profile.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">👤</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Profile</span>
+            <span class="nav-icon" style="color: var(--secondary-text-color);">👤</span>
+            <span class="nav-text" style="color: var(--secondary-text-color);">Profile</span>
         </a>
     </nav>
 
     <!-- Coming Soon Modal - Reused from dashboard for consistency -->
     <div id="comingSoonModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="p-6 rounded-lg shadow-pixel border-2 max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-            <h3 class="text-lg font-bold mb-2" style="color: var(--theme-text-color);">Coming Soon!</h3>
-            <p class="mb-4" style="color: var(--secondary-text-color);">This feature is under development.</p>
+        <div class="p-4 md:p-6 rounded-lg shadow-pixel border-2 modal-content" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+            <h3 class="text-base md:text-lg font-bold mb-2" style="color: var(--theme-text-color);">Coming Soon!</h3>
+            <p class="mb-4 text-sm md:text-base" style="color: var(--secondary-text-color);">This feature is under development.</p>
             <button onclick="document.getElementById('comingSoonModal').classList.add('hidden')"
-                class="bg-pixel-blue text-white py-2 px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600">
+                class="bg-pixel-blue text-white py-1 px-3 md:py-2 md:px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600">
                 OK
             </button>
         </div>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Leksiyonity - Assignments</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -13,11 +13,11 @@
                 extend: {
                     fontFamily: {
                         inter: ['Inter', 'sans-serif'],
-                        pixel: ['"Press Start 2P"', 'cursive'], // Added pixelated font
+                        pixel: ['"Press Start 2P"', 'cursive'],
                     },
                     colors: {
                         'pixel-blue': '#3b82f6',
-                        'pixel-green': '#22c55e', // Keeping this strong green for specific elements like 'Completed' tag
+                        'pixel-green': '#22c55e',
                         'pixel-yellow': '#facc15',
                         'pixel-purple': '#a855f7',
                         'pixel-red': '#ef4444',
@@ -28,25 +28,26 @@
                         'teal-500': '#14b8a6',
                         'music-light': '#f0f9ff',
                         'music-dark': '#4b5563',
-                        // CSS variables for dynamic theme colors
                         'theme-bg': 'var(--theme-bg-color)',
                         'theme-text': 'var(--theme-text-color)',
                         'card-bg': 'var(--card-bg-color)',
                         'card-border': 'var(--card-border-color)',
                         'secondary-text': 'var(--secondary-text-color)',
-                        'accent-bg-light': 'var(--accent-bg-light-color)', // For colorful sections
-                        'accent-bg-dark': 'var(--accent-bg-dark-color)',   // For colorful sections
+                        'accent-bg-light': 'var(--accent-bg-light-color)',
+                        'accent-bg-dark': 'var(--accent-bg-dark-color)',
                     },
                     boxShadow: {
                         'pixel': '4px 4px 0px 0px rgba(0,0,0,1)',
                         'pixel-sm': '2px 2px 0px 0px rgba(0,0,0,1)',
+                    },
+                    fontSize: {
+                        'xxs': '0.625rem', // 10px
                     }
                 }
             }
         }
     </script>
     <style>
-        /* Custom CSS for pixel art rendering and button effects */
         .pixel-art {
             image-rendering: pixelated;
             image-rendering: -moz-crisp-edges;
@@ -60,62 +61,72 @@
             box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
         }
 
-        /* Define CSS variables for Day and Dark themes */
-        /* Default (Day Mode) - Green Palette */
+        /* Theme Variables */
         :root, [data-theme='day'] {
-            --theme-bg-color: #f0fff0; /* Very light mint green / honeydew */
-            --theme-text-color: #1f2937; /* text-gray-800 */
-            --card-bg-color: #ffffff; /* Keeping white for main cards/header for contrast */
-            --card-border-color: #000000; /* border-black */
-            --secondary-text-color: #4b5563; /* text-gray-600 */
-            --accent-bg-light-color: #e6ffe6; /* Lighter green accent */
-            --accent-bg-dark-color: #d0ffd0;   /* Slightly darker green accent */
+            --theme-bg-color: #f0fff0;
+            --theme-text-color: #1f2937;
+            --card-bg-color: #ffffff;
+            --card-border-color: #000000;
+            --secondary-text-color: #4b5563;
+            --accent-bg-light-color: #e6ffe6;
+            --accent-bg-dark-color: #d0ffd0;
         }
 
-        /* Dark Mode - Green Palette */
         [data-theme='dark'] {
-            --theme-bg-color: #2d373a; /* Dark muted green background */
-            --theme-text-color: #f3f4f6; /* Light gray text */
-            --card-bg-color: #3a474a; /* Darker muted green for cards */
-            --card-border-color: #7b8d8f; /* Muted gray-green border */
-            --secondary-text-color: #a0b0b3; /* Lighter muted gray-green for secondary text */
-            --accent-bg-light-color: #354144; /* Darker green accent */
-            --accent-bg-dark-color: #425053;   /* Even darker green accent */
+            --theme-bg-color: #2d373a;
+            --theme-text-color: #f3f4f6;
+            --card-bg-color: #3a474a;
+            --card-border-color: #7b8d8f;
+            --secondary-text-color: #a0b0b3;
+            --accent-bg-light-color: #354144;
+            --accent-bg-dark-color: #425053;
         }
 
-        /* Apply theme variables to core elements */
         body {
             background-color: var(--theme-bg-color);
             color: var(--theme-text-color);
+            font-size: 0.9rem; /* Slightly smaller base font size */
         }
 
-        /* Override specific Tailwind classes to use CSS variables for theme consistency */
-        .bg-white { /* Applies to header, main cards */
+        /* Mobile-specific adjustments */
+        @media (min-width: 640px) {
+            body {
+                font-size: 1rem; /* Normal size on larger screens */
+            }
+        }
+
+        /* Pixel font scaling for mobile */
+        @media (max-width: 640px) {
+            .font-pixel {
+                font-size: 0.7em !important;
+                letter-spacing: -0.5px;
+            }
+        }
+
+        .bg-white {
             background-color: var(--card-bg-color);
         }
-        .border-black { /* Applies to borders of cards, header, nav */
+        .border-black {
             border-color: var(--card-border-color);
         }
-        .text-gray-600 { /* Applies to secondary text like descriptions */
+        .text-gray-600 {
             color: var(--secondary-text-color);
         }
-        .bg-blue-50 { /* Applies to main body background, but overridden by body style */
+        .bg-blue-50 {
             background-color: var(--theme-bg-color);
         }
-        /* Specific styles for assignment elements */
         .assignment-card {
-            background-color: var(--theme-bg-color); /* Default for cards, overridden by colorful-sections */
+            background-color: var(--theme-bg-color);
             border-color: var(--card-border-color);
         }
         .assignment-status-tag-due {
             background-color: var(--pixel-red);
-            color: black; /* Changed to black for better contrast */
+            color: black;
         }
         .assignment-status-tag-completed {
             background-color: var(--pixel-green);
-            color: black; /* Changed to black for better contrast */
+            color: black;
         }
-        /* Styles for colorful sections using the new green palette */
         .colorful-section-light {
             background-color: var(--accent-bg-light-color);
         }
@@ -125,103 +136,109 @@
     </style>
 </head>
 <body class="min-h-screen font-inter flex flex-col" data-theme="day">
-    <!-- Header section, consistent with the app's branding -->
-    <header class="shadow-pixel border-b-2 p-4" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+    <!-- Header - Mobile Optimized -->
+    <header class="shadow-pixel border-b-2 p-3 sm:p-4" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
         <div class="flex items-center justify-between">
             <a href="classroom.html" class="btn-pixel">
-                <span class="text-2xl" style="color: var(--secondary-text-color);">←</span>
+                <span class="text-xl sm:text-2xl" style="color: var(--secondary-text-color);">←</span>
             </a>
-            <h1 class="text-xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">Leksiyonity - Assignments</h1>
-            <div class="w-6"></div> <!-- Spacer for balance -->
+            <h1 class="text-lg sm:text-xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">Assignments</h1>
+            <div class="w-5 sm:w-6"></div>
         </div>
     </header>
 
-    <main class="flex-grow p-4">
-        <!-- Assignments Content Section -->
-        <div class="p-4 rounded-lg shadow-pixel border-2 mb-4 colorful-section-light" style="border-color: var(--card-border-color);">
-            <h2 class="text-2xl font-pixel font-bold mb-4 text-center" style="color: var(--theme-text-color);">My Assignments</h2>
+    <main class="flex-grow p-3 sm:p-4">
+        <!-- Assignments Content - Mobile Optimized -->
+        <div class="p-3 sm:p-4 rounded-lg shadow-pixel border-2 mb-3 sm:mb-4 colorful-section-light" style="border-color: var(--card-border-color);">
+            <h2 class="text-xl sm:text-2xl font-pixel font-bold mb-3 sm:mb-4 text-center" style="color: var(--theme-text-color);">My Assignments</h2>
             
-            <div class="space-y-4">
+            <div class="space-y-3 sm:space-y-4">
                 <!-- Assignment 1 (Due) -->
-                <div class="assignment-card p-3 rounded-lg border-2 shadow-pixel-sm flex items-center justify-between colorful-section-dark">
-                    <div>
-                        <h3 class="font-pixel text-lg" style="color: var(--theme-text-color);">Biology Quiz: Cell Structure</h3>
-                        <p class="text-sm" style="color: var(--secondary-text-color);">Due: Aug 15, 2025</p>
+                <div class="assignment-card p-2 sm:p-3 rounded-lg border-2 shadow-pixel-sm flex flex-col sm:flex-row sm:items-center justify-between colorful-section-dark gap-2">
+                    <div class="flex-grow">
+                        <h3 class="font-pixel text-base sm:text-lg" style="color: var(--theme-text-color);">Biology Quiz: Cell Structure</h3>
+                        <p class="text-xs sm:text-sm" style="color: var(--secondary-text-color);">Due: Aug 15, 2025</p>
                     </div>
-                    <span class="assignment-status-tag-due text-xs px-2 py-1 rounded-full font-semibold">Due Soon</span>
-                    <button onclick="showComingSoonModal()" class="ml-4 bg-pixel-blue text-white py-1 px-3 rounded font-bold shadow-pixel-sm border border-black btn-pixel hover:bg-blue-600">
-                        Start
-                    </button>
+                    <div class="flex items-center gap-2 sm:gap-3 justify-end">
+                        <span class="assignment-status-tag-due text-xxs sm:text-xs px-2 py-1 rounded-full font-semibold">Due Soon</span>
+                        <button onclick="showComingSoonModal()" class="bg-pixel-blue text-white py-1 px-2 sm:px-3 rounded font-bold shadow-pixel-sm border border-black btn-pixel hover:bg-blue-600 text-xs sm:text-sm">
+                            Start
+                        </button>
+                    </div>
                 </div>
+                
                 <!-- Assignment 2 (Completed) -->
-                <div class="assignment-card p-3 rounded-lg border-2 shadow-pixel-sm flex items-center justify-between colorful-section-light">
-                    <div>
-                        <h3 class="font-pixel text-lg line-through" style="color: var(--theme-text-color);">Calculus Homework: Derivatives</h3>
-                        <p class="text-sm" style="color: var(--secondary-text-color);">Completed: Aug 1, 2025</p>
+                <div class="assignment-card p-2 sm:p-3 rounded-lg border-2 shadow-pixel-sm flex flex-col sm:flex-row sm:items-center justify-between colorful-section-light gap-2">
+                    <div class="flex-grow">
+                        <h3 class="font-pixel text-base sm:text-lg line-through" style="color: var(--theme-text-color);">Calculus Homework: Derivatives</h3>
+                        <p class="text-xs sm:text-sm" style="color: var(--secondary-text-color);">Completed: Aug 1, 2025</p>
                     </div>
-                    <span class="assignment-status-tag-completed text-xs px-2 py-1 rounded-full font-semibold">Completed</span>
-                    <button onclick="showComingSoonModal()" class="ml-4 bg-pixel-green text-white py-1 px-3 rounded font-bold shadow-pixel-sm border border-black btn-pixel hover:bg-green-600">
-                        View
-                    </button>
+                    <div class="flex items-center gap-2 sm:gap-3 justify-end">
+                        <span class="assignment-status-tag-completed text-xxs sm:text-xs px-2 py-1 rounded-full font-semibold">Completed</span>
+                        <button onclick="showComingSoonModal()" class="bg-pixel-green text-white py-1 px-2 sm:px-3 rounded font-bold shadow-pixel-sm border border-black btn-pixel hover:bg-green-600 text-xs sm:text-sm">
+                            View
+                        </button>
+                    </div>
                 </div>
+                
                 <!-- Assignment 3 (Upcoming) -->
-                <div class="assignment-card p-3 rounded-lg border-2 shadow-pixel-sm flex items-center justify-between colorful-section-dark">
-                    <div>
-                        <h3 class="font-pixel text-lg" style="color: var(--theme-text-color);">History Essay: Industrial Revolution</h3>
-                        <p class="text-sm" style="color: var(--secondary-text-color);">Due: Sep 1, 2025</p>
+                <div class="assignment-card p-2 sm:p-3 rounded-lg border-2 shadow-pixel-sm flex flex-col sm:flex-row sm:items-center justify-between colorful-section-dark gap-2">
+                    <div class="flex-grow">
+                        <h3 class="font-pixel text-base sm:text-lg" style="color: var(--theme-text-color);">History Essay: Industrial Revolution</h3>
+                        <p class="text-xs sm:text-sm" style="color: var(--secondary-text-color);">Due: Sep 1, 2025</p>
                     </div>
-                    <span class="text-xs px-2 py-1 rounded-full font-semibold" style="background-color: var(--pixel-yellow); color: black; border: 1px solid var(--card-border-color);">Upcoming</span>
-                    <button onclick="showComingSoonModal()" class="ml-4 bg-pixel-blue text-white py-1 px-3 rounded font-bold shadow-pixel-sm border border-black btn-pixel hover:bg-blue-600">
-                        Start
-                    </button>
+                    <div class="flex items-center gap-2 sm:gap-3 justify-end">
+                        <span class="text-xxs sm:text-xs px-2 py-1 rounded-full font-semibold" style="background-color: var(--pixel-yellow); color: black; border: 1px solid var(--card-border-color);">Upcoming</span>
+                        <button onclick="showComingSoonModal()" class="bg-pixel-blue text-white py-1 px-2 sm:px-3 rounded font-bold shadow-pixel-sm border border-black btn-pixel hover:bg-blue-600 text-xs sm:text-sm">
+                            Start
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Bottom Navigation, consistent with the dashboard -->
-    <nav class="border-t-2 shadow-pixel flex justify-around p-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+    <!-- Bottom Navigation - Mobile Optimized -->
+    <nav class="border-t-2 shadow-pixel flex justify-around p-1 sm:p-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
         <a href="dashboard.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🏠</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Home</span>
+            <span class="text-xl sm:text-2xl" style="color: var(--secondary-text-color);">🏠</span>
+            <span class="text-xxs sm:text-xs" style="color: var(--secondary-text-color);">Home</span>
         </a>
         <a href="music.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🎵</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Music</span>
+            <span class="text-xl sm:text-2xl" style="color: var(--secondary-text-color);">🎵</span>
+            <span class="text-xxs sm:text-xs" style="color: var(--secondary-text-color);">Music</span>
         </a>
         <a href="explore.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🗺️</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Explore</span>
+            <span class="text-xl sm:text-2xl" style="color: var(--secondary-text-color);">🗺️</span>
+            <span class="text-xxs sm:text-xs" style="color: var(--secondary-text-color);">Explore</span>
         </a>
         <a href="tools.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🛠️</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Tools</span>
+            <span class="text-xl sm:text-2xl" style="color: var(--secondary-text-color);">🛠️</span>
+            <span class="text-xxs sm:text-xs" style="color: var(--secondary-text-color);">Tools</span>
         </a>
         <a href="profile.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">👤</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Profile</span>
+            <span class="text-xl sm:text-2xl" style="color: var(--secondary-text-color);">👤</span>
+            <span class="text-xxs sm:text-xs" style="color: var(--secondary-text-color);">Profile</span>
         </a>
     </nav>
 
-    <!-- Coming Soon Modal - Reused for consistency -->
+    <!-- Coming Soon Modal - Mobile Optimized -->
     <div id="comingSoonModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="p-6 rounded-lg shadow-pixel border-2 max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-            <h3 class="text-lg font-bold mb-2" style="color: var(--theme-text-color);">Coming Soon!</h3>
-            <p class="mb-4" style="color: var(--secondary-text-color);">This feature is under development.</p>
+        <div class="p-4 sm:p-6 rounded-lg shadow-pixel border-2 max-w-xs sm:max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+            <h3 class="text-base sm:text-lg font-bold mb-2 sm:mb-3" style="color: var(--theme-text-color);">Coming Soon!</h3>
+            <p class="mb-3 sm:mb-4 text-sm" style="color: var(--secondary-text-color);">This feature is under development.</p>
             <button onclick="document.getElementById('comingSoonModal').classList.add('hidden')"
-                class="bg-pixel-blue text-white py-2 px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600">
+                class="bg-pixel-blue text-white py-1.5 sm:py-2 px-3 sm:px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600 text-sm sm:text-base">
                 OK
             </button>
         </div>
     </div>
 
     <script>
-        // Function to show the "Coming Soon" modal
         function showComingSoonModal() {
             document.getElementById('comingSoonModal').classList.remove('hidden');
         }
 
-        // Apply saved theme on page load for consistency across pages
         document.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('theme') || 'day';
             document.body.setAttribute('data-theme', savedTheme);

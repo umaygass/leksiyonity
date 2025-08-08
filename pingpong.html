@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pixel Pong - Minecraft Style Ping Pong</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script>
+        // Tailwind CSS configuration for custom colors and shadows, consistent with the app's theme.
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                        pixel: ['"Press Start 2P"', 'cursive'], // Added pixelated font
+                    },
+                    colors: {
+                        'pixel-blue': '#3b82f6',
+                        'pixel-green': '#22c55e',
+                        'pixel-yellow': '#facc15',
+                        'pixel-purple': '#a855f7',
+                        'pixel-red': '#ef4444',
+                        'pixel-orange': '#f97316',
+                        'chat-bg': '#e0f2f7',
+                        'chat-user': '#d1fae5',
+                        'chat-ai': '#bfdbfe',
+                        'teal-500': '#14b8a6',
+                        'music-light': '#f0f9ff',
+                        'music-dark': '#4b5563',
+                        // CSS variables for dynamic theme colors
+                        'theme-bg': 'var(--theme-bg-color)',
+                        'theme-text': 'var(--theme-text-color)',
+                        'card-bg': 'var(--card-bg-color)',
+                        'card-border': 'var(--card-border-color)',
+                        'secondary-text': 'var(--secondary-text-color)',
+                        'accent-bg-light': 'var(--accent-bg-light-color)', // For colorful sections
+                        'accent-bg-dark': 'var(--accent-bg-dark-color)',   // For colorful sections
+                    },
+                    boxShadow: {
+                        'pixel': '4px 4px 0px 0px rgba(0,0,0,1)',
+                        'pixel-sm': '2px 2px 0px 0px rgba(0,0,0,1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom CSS for pixel art rendering and button effects */
+        body {
+            background-color: var(--theme-bg-color); /* Use theme background */
+            font-family: 'Inter', sans-serif; /* Default font */
+            touch-action: manipulation;
+            overflow: hidden;
+            color: var(--theme-text-color); /* Use theme text color */
+        }
+        .pixel-art {
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        .btn-pixel {
+            transition: all 0.1s ease;
+        }
+        .btn-pixel:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+        }
+        #gameCanvas {
+            border: 4px solid var(--card-border-color); /* Use theme border color */
+            background-color: #0a0a0a; /* Keep dark background for game area */
+            box-shadow: 0 0 20px rgba(139, 139, 139, 0.3);
+            image-rendering: pixelated;
+        }
+        .pixel-font {
+            font-family: 'Press Start 2P', cursive; /* Applied pixel font */
+            text-shadow: 2px 2px 0px #000;
+        }
+        .blocky-btn {
+            border: 3px solid var(--card-border-color); /* Use theme border color */
+            background-color: var(--accent-bg-dark); /* Use theme accent color */
+            color: var(--theme-text-color); /* Use theme text color */
+            padding: 8px 16px;
+            font-weight: bold;
+            box-shadow: 4px 4px 0px #000;
+            transition: all 0.1s;
+        }
+        .blocky-btn:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000;
+        }
+        .blocky-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px #000;
+        }
+        .minecraft-border {
+            border: 4px solid var(--card-border-color); /* Use theme border color */
+            background-color: var(--card-bg-color); /* Use theme card background */
+            box-shadow: 4px 4px 0px #000;
+        }
+        .mobile-btn {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(139, 139, 139, 0.5);
+            border: 3px solid var(--card-border-color); /* Use theme border color */
+            border-radius: 8px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            z-index: 10;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .mobile-btn:active {
+            background-color: rgba(139, 139, 139, 0.8);
+            transform: translate(2px, 2px);
+        }
+        @media (max-width: 768px) {
+            .mobile-btn {
+                display: flex;
+            }
+            #gameContainer {
+                position: relative;
+                width: 100%;
+                max-width: 100%;
+            }
+            #gameCanvas {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 3/2;
+            }
+        }
+
+        /* Define CSS variables for Day and Dark themes */
+        /* Default (Day Mode) */
+        :root, [data-theme='day'] {
+            --theme-bg-color: #eff6ff; /* bg-blue-50 */
+            --theme-text-color: #1f2937; /* text-gray-800 */
+            --card-bg-color: #ffffff; /* bg-white */
+            --card-border-color: #000000; /* border-black */
+            --secondary-text-color: #4b5563; /* text-gray-600 */
+            --accent-bg-light-color: #e0f2f7; /* Light blue for colorful sections */
+            --accent-bg-dark-color: #bfdbfe; /* Slightly darker blue for contrast */
+        }
+
+        /* Dark Mode */
+        [data-theme='dark'] {
+            --theme-bg-color: #1f2937; /* Dark gray background */
+            --theme-text-color: #f3f4f6; /* Light gray text */
+            --card-bg-color: #374151; /* Darker gray for cards */
+            --card-border-color: #6b7280; /* Lighter gray border */
+            --secondary-text-color: #9ca3af; /* Lighter gray for secondary text */
+            --accent-bg-light-color: #2d3748; /* Darker shade for colorful sections */
+            --accent-bg-dark-color: #4a5568;   /* Even darker shade for contrast */
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4" data-theme="day">
+    <!-- Header section, consistent with the app's branding -->
+    <header class="shadow-pixel border-b-2 p-4 w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <div class="flex items-center justify-between">
+            <a href="dashboard.html" class="btn-pixel">
+                <span class="text-2xl" style="color: var(--secondary-text-color);">←</span>
+            </a>
+            <h1 class="text-xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">PIXEL PONG</h1>
+            <div class="w-6"></div> <!-- Spacer for balance -->
+        </div>
+    </header>
+
+    <main class="flex-grow flex flex-col items-center justify-center p-4 w-full">
+        <div class="flex flex-col md:flex-row gap-8 items-center justify-center w-full max-w-6xl">
+            <!-- Game Container -->
+            <div id="gameContainer" class="relative">
+                <canvas id="gameCanvas" width="600" height="400" class="w-full max-w-full"></canvas>
+                
+                <!-- Mobile Controls (Visible only on mobile) -->
+                <!-- Left Paddle Controls -->
+                <div id="leftPaddleUp" class="mobile-btn" style="left: 10px; bottom: 80px;">W</div>
+                <div id="leftPaddleDown" class="mobile-btn" style="left: 10px; bottom: 10px;">S</div>
+                
+                <!-- Right Paddle Controls -->
+                <div id="rightPaddleUp" class="mobile-btn" style="right: 10px; bottom: 80px;">↑</div>
+                <div id="rightPaddleDown" class="mobile-btn" style="right: 10px; bottom: 10px;">↓</div>
+                
+                <!-- Game Over Screen -->
+                <div id="gameOverScreen" class="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-80 hidden">
+                    <h2 class="text-3xl font-pixel text-pixel-red mb-4" id="gameOverText">GAME OVER</h2>
+                    <div class="text-xl text-white mb-6 font-pixel" id="finalScore">Player 1: 0 - Player 2: 0</div>
+                    <button id="restartBtn" class="blocky-btn text-pixel-yellow font-pixel">PLAY AGAIN</button>
+                </div>
+                
+                <!-- Start Screen -->
+                <div id="startScreen" class="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-80">
+                    <h2 class="text-3xl font-pixel text-pixel-green mb-6">PIXEL PONG</h2>
+                    <div class="flex flex-col gap-4 items-center">
+                        <button id="singlePlayerBtn" class="blocky-btn text-white w-48 font-pixel">VS COMPUTER</button>
+                        <button id="multiPlayerBtn" class="blocky-btn text-white w-48 font-pixel">VS FRIEND</button>
+                        <div class="mt-6 text-white font-pixel">First to score <span id="winningScoreDisplay">5</span> wins!</div>
+                        <input type="range" id="winningScoreSlider" min="1" max="11" value="5" class="w-48 mt-2">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Leaderboard and Controls -->
+            <div class="minecraft-border p-4 w-full md:w-64">
+                <h3 class="text-xl font-pixel text-pixel-green mb-4">LEADERBOARD</h3>
+                <div id="leaderboard" class="mb-6 text-white font-pixel">
+                    <div class="flex justify-between border-b border-gray-600 py-1">
+                        <span>Player</span>
+                        <span>Wins</span>
+                    </div>
+                    <!-- Leaderboard entries will be added here by JavaScript -->
+                </div>
+                
+                <h3 class="text-xl font-pixel text-pixel-green mb-4">CONTROLS</h3>
+                <div class="text-white text-sm font-pixel mb-2">
+                    <div class="flex justify-between py-1">
+                        <span>Player 1:</span>
+                        <span>W (Up) S (Down)</span>
+                    </div>
+                    <div class="flex justify-between py-1">
+                        <span>Player 2:</span>
+                        <span>↑ (Up) ↓ (Down)</span>
+                    </div>
+                    <div class="flex justify-between py-1 mt-2 text-xs text-gray-300">
+                        <span>Mobile:</span>
+                        <span>Use on-screen buttons</span>
+                    </div>
+                </div>
+                
+                <div class="mt-6 text-white text-sm font-pixel">
+                    <div class="flex justify-between py-1">
+                        <span>Game Mode:</span>
+                        <span id="currentMode">-</span>
+                    </div>
+                    <div class="flex justify-between py-1">
+                        <span>Winning Score:</span>
+                        <span id="currentWinningScore">-</span>
+                    </div>
+                </div>
+                
+                <button id="resetLeaderboardBtn" class="blocky-btn text-pixel-red mt-6 w-full text-sm font-pixel">RESET LEADERBOARD</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Custom Confirmation Modal for Reset Leaderboard -->
+    <div id="resetConfirmModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="p-6 rounded-lg shadow-pixel border-2 max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+            <h3 class="text-lg font-pixel font-bold mb-2" style="color: var(--theme-text-color);">Confirm Reset</h3>
+            <p class="mb-4" style="color: var(--secondary-text-color);">Are you sure you want to reset the leaderboard? This action cannot be undone.</p>
+            <div class="flex justify-end space-x-3">
+                <button onclick="document.getElementById('resetConfirmModal').classList.add('hidden')"
+                    class="bg-pixel-red text-white py-2 px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-red-600">
+                    Cancel
+                </button>
+                <button onclick="performResetLeaderboard()"
+                    class="bg-pixel-green text-white py-2 px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-green-600">
+                    Reset
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game variables
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const startScreen = document.getElementById('startScreen');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const singlePlayerBtn = document.getElementById('singlePlayerBtn');
+        const multiPlayerBtn = document.getElementById('multiPlayerBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const gameOverText = document.getElementById('gameOverText');
+        const finalScore = document.getElementById('finalScore');
+        const leaderboard = document.getElementById('leaderboard');
+        const resetLeaderboardBtn = document.getElementById('resetLeaderboardBtn');
+        const winningScoreSlider = document.getElementById('winningScoreSlider');
+        const winningScoreDisplay = document.getElementById('winningScoreDisplay');
+        const currentMode = document.getElementById('currentMode');
+        const currentWinningScore = document.getElementById('currentWinningScore');
+        
+        // Mobile control buttons
+        const leftPaddleUpBtn = document.getElementById('leftPaddleUp');
+        const leftPaddleDownBtn = document.getElementById('leftPaddleDown');
+        const rightPaddleUpBtn = document.getElementById('rightPaddleUp');
+        const rightPaddleDownBtn = document.getElementById('rightPaddleDown');
+        
+        // Game state
+        let gameRunning = false;
+        let singlePlayerMode = false;
+        let winningScore = 5;
+        
+        // Adjust canvas size for mobile
+        function resizeCanvas() {
+            if (window.innerWidth <= 768) {
+                const container = document.getElementById('gameContainer');
+                const containerWidth = container.clientWidth;
+                canvas.width = containerWidth;
+                canvas.height = containerWidth * (2/3); // Maintain 3:2 aspect ratio
+            } else {
+                canvas.width = 600;
+                canvas.height = 400;
+            }
+            
+            // Reset ball and paddle positions
+            if (gameRunning) {
+                leftPaddle.y = canvas.height / 2 - leftPaddle.height / 2;
+                rightPaddle.y = canvas.height / 2 - rightPaddle.height / 2;
+                resetBall();
+            }
+        }
+        
+        // Paddle variables
+        const paddleWidth = 15;
+        let paddleHeight = 80;
+        
+        const leftPaddle = {
+            x: 20,
+            y: canvas.height / 2 - paddleHeight / 2,
+            width: paddleWidth,
+            height: paddleHeight,
+            color: '#55FF55',
+            score: 0,
+            upKey: false,
+            downKey: false
+        };
+        
+        const rightPaddle = {
+            x: canvas.width - 20 - paddleWidth,
+            y: canvas.height / 2 - paddleHeight / 2,
+            width: paddleWidth,
+            height: paddleHeight,
+            color: '#FF5555',
+            score: 0,
+            upKey: false,
+            downKey: false
+        };
+        
+        // Ball variables
+        const ballSize = 12;
+        let ball = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            size: ballSize,
+            speed: 5,
+            velocityX: 5,
+            velocityY: 5,
+            color: '#FFFFFF'
+        };
+        
+        // AI variables
+        let aiDifficulty = 0.9; // 0 (easy) to 1 (hard)
+        
+        // Leaderboard
+        let leaderboardData = {
+            'Player 1': 0,
+            'Player 2': 0,
+            'Computer': 0
+        };
+        
+        // Load leaderboard from localStorage
+        function loadLeaderboard() {
+            const savedLeaderboard = localStorage.getItem('pixelPongLeaderboard');
+            if (savedLeaderboard) {
+                leaderboardData = JSON.parse(savedLeaderboard);
+            }
+            updateLeaderboard();
+        }
+        
+        // Save leaderboard to localStorage
+        function saveLeaderboard() {
+            localStorage.setItem('pixelPongLeaderboard', JSON.stringify(leaderboardData));
+        }
+        
+        // Update leaderboard display
+        function updateLeaderboard() {
+            // Clear existing entries
+            while (leaderboard.children.length > 1) {
+                leaderboard.removeChild(leaderboard.lastChild);
+            }
+            
+            // Sort leaderboard by wins (descending)
+            const sortedEntries = Object.entries(leaderboardData).sort((a, b) => b[1] - a[1]);
+            
+            // Add entries to the leaderboard
+            sortedEntries.forEach(([player, wins]) => {
+                const entry = document.createElement('div');
+                entry.className = 'flex justify-between border-b border-gray-600 py-1';
+                entry.innerHTML = `
+                    <span>${player}</span>
+                    <span>${wins}</span>
+                `;
+                leaderboard.appendChild(entry);
+            });
+        }
+        
+        // Function to show the reset confirmation modal
+        function showResetConfirmModal() {
+            document.getElementById('resetConfirmModal').classList.remove('hidden');
+        }
+
+        // Function to perform the leaderboard reset after confirmation
+        function performResetLeaderboard() {
+            leaderboardData = {
+                'Player 1': 0,
+                'Player 2': 0,
+                'Computer': 0
+            };
+            saveLeaderboard();
+            updateLeaderboard();
+            document.getElementById('resetConfirmModal').classList.add('hidden'); // Hide the modal
+        }
+
+        // Initialize game
+        function initGame() {
+            // Reset scores
+            leftPaddle.score = 0;
+            rightPaddle.score = 0;
+            
+            // Reset paddles position
+            leftPaddle.y = canvas.height / 2 - leftPaddle.height / 2;
+            rightPaddle.y = canvas.height / 2 - rightPaddle.height / 2;
+            
+            // Reset ball position
+            resetBall();
+            
+            // Hide start screen and game over screen
+            startScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            
+            // Set game state
+            gameRunning = true;
+            
+            // Start game loop
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Reset ball to center with random direction
+        function resetBall() {
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height / 2;
+            
+            // Reset speed
+            ball.speed = 5;
+            
+            // Random direction
+            ball.velocityX = (Math.random() > 0.5 ? 1 : -1) * ball.speed;
+            ball.velocityY = (Math.random() * 2 - 1) * ball.speed;
+        }
+        
+        // Draw a rectangle with pixelated style
+        function drawRect(x, y, width, height, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(Math.round(x), Math.round(y), Math.round(width), Math.round(height));
+            
+            // Add pixelated border
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(Math.round(x), Math.round(y), Math.round(width), Math.round(height));
+        }
+        
+        // Draw the net
+        function drawNet() {
+            ctx.strokeStyle = '#8B8B8B';
+            ctx.lineWidth = 4;
+            ctx.setLineDash([10, 15]);
+            
+            ctx.beginPath();
+            ctx.moveTo(canvas.width / 2, 0);
+            ctx.lineTo(canvas.width / 2, canvas.height);
+            ctx.stroke();
+            
+            ctx.setLineDash([]);
+        }
+        
+        // Draw the game
+        function draw() {
+            // Clear canvas
+            ctx.fillStyle = '#0a0a0a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw net
+            drawNet();
+            
+            // Draw paddles
+            drawRect(leftPaddle.x, leftPaddle.y, leftPaddle.width, leftPaddle.height, leftPaddle.color);
+            drawRect(rightPaddle.x, rightPaddle.y, rightPaddle.width, rightPaddle.height, rightPaddle.color);
+            
+            // Draw ball
+            drawRect(ball.x - ball.size / 2, ball.y - ball.size / 2, ball.size, ball.size, ball.color);
+            
+            // Draw scores
+            ctx.font = '32px "Press Start 2P"'; /* Use pixel font for scores */
+            ctx.fillStyle = '#55FF55';
+            ctx.fillText(leftPaddle.score.toString(), canvas.width / 4, 50);
+            
+            ctx.fillStyle = '#FF5555';
+            ctx.fillText(rightPaddle.score.toString(), 3 * canvas.width / 4, 50);
+        }
+        
+        // Update game state
+        function update() {
+            // Adjust paddle size for mobile
+            paddleHeight = window.innerWidth <= 768 ? canvas.height / 5 : 80;
+            leftPaddle.height = paddleHeight;
+            rightPaddle.height = paddleHeight;
+            
+            // Move paddles
+            const paddleSpeed = window.innerWidth <= 768 ? 10 : 8; // Faster on mobile
+            
+            if (leftPaddle.upKey && leftPaddle.y > 0) {
+                leftPaddle.y -= paddleSpeed;
+            }
+            if (leftPaddle.downKey && leftPaddle.y < canvas.height - leftPaddle.height) {
+                leftPaddle.y += paddleSpeed;
+            }
+            
+            if (singlePlayerMode) {
+                // AI paddle movement
+                const paddleCenter = rightPaddle.y + rightPaddle.height / 2;
+                const ballCenter = ball.y;
+                
+                // Only move if ball is moving towards AI
+                if (ball.velocityX > 0) {
+                    if (paddleCenter < ballCenter - 10) {
+                        rightPaddle.y += paddleSpeed * aiDifficulty;
+                    } else if (paddleCenter > ballCenter + 10) {
+                        rightPaddle.y -= paddleSpeed * aiDifficulty;
+                    }
+                }
+            } else {
+                // Player 2 paddle movement
+                if (rightPaddle.upKey && rightPaddle.y > 0) {
+                    rightPaddle.y -= paddleSpeed;
+                }
+                if (rightPaddle.downKey && rightPaddle.y < canvas.height - rightPaddle.height) {
+                    rightPaddle.y += paddleSpeed;
+                }
+            }
+            
+            // Ensure paddles stay in bounds
+            leftPaddle.y = Math.max(0, Math.min(canvas.height - leftPaddle.height, leftPaddle.y));
+            rightPaddle.y = Math.max(0, Math.min(canvas.height - rightPaddle.height, rightPaddle.y));
+            
+            // Move ball
+            ball.x += ball.velocityX;
+            ball.y += ball.velocityY;
+            
+            // Ball collision with top and bottom walls
+            if (ball.y - ball.size / 2 < 0 || ball.y + ball.size / 2 > canvas.height) {
+                ball.velocityY = -ball.velocityY;
+                
+                // Add some randomness to the bounce
+                if (Math.random() > 0.7) {
+                    ball.velocityY *= 1.1;
+                }
+            }
+            
+            // Ball collision with paddles
+            // Left paddle
+            if (
+                ball.x - ball.size / 2 < leftPaddle.x + leftPaddle.width &&
+                ball.y > leftPaddle.y &&
+                ball.y < leftPaddle.y + leftPaddle.height &&
+                ball.velocityX < 0
+            ) {
+                // Calculate angle based on where ball hits paddle
+                const hitPosition = (ball.y - (leftPaddle.y + leftPaddle.height / 2)) / (leftPaddle.height / 2);
+                const angle = hitPosition * Math.PI / 4; // Max 45 degrees
+                
+                ball.velocityX = Math.cos(angle) * ball.speed;
+                ball.velocityY = Math.sin(angle) * ball.speed;
+                
+                // Increase speed slightly
+                ball.speed += 0.2;
+            }
+            
+            // Right paddle
+            if (
+                ball.x + ball.size / 2 > rightPaddle.x &&
+                ball.y > rightPaddle.y &&
+                ball.y < rightPaddle.y + rightPaddle.height &&
+                ball.velocityX > 0
+            ) {
+                // Calculate angle based on where ball hits paddle
+                const hitPosition = (ball.y - (rightPaddle.y + rightPaddle.height / 2)) / (rightPaddle.height / 2);
+                const angle = hitPosition * Math.PI / 4; // Max 45 degrees
+                
+                ball.velocityX = -Math.cos(angle) * ball.speed;
+                ball.velocityY = Math.sin(angle) * ball.speed;
+                
+                // Increase speed slightly
+                ball.speed += 0.2;
+            }
+            
+            // Ball out of bounds (score)
+            if (ball.x - ball.size / 2 < 0) {
+                // Right player scores
+                rightPaddle.score++;
+                updateLeaderboard();
+                
+                if (rightPaddle.score >= winningScore) {
+                    gameOver(rightPaddle);
+                } else {
+                    resetBall();
+                }
+            }
+            
+            if (ball.x + ball.size / 2 > canvas.width) {
+                // Left player scores
+                leftPaddle.score++;
+                updateLeaderboard();
+                
+                if (leftPaddle.score >= winningScore) {
+                    gameOver(leftPaddle);
+                } else {
+                    resetBall();
+                }
+            }
+        }
+        
+        // Game over
+        function gameOver(winningPaddle) {
+            gameRunning = false;
+            
+            // Update leaderboard
+            const winnerName = winningPaddle === leftPaddle ? 'Player 1' : 
+                               (singlePlayerMode ? 'Computer' : 'Player 2');
+            leaderboardData[winnerName]++;
+            saveLeaderboard();
+            
+            // Update game over screen
+            gameOverText.textContent = `${winnerName} WINS!`;
+            finalScore.textContent = `Player 1: ${leftPaddle.score} - ${singlePlayerMode ? 'Computer' : 'Player 2'}: ${rightPaddle.score}`;
+            
+            // Show game over screen
+            gameOverScreen.classList.remove('hidden');
+        }
+        
+        // Game loop
+        function gameLoop() {
+            if (gameRunning) {
+                update();
+                draw();
+                requestAnimationFrame(gameLoop);
+            }
+        }
+        
+        // Event listeners for keyboard
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'w':
+                    leftPaddle.upKey = true;
+                    break;
+                case 's':
+                    leftPaddle.downKey = true;
+                    break;
+                case 'ArrowUp':
+                    rightPaddle.upKey = true;
+                    break;
+                case 'ArrowDown':
+                    rightPaddle.downKey = true;
+                    break;
+            }
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            switch(e.key) {
+                case 'w':
+                    leftPaddle.upKey = false;
+                    break;
+                case 's':
+                    leftPaddle.downKey = false;
+                    break;
+                case 'ArrowUp':
+                    rightPaddle.upKey = false;
+                    break;
+                case 'ArrowDown':
+                    rightPaddle.downKey = false;
+                    break;
+            }
+        });
+        
+        // Event listeners for mobile buttons
+        function setupMobileButton(button, key) {
+            const isUp = key === 'up';
+            
+            button.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (button.id.includes('left')) {
+                    if (isUp) leftPaddle.upKey = true;
+                    else leftPaddle.downKey = true;
+                } else {
+                    if (isUp) rightPaddle.upKey = true;
+                    else rightPaddle.downKey = true;
+                }
+            });
+            
+            button.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                if (button.id.includes('left')) {
+                    if (isUp) leftPaddle.upKey = false;
+                    else leftPaddle.downKey = false;
+                } else {
+                    if (isUp) rightPaddle.upKey = false;
+                    else rightPaddle.downKey = false;
+                }
+            });
+            
+            // For mouse support on devices with both touch and mouse
+            button.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                if (button.id.includes('left')) {
+                    if (isUp) leftPaddle.upKey = true;
+                    else leftPaddle.downKey = true;
+                } else {
+                    if (isUp) rightPaddle.upKey = true;
+                    else rightPaddle.downKey = true;
+                }
+            });
+            
+            button.addEventListener('mouseup', (e) => {
+                e.preventDefault();
+                if (button.id.includes('left')) {
+                    if (isUp) leftPaddle.upKey = false;
+                    else leftPaddle.downKey = false;
+                } else {
+                    if (isUp) rightPaddle.upKey = false;
+                    else rightPaddle.downKey = false;
+                }
+            });
+            
+            button.addEventListener('mouseleave', (e) => {
+                e.preventDefault();
+                if (button.id.includes('left')) {
+                    if (isUp) leftPaddle.upKey = false;
+                    else leftPaddle.downKey = false;
+                } else {
+                    if (isUp) rightPaddle.upKey = false;
+                    else rightPaddle.downKey = false;
+                }
+            });
+        }
+        
+        // Setup mobile controls
+        setupMobileButton(leftPaddleUpBtn, 'up');
+        setupMobileButton(leftPaddleDownBtn, 'down');
+        setupMobileButton(rightPaddleUpBtn, 'up');
+        setupMobileButton(rightPaddleDownBtn, 'down');
+        
+        // Game control buttons
+        singlePlayerBtn.addEventListener('click', () => {
+            singlePlayerMode = true;
+            currentMode.textContent = 'VS COMPUTER';
+            currentWinningScore.textContent = winningScore;
+            initGame();
+        });
+        
+        multiPlayerBtn.addEventListener('click', () => {
+            singlePlayerMode = false;
+            currentMode.textContent = 'VS FRIEND';
+            currentWinningScore.textContent = winningScore;
+            initGame();
+        });
+        
+        restartBtn.addEventListener('click', () => {
+            initGame();
+        });
+        
+        resetLeaderboardBtn.addEventListener('click', () => {
+            showResetConfirmModal(); // Show custom confirmation modal
+        });
+        
+        winningScoreSlider.addEventListener('input', () => {
+            winningScore = parseInt(winningScoreSlider.value);
+            winningScoreDisplay.textContent = winningScore;
+            currentWinningScore.textContent = winningScore;
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Apply saved theme on page load for consistency across pages
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'day';
+            document.body.setAttribute('data-theme', savedTheme);
+            loadLeaderboard();
+            resizeCanvas();
+            draw(); // Draw initial screen
+        });
+    </script>
+</body>
+</html>

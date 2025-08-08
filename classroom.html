@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leksiyonity - Servers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script>
+        // Tailwind CSS configuration for custom colors and shadows, consistent with the app's theme.
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                        pixel: ['"Press Start 2P"', 'cursive'], // Added pixelated font
+                    },
+                    colors: {
+                        'pixel-blue': '#3b82f6',
+                        'pixel-green': '#22c55e',
+                        'pixel-yellow': '#facc15',
+                        'pixel-purple': '#a855f7',
+                        'pixel-red': '#ef4444',
+                        'pixel-orange': '#f97316',
+                        'chat-bg': '#e0f2f7',
+                        'chat-user': '#d1fae5',
+                        'chat-ai': '#bfdbfe',
+                        'teal-500': '#14b8a6',
+                        'music-light': '#f0f9ff',
+                        'music-dark': '#4b5563',
+                        // CSS variables for dynamic theme colors
+                        'theme-bg': 'var(--theme-bg-color)',
+                        'theme-text': 'var(--theme-text-color)',
+                        'card-bg': 'var(--card-bg-color)',
+                        'card-border': 'var(--card-border-color)',
+                        'secondary-text': 'var(--secondary-text-color)',
+                        'accent-bg-light': 'var(--accent-bg-light-color)', // For colorful sections
+                        'accent-bg-dark': 'var(--accent-bg-dark-color)',   // For colorful sections
+                    },
+                    boxShadow: {
+                        'pixel': '4px 4px 0px 0px rgba(0,0,0,1)',
+                        'pixel-sm': '2px 2px 0px 0px rgba(0,0,0,1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom CSS for pixel art rendering and button effects */
+        .pixel-art {
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        .btn-pixel {
+            transition: all 0.1s ease;
+        }
+        .btn-pixel:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+        }
+        .server-card {
+            transition: all 0.2s ease;
+            background-color: var(--card-bg-color); /* Apply theme color */
+            border-color: var(--card-border-color); /* Apply theme color */
+        }
+        .server-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
+        }
+        .category-btn {
+            background-color: var(--card-bg-color); /* Default to card background */
+            color: var(--theme-text-color); /* Default to theme text */
+            border-color: var(--card-border-color);
+        }
+        .category-btn.active {
+            background-color: var(--pixel-blue); /* Active state uses pixel-blue */
+            color: white;
+            border-color: var(--pixel-blue); /* Active state border matches button */
+        }
+        /* Specific styles for elements within server cards */
+        .server-card .text-gray-600 {
+            color: var(--secondary-text-color);
+        }
+        .server-card .bg-blue-100, .server-card .bg-green-100, 
+        .server-card .bg-yellow-100, .server-card .bg-red-100,
+        .server-card .bg-purple-100, .server-card .bg-pink-100,
+        .server-card .bg-gray-200 { /* For tags and initial status badges */
+            background-color: var(--theme-bg-color); /* Use theme background */
+            border-color: var(--card-border-color); /* Use theme border */
+            color: var(--secondary-text-color); /* Use secondary text color */
+        }
+        .server-card .bg-purple-200, .server-card .bg-blue-200, .server-card .bg-yellow-200, .server-card .bg-red-200 {
+            /* For server icon backgrounds, keep distinct colors but ensure text is theme-aware */
+            border-color: var(--card-border-color);
+        }
+        .server-card .bg-pixel-green, .server-card .bg-pixel-blue { /* For JOINED/Enter buttons */
+            border-color: var(--card-border-color); /* Ensure border is pixelated */
+        }
+
+        /* Define CSS variables for Day and Dark themes */
+        /* Default (Day Mode) */
+        :root, [data-theme='day'] {
+            --theme-bg-color: #eff6ff; /* bg-blue-50 */
+            --theme-text-color: #1f2937; /* text-gray-800 */
+            --card-bg-color: #ffffff; /* bg-white */
+            --card-border-color: #000000; /* border-black */
+            --secondary-text-color: #4b5563; /* text-gray-600 */
+            --accent-bg-light-color: #e0f2f7; /* Light blue for colorful sections */
+            --accent-bg-dark-color: #bfdbfe; /* Slightly darker blue for contrast */
+        }
+
+        /* Dark Mode */
+        [data-theme='dark'] {
+            --theme-bg-color: #1f2937; /* Dark gray background */
+            --theme-text-color: #f3f4f6; /* Light gray text */
+            --card-bg-color: #374151; /* Darker gray for cards */
+            --card-border-color: #6b7280; /* Lighter gray border */
+            --secondary-text-color: #9ca3af; /* Lighter gray for secondary text */
+            --accent-bg-light-color: #2d3748; /* Darker shade for colorful sections */
+            --accent-bg-dark-color: #4a5568;   /* Even darker shade for contrast */
+        }
+
+        /* Apply theme variables to core elements */
+        body {
+            background-color: var(--theme-bg-color);
+            color: var(--theme-text-color);
+        }
+
+        /* Override specific Tailwind classes to use CSS variables for theme consistency */
+        .bg-white { /* Applies to header, main cards */
+            background-color: var(--card-bg-color);
+        }
+        .border-black { /* Applies to borders of cards, header, nav */
+            border-color: var(--card-border-color);
+        }
+        .text-gray-600 { /* Applies to secondary text like descriptions */
+            color: var(--secondary-text-color);
+        }
+        .bg-blue-50 { /* Applies to main body background, but overridden by body style */
+            background-color: var(--theme-bg-color);
+        }
+        /* New custom style for the small text in server icons */
+        .server-icon-text {
+            font-size: 0.5rem; /* Even smaller font size */
+            line-height: 0.6rem; /* Adjusted line height for better fit */
+            white-space: nowrap; /* Prevent text from wrapping */
+            transform: scaleX(0.9); /* Slightly compress text horizontally */
+            transform-origin: center; /* Ensure scaling is from the center */
+        }
+    </style>
+</head>
+<body class="min-h-screen font-inter flex flex-col" data-theme="day">
+    <!-- Header section, consistent with the app's branding -->
+    <header class="shadow-pixel border-b-2 p-4" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <div class="flex items-center justify-between">
+            <a href="dashboard.html" class="btn-pixel">
+                <span class="text-2xl" style="color: var(--secondary-text-color);">←</span>
+            </a>
+            <h1 class="text-xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">LEKSIYONITY - Servers</h1>
+            <div class="w-6"></div> <!-- Spacer for balance -->
+        </div>
+    </header>
+
+    <main class="flex-grow p-4">
+        <!-- Search Bar -->
+        <div class="relative mb-4 p-3 rounded-lg shadow-pixel border-2 colorful-section-light" style="border-color: var(--card-border-color);">
+            <input type="text" placeholder="Search servers..." 
+                   class="w-full p-2 pl-10 rounded-lg shadow-pixel-sm border-2 focus:outline-none"
+                   style="background-color: var(--card-bg-color); color: var(--theme-text-color); border-color: var(--card-border-color);">
+            <span class="absolute left-3 top-2.5" style="color: var(--secondary-text-color);">🔍</span>
+        </div>
+
+        <!-- Categories -->
+        <div class="flex overflow-x-auto space-x-2 mb-4 pb-2">
+            <button class="category-btn active px-4 py-2 rounded-full shadow-pixel-sm border-2 border-black whitespace-nowrap btn-pixel font-pixel">
+                All Servers
+            </button>
+            <button class="category-btn px-4 py-2 rounded-full shadow-pixel-sm border-2 border-black whitespace-nowrap btn-pixel font-pixel">
+                Biology
+            </button>
+            <button class="category-btn px-4 py-2 rounded-full shadow-pixel-sm border-2 border-black whitespace-nowrap btn-pixel font-pixel">
+                Chemistry
+            </button>
+            <button class="category-btn px-4 py-2 rounded-full shadow-pixel-sm border-2 border-black whitespace-nowrap btn-pixel font-pixel">
+                Physics
+            </button>
+            <button class="category-btn px-4 py-2 rounded-full shadow-pixel-sm border-2 border-black whitespace-nowrap btn-pixel font-pixel">
+                Language
+            </button>
+        </div>
+
+        <!-- Server List -->
+        <div class="grid grid-cols-1 gap-4">
+            <!-- Biology Hub -->
+            <div class="server-card p-4 rounded-lg shadow-pixel border-2 colorful-section-dark">
+                <div class="flex items-start">
+                    <div class="w-16 h-16 bg-purple-200 border-2 border-black shadow-pixel-sm mr-3 flex-shrink-0 flex items-center justify-center pixel-art">
+                        <span class="font-pixel font-bold text-center server-icon-text" style="color: var(--theme-text-color);">BIOLOGY</span>
+                    </div>
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-pixel text-lg" style="color: var(--theme-text-color);">BIOLOGY HUB</h3>
+                            <span class="bg-pixel-green text-white text-xs px-2 py-1 rounded shadow-pixel-sm border border-black font-pixel">JOINED</span>
+                        </div>
+                        <p class="text-sm mb-2" style="color: var(--secondary-text-color);">45 Active, 1 PENDING</p>
+                        <p class="text-sm" style="color: var(--theme-text-color);">Join our biology community for discussions, quizzes, and collaborative learning.</p>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-3">
+                    <div class="flex space-x-1">
+                        <span class="bg-blue-100 text-xs px-2 py-1 rounded shadow-pixel-sm border border-black font-pixel">Microbiology</span>
+                        <span class="bg-green-100 text-xs px-2 py-1 rounded shadow-pixel-sm border border-black font-pixel">Study Group</span>
+                    </div>
+                    <button class="bg-pixel-blue text-white px-3 py-1 rounded shadow-pixel-sm border-2 border-black text-sm btn-pixel font-pixel">
+                        Enter
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chemistry Lab -->
+            <div class="server-card p-4 rounded-lg shadow-pixel border-2 colorful-section-light">
+                <div class="flex items-start">
+                    <div class="w-16 h-16 bg-blue-200 border-2 border-black shadow-pixel-sm mr-3 flex-shrink-0 flex items-center justify-center pixel-art">
+                        <span class="text-xs font-pixel font-bold text-center" style="color: var(--theme-text-color);">CHEM</span>
+                    </div>
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-pixel text-lg" style="color: var(--theme-text-color);">CHEMISTRY LAB</h3>
+                            <span class="bg-gray-200 text-xs px-2 py-1 rounded shadow-pixel-sm border border-black font-pixel">PUBLIC</span>
+                        </div>
+                        <p class="text-sm mb-2" style="color: var(--secondary-text-color);">32 Active, 0 PENDING</p>
+                        <p class="text-sm" style="color: var(--theme-text-color);">Explore chemical reactions, periodic table, and lab experiments together.</p>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-3">
+                    <div class="flex space-x-1">
+                        <span class="bg-yellow-100 text-xs px-2 py-1 rounded shadow-pixel-sm border border-black font-pixel">Organic</span>
+                        <span class="bg-red-100 text-xs px-2 py-1 rounded shadow-pixel-sm border border-black font-pixel">Lab</span>
+                    </div>
+                    <button class="bg-pixel-green text-white px-3 py-1 rounded shadow-pixel-sm border-2 border-black text-sm btn-pixel font-pixel">
+                        Join
+                    </button>
+                </div>
+            </div>
+
+            <!-- Language Exchange -->
+            <div class="server-card p-4 rounded-lg shadow-pixel border-2 colorful-section-dark">
+                <div class="flex items-start">
+                    <div class="w-16 h-16 bg-yellow-200 border-2 border-black shadow-pixel-sm mr-3 flex-shrink-0 flex items-center justify-center pixel-art">
+                        <span class="text-xs font-pixel font-bold text-center" style="color: var(--theme-text-color);">LANG</span>
+                    </div>
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-pixel text-lg" style="color: var(--theme-text-color);">LANGUAGE EXCHANGE</h3>
+                            <span class="bg-gray-200 text-xs px-2 py-1 rounded shadow-pixel-sm border border-black font-pixel">PUBLIC</span>
+                        </div>
+                        <p class="text-sm mb-2" style="color: var(--secondary-text-color);">28 Active, 2 PENDING</p>
+                        <p class="text-sm" style="color: var(--theme-text-color);">Practice languages with native speakers through games and conversations.</p>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-3">
+                    <div class="flex space-x-1">
+                        <span class="bg-blue-100 text-xs px-2 py-1 rounded shadow-pixel-sm border border-black font-pixel">Tagalog</span>
+                        <span class="bg-green-100 text-xs px-2 py-1 rounded shadow-pixel-sm border border-black font-pixel">English</span>
+                    </div>
+                    <button class="bg-pixel-green text-white px-3 py-1 rounded shadow-pixel-sm border-2 border-black text-sm btn-pixel font-pixel">
+                        Join
+                    </button>
+                </div>
+            </div>
+
+            <!-- Physics Forum -->
+            <div class="server-card p-4 rounded-lg shadow-pixel border-2 colorful-section-light">
+                <div class="flex items-start">
+                    <div class="w-16 h-16 bg-red-200 border-2 border-black shadow-pixel-sm mr-3 flex-shrink-0 flex items-center justify-center pixel-art">
+                        <span class="font-pixel font-bold text-center server-icon-text" style="color: var(--theme-text-color);">PHYSICS</span>
+                    </div>
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-pixel text-lg" style="color: var(--theme-text-color);">PHYSICS FORUM</h3>
+                            <span class="bg-gray-200 text-xs px-2 py-1 rounded shadow-pixel-sm border border-black font-pixel">PUBLIC</span>
+                        </div>
+                        <p class="text-sm mb-2" style="color: var(--secondary-text-color);">18 Active, 0 PENDING</p>
+                        <p class="text-sm" style="color: var(--theme-text-color);">Discuss classical mechanics, quantum physics, and everything in between.</p>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-3">
+                    <div class="flex space-x-1">
+                        <span class="bg-purple-100 text-xs px-2 py-1 rounded shadow-pixel-sm border border-black font-pixel">Theory</span>
+                        <span class="bg-pink-100 text-xs px-2 py-1 rounded shadow-pixel-sm border border-black font-pixel">Math</span>
+                    </div>
+                    <button class="bg-pixel-green text-white px-3 py-1 rounded shadow-pixel-sm border-2 border-black text-sm btn-pixel font-pixel">
+                        Join
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Server Button -->
+        <button onclick="showComingSoonModal()" 
+                class="bg-pixel-purple text-white py-3 px-4 rounded-lg shadow-pixel border-2 border-black font-bold mt-6 w-full btn-pixel font-pixel">
+            + Create New Server
+        </button>
+    </main>
+
+    <!-- Bottom Navigation, consistent with the dashboard -->
+    <nav class="border-t-2 shadow-pixel flex justify-around p-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <a href="dashboard.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🏠</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Home</span>
+        </a>
+        <a href="music.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🎵</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Music</span>
+        </a>
+        <a href="explore.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🗺️</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Explore</span>
+        </a>
+        <a href="tools.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🛠️</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Tools</span>
+        </a>
+        <a href="profile.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">👤</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Profile</span>
+        </a>
+    </nav>
+
+    <!-- Coming Soon Modal -->
+    <div id="comingSoonModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="p-6 rounded-lg shadow-pixel border-2 max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+            <h3 class="text-lg font-pixel font-bold mb-2" style="color: var(--theme-text-color);">Coming Soon!</h3>
+            <p class="mb-4" style="color: var(--secondary-text-color);">This feature is under development.</p>
+            <button onclick="document.getElementById('comingSoonModal').classList.add('hidden')"
+                class="bg-pixel-blue text-white py-2 px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600 font-pixel">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <!-- Join Success Modal -->
+    <div id="joinSuccessModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="p-6 rounded-lg shadow-pixel border-2 max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+            <h3 class="text-lg font-pixel font-bold mb-2" style="color: var(--theme-text-color);">Joined Successfully!</h3>
+            <p class="mb-4" style="color: var(--secondary-text-color);">You've joined this server. Start exploring now!</p>
+            <button onclick="document.getElementById('joinSuccessModal').classList.add('hidden')"
+                class="bg-pixel-green text-white py-2 px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-green-600 font-pixel">
+                Let's Go!
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Function to show the "Coming Soon" modal
+        function showComingSoonModal() {
+            document.getElementById('comingSoonModal').classList.remove('hidden');
+        }
+
+        // Function to show the "Join Success" modal
+        function showJoinSuccessModal() {
+            document.getElementById('joinSuccessModal').classList.remove('hidden');
+        }
+
+        // Add click effect to server cards (triggers Coming Soon if not clicking a button)
+        document.querySelectorAll('.server-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Don't navigate if clicking on a button inside the card
+                if (!e.target.closest('button')) {
+                    showComingSoonModal(); // Use the consistent modal function
+                }
+            });
+        });
+
+        // Category button functionality
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.category-btn').forEach(b => {
+                    b.classList.remove('active', 'bg-pixel-blue', 'text-white');
+                    // Reset to theme's card bg and text color explicitly
+                    b.style.backgroundColor = 'var(--card-bg-color)'; 
+                    b.style.color = 'var(--theme-text-color)'; 
+                });
+                // Apply active styles
+                this.classList.add('active', 'bg-pixel-blue', 'text-white');
+                // Remove inline styles to let Tailwind's active classes take over
+                this.style.backgroundColor = ''; 
+                this.style.color = ''; 
+                
+                // In a real app, this would filter servers
+                showComingSoonModal(); // Use the consistent modal function
+            });
+        });
+
+        // Join/Enter button functionality
+        document.querySelectorAll('.server-card button').forEach(btn => {
+            if (btn.textContent.trim() === 'Join') {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Prevent card click event from firing
+                    this.textContent = 'Enter';
+                    this.classList.remove('bg-pixel-green');
+                    this.classList.add('bg-pixel-blue');
+                    
+                    // Change status to JOINED
+                    const card = this.closest('.server-card');
+                    const statusBadge = card.querySelector('.text-xs'); // Select the span with text-xs
+                    if (statusBadge && statusBadge.textContent.trim() === 'PUBLIC') {
+                        statusBadge.textContent = 'JOINED';
+                        statusBadge.classList.remove('bg-gray-200');
+                        // Remove inline styles to let Tailwind's classes take over
+                        statusBadge.style.backgroundColor = ''; 
+                        statusBadge.style.color = ''; 
+                        statusBadge.classList.add('bg-pixel-green', 'text-white');
+                    }
+                    
+                    showJoinSuccessModal(); // Use the consistent modal function
+                });
+            } else if (btn.textContent.trim() === 'Enter') {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Prevent card click event from firing
+                    showComingSoonModal(); // In a real app, this would navigate to the server
+                });
+            }
+        });
+
+        // Apply saved theme on page load for consistency across pages
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'day';
+            document.body.setAttribute('data-theme', savedTheme);
+        });
+    </script>
+</body>
+</html>

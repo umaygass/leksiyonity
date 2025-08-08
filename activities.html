@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leksiyonity - Activities</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script>
+        // Tailwind CSS configuration for custom colors and shadows, consistent with the app's theme.
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                        pixel: ['"Press Start 2P"', 'cursive'], // Added pixelated font
+                    },
+                    colors: {
+                        'pixel-blue': '#3b82f6',
+                        'pixel-green': '#22c55e',
+                        'pixel-yellow': '#facc15',
+                        'pixel-purple': '#a855f7',
+                        'pixel-red': '#ef4444',
+                        'pixel-orange': '#f97316',
+                        'chat-bg': '#e0f2f7',
+                        'chat-user': '#d1fae5',
+                        'chat-ai': '#bfdbfe',
+                        'teal-500': '#14b8a6',
+                        'music-light': '#f0f9ff',
+                        'music-dark': '#4b5563',
+                        // CSS variables for dynamic theme colors
+                        'theme-bg': 'var(--theme-bg-color)',
+                        'theme-text': 'var(--theme-text-color)',
+                        'card-bg': 'var(--card-bg-color)',
+                        'card-border': 'var(--card-border-color)',
+                        'secondary-text': 'var(--secondary-text-color)',
+                        'accent-bg-light': 'var(--accent-bg-light-color)', // For colorful sections
+                        'accent-bg-dark': 'var(--accent-bg-dark-color)',   // For colorful sections
+                    },
+                    boxShadow: {
+                        'pixel': '4px 4px 0px 0px rgba(0,0,0,1)',
+                        'pixel-sm': '2px 2px 0px 0px rgba(0,0,0,1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom CSS for pixel art rendering and button effects */
+        .pixel-art {
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        .btn-pixel {
+            transition: all 0.1s ease;
+        }
+        .btn-pixel:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+        }
+
+        /* Define CSS variables for Day and Dark themes */
+        /* Default (Day Mode) */
+        :root, [data-theme='day'] {
+            --theme-bg-color: #eff6ff; /* bg-blue-50 */
+            --theme-text-color: #1f2937; /* text-gray-800 */
+            --card-bg-color: #ffffff; /* bg-white */
+            --card-border-color: #000000; /* border-black */
+            --secondary-text-color: #4b5563; /* text-gray-600 */
+            --accent-bg-light-color: #e0f2f7; /* Light blue for colorful sections */
+            --accent-bg-dark-color: #bfdbfe; /* Slightly darker blue for contrast */
+        }
+
+        /* Dark Mode */
+        [data-theme='dark'] {
+            --theme-bg-color: #1f2937; /* Dark gray background */
+            --theme-text-color: #f3f4f6; /* Light gray text */
+            --card-bg-color: #374151; /* Darker gray for cards */
+            --card-border-color: #6b7280; /* Lighter gray border */
+            --secondary-text-color: #9ca3af; /* Lighter gray for secondary text */
+            --accent-bg-light-color: #2d3748; /* Darker shade for colorful sections */
+            --accent-bg-dark-color: #4a5568;   /* Even darker shade for contrast */
+        }
+
+        /* Apply theme variables to core elements */
+        body {
+            background-color: var(--theme-bg-color);
+            color: var(--theme-text-color);
+        }
+
+        /* Override specific Tailwind classes to use CSS variables for theme consistency */
+        .bg-white { /* Applies to header, main cards */
+            background-color: var(--card-bg-color);
+        }
+        .border-black { /* Applies to borders of cards, header, nav */
+            border-color: var(--card-border-color);
+        }
+        .text-gray-600 { /* Applies to secondary text like descriptions */
+            color: var(--secondary-text-color);
+        }
+        .bg-blue-50 { /* Applies to main body background, but overridden by body style */
+            background-color: var(--theme-bg-color);
+        }
+        /* Specific styles for activities page elements */
+        .activity-item {
+            background-color: var(--card-bg-color);
+            border-color: var(--card-border-color);
+        }
+        .activity-item:hover {
+            background-color: var(--theme-bg-color); /* Lighter hover background */
+        }
+        .activity-icon-bg {
+            background-color: var(--theme-bg-color); /* Use theme bg for icon background */
+            border-color: var(--card-border-color);
+        }
+        .activity-icon {
+            color: var(--pixel-green); /* Keep specific icon colors */
+        }
+        .activity-due-tag {
+            background-color: var(--pixel-green); /* Example: green tag for due soon */
+            color: white;
+        }
+        .activity-overdue-tag {
+            background-color: var(--pixel-red); /* Example: red tag for overdue */
+            color: white;
+        }
+        /* New styles for colorful sections */
+        .colorful-section-light {
+            background-color: var(--accent-bg-light-color);
+        }
+        .colorful-section-dark {
+            background-color: var(--accent-bg-dark-color);
+        }
+    </style>
+</head>
+<body class="min-h-screen font-inter flex flex-col" data-theme="day">
+    <!-- Header section, consistent with the app's branding -->
+    <header class="shadow-pixel border-b-2 p-4" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <h1 class="text-2xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">LEKSIYONITY</h1>
+    </header>
+
+    <main class="flex-grow p-4">
+        <!-- Activities Section -->
+        <div class="p-4 rounded-lg shadow-pixel border-2 mb-4 colorful-section-light" style="border-color: var(--card-border-color);">
+            <h2 class="text-2xl font-pixel mb-4 text-center" style="color: var(--theme-text-color);">My Activities</h2>
+            
+            <div class="flex justify-between items-center mb-6">
+                <button onclick="showComingSoonModal()" class="bg-pixel-blue text-white py-2 px-4 rounded-lg font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600">
+                    <span class="text-xl">⚙️</span> <span class="font-pixel">Filter</span>
+                </button>
+                <button onclick="showComingSoonModal()" class="bg-pixel-green text-white py-2 px-4 rounded-lg font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-green-600">
+                    <span class="text-xl">➕</span> <span class="font-pixel">New Activity</span>
+                </button>
+            </div>
+
+            <!-- Activity Tabs -->
+            <div class="mb-6 border-b-2 colorful-section-dark" style="border-color: var(--card-border-color);">
+                <div class="flex justify-around space-x-2">
+                    <button class="py-2 px-4 border-b-2 border-pixel-blue font-pixel font-medium text-sm text-pixel-blue btn-pixel">
+                        All Activities
+                    </button>
+                    <button class="py-2 px-4 border-b-2 border-transparent font-pixel font-medium text-sm hover:text-pixel-blue hover:border-pixel-blue btn-pixel" style="color: var(--secondary-text-color);">
+                        Upcoming
+                    </button>
+                    <button class="py-2 px-4 border-b-2 border-transparent font-pixel font-medium text-sm hover:text-pixel-blue hover:border-pixel-blue btn-pixel" style="color: var(--secondary-text-color);">
+                        Completed
+                    </button>
+                    <button class="py-2 px-4 border-b-2 border-transparent font-pixel font-medium text-sm hover:text-pixel-blue hover:border-pixel-blue btn-pixel" style="color: var(--secondary-text-color);">
+                        Overdue
+                    </button>
+                </div>
+            </div>
+
+            <!-- Activity List -->
+            <div class="space-y-4">
+                <!-- Activity 1 -->
+                <div class="activity-item p-4 rounded-lg border-2 shadow-pixel-sm flex items-start colorful-section-dark">
+                    <div class="activity-icon-bg w-12 h-12 rounded-lg p-2 mr-4 flex-shrink-0 flex items-center justify-center border-2">
+                        <span class="activity-icon text-2xl">📚</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-pixel text-lg" style="color: var(--theme-text-color);">Read Chapter 5 - Biology</h3>
+                            <span class="activity-due-tag text-xs px-2 py-1 rounded-full font-semibold">Due Tomorrow</span>
+                        </div>
+                        <p class="mt-1 text-sm" style="color: var(--secondary-text-color);">Biology 101 - Cell Structure and Function</p>
+                        <div class="mt-2 flex items-center text-sm" style="color: var(--secondary-text-color);">
+                            <span class="text-pixel-green mr-2 text-lg">🗓️</span> Due: Oct 15, 2023
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity 2 -->
+                <div class="activity-item p-4 rounded-lg border-2 shadow-pixel-sm flex items-start colorful-section-light">
+                    <div class="activity-icon-bg w-12 h-12 rounded-lg p-2 mr-4 flex-shrink-0 flex items-center justify-center border-2">
+                        <span class="activity-icon text-2xl">✍️</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-pixel text-lg" style="color: var(--theme-text-color);">Essay Assignment</h3>
+                            <span class="activity-due-tag text-xs px-2 py-1 rounded-full font-semibold">Due in 3 days</span>
+                        </div>
+                        <p class="mt-1 text-sm" style="color: var(--secondary-text-color);">History 101 - Industrial Revolution Impact</p>
+                        <div class="mt-2 flex items-center text-sm" style="color: var(--secondary-text-color);">
+                            <span class="text-pixel-green mr-2 text-lg">🗓️</span> Due: Oct 18, 2023
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity 3 -->
+                <div class="activity-item p-4 rounded-lg border-2 shadow-pixel-sm flex items-start colorful-section-dark">
+                    <div class="activity-icon-bg w-12 h-12 rounded-lg p-2 mr-4 flex-shrink-0 flex items-center justify-center border-2">
+                        <span class="activity-icon text-2xl">🧪</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-pixel text-lg" style="color: var(--theme-text-color);">Lab Report</h3>
+                            <span class="activity-due-tag text-xs px-2 py-1 rounded-full font-semibold">Due in 1 week</span>
+                        </div>
+                        <p class="mt-1 text-sm" style="color: var(--secondary-text-color);">Chemistry 101 - Chemical Reactions</p>
+                        <div class="mt-2 flex items-center text-sm" style="color: var(--secondary-text-color);">
+                            <span class="text-pixel-green mr-2 text-lg">🗓️</span> Due: Oct 22, 2023
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity 4 (Overdue) -->
+                <div class="activity-item p-4 rounded-lg border-2 shadow-pixel-sm flex items-start colorful-section-light">
+                    <div class="activity-icon-bg w-12 h-12 rounded-lg p-2 mr-4 flex-shrink-0 flex items-center justify-center border-2">
+                        <span class="activity-icon text-2xl">🧮</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-pixel text-lg" style="color: var(--theme-text-color);">Math Problem Set</h3>
+                            <span class="activity-overdue-tag text-xs px-2 py-1 rounded-full font-semibold">Overdue</span>
+                        </div>
+                        <p class="mt-1 text-sm" style="color: var(--secondary-text-color);">Calculus 101 - Derivatives</p>
+                        <div class="mt-2 flex items-center text-sm" style="color: var(--secondary-text-color);">
+                            <span class="text-pixel-green mr-2 text-lg">🗓️</span> Due: Oct 10, 2023
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation, consistent with the dashboard -->
+    <nav class="border-t-2 shadow-pixel flex justify-around p-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <a href="dashboard.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🏠</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Home</span>
+        </a>
+        <a href="music.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🎵</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Music</span>
+        </a>
+        <a href="explore.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🗺️</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Explore</span>
+        </a>
+        <a href="tools.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🛠️</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Tools</span>
+        </a>
+        <a href="profile.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">👤</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Profile</span>
+        </a>
+    </nav>
+
+    <!-- Coming Soon Modal - Reused from dashboard for consistency -->
+    <div id="comingSoonModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="p-6 rounded-lg shadow-pixel border-2 max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+            <h3 class="text-lg font-bold mb-2" style="color: var(--theme-text-color);">Coming Soon!</h3>
+            <p class="mb-4" style="color: var(--secondary-text-color);">This feature is under development.</p>
+            <button onclick="document.getElementById('comingSoonModal').classList.add('hidden')"
+                class="bg-pixel-blue text-white py-2 px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Function to show the "Coming Soon" modal
+        function showComingSoonModal() {
+            document.getElementById('comingSoonModal').classList.remove('hidden');
+        }
+
+        // Apply saved theme on page load for consistency across pages
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'day';
+            document.body.setAttribute('data-theme', savedTheme);
+        });
+    </script>
+</body>
+</html>

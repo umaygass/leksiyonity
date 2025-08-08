@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leksiyonity - Rankings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script>
+        // Tailwind CSS configuration for custom colors and shadows, consistent with the app's theme.
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                        pixel: ['"Press Start 2P"', 'cursive'], // Added pixelated font
+                    },
+                    colors: {
+                        'pixel-blue': '#3b82f6',
+                        'pixel-green': '#22c55e',
+                        'pixel-yellow': '#facc15',
+                        'pixel-purple': '#a855f7',
+                        'pixel-red': '#ef4444',
+                        'pixel-orange': '#f97316',
+                        'chat-bg': '#e0f2f7',
+                        'chat-user': '#d1fae5',
+                        'chat-ai': '#bfdbfe',
+                        'teal-500': '#14b8a6',
+                        'music-light': '#f0f9ff',
+                        'music-dark': '#4b5563',
+                        // CSS variables for dynamic theme colors
+                        'theme-bg': 'var(--theme-bg-color)',
+                        'theme-text': 'var(--theme-text-color)',
+                        'card-bg': 'var(--card-bg-color)',
+                        'card-border': 'var(--card-border-color)',
+                        'secondary-text': 'var(--secondary-text-color)',
+                        'accent-bg-light': 'var(--accent-bg-light-color)', // For colorful sections
+                        'accent-bg-dark': 'var(--accent-bg-dark-color)',   // For colorful sections
+                        'podium-1-color': 'var(--podium-1-color)', // pixel-yellow
+                        'podium-2-color': 'var(--podium-2-color)', // gray-300
+                        'podium-3-color': 'var(--podium-3-color)', // amber-500
+                    },
+                    boxShadow: {
+                        'pixel': '4px 4px 0px 0px rgba(0,0,0,1)',
+                        'pixel-sm': '2px 2px 0px 0px rgba(0,0,0,1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom CSS for pixel art rendering and button effects */
+        .pixel-art {
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        .btn-pixel {
+            transition: all 0.1s ease;
+        }
+        .btn-pixel:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+        }
+        /* Define CSS variables for Day and Dark themes */
+        /* Default (Day Mode) */
+        :root, [data-theme='day'] {
+            --theme-bg-color: #eff6ff; /* bg-blue-50 */
+            --theme-text-color: #1f2937; /* text-gray-800 */
+            --card-bg-color: #ffffff; /* bg-white */
+            --card-border-color: #000000; /* border-black */
+            --secondary-text-color: #4b5563; /* text-gray-600 */
+            --accent-bg-light-color: #e0f2f7; /* Light blue for colorful sections */
+            --accent-bg-dark-color: #bfdbfe; /* Slightly darker blue for contrast */
+            --podium-1-color: #facc15; /* pixel-yellow */
+            --podium-2-color: #d1d5db; /* gray-300 */
+            --podium-3-color: #f59e0b; /* amber-500 */
+        }
+
+        /* Dark Mode */
+        [data-theme='dark'] {
+            --theme-bg-color: #1f2937; /* Dark gray background */
+            --theme-text-color: #f3f4f6; /* Light gray text */
+            --card-bg-color: #374151; /* Darker gray for cards */
+            --card-border-color: #6b7280; /* Lighter gray border */
+            --secondary-text-color: #9ca3af; /* Lighter gray for secondary text */
+            --accent-bg-light-color: #2d3748; /* Darker shade for colorful sections */
+            --accent-bg-dark-color: #4a5568;   /* Even darker shade for contrast */
+            --podium-1-color: #facc15; /* pixel-yellow (can keep bright) */
+            --podium-2-color: #9ca3af; /* gray-400 */
+            --podium-3-color: #d97706; /* amber-700 */
+        }
+
+        /* Apply theme variables to core elements */
+        body {
+            background-color: var(--theme-bg-color);
+            color: var(--theme-text-color);
+        }
+
+        /* Override specific Tailwind classes to use CSS variables for theme consistency */
+        .bg-white { /* Applies to header, main cards */
+            background-color: var(--card-bg-color);
+        }
+        .border-black { /* Applies to borders of cards, header, nav */
+            border-color: var(--card-border-color);
+        }
+        .text-gray-600 { /* Applies to secondary text like descriptions */
+            color: var(--secondary-text-color);
+        }
+        .bg-blue-50 { /* Applies to main body background, but overridden by body style */
+            background-color: var(--theme-bg-color);
+        }
+        /* Podium specific colors */
+        .podium-1 {
+            background-color: var(--podium-1-color);
+            height: 120px; /* Adjusted height for better visual */
+            min-width: 120px; /* Ensured minimum width for text */
+        }
+        .podium-2 {
+            background-color: var(--podium-2-color);
+            height: 90px; /* Adjusted height for better visual */
+            min-width: 120px; /* Ensured minimum width for text */
+        }
+        .podium-3 {
+            background-color: var(--podium-3-color);
+            height: 70px; /* Adjusted height for better visual */
+            min-width: 120px; /* Ensured minimum width for text */
+        }
+        .leaderboard-item {
+            background-color: var(--theme-bg-color); /* Use theme bg for list items */
+            border-color: var(--card-border-color);
+        }
+        .leaderboard-item.bg-blue-50 { /* For the first item in the list */
+            background-color: var(--theme-bg-color);
+        }
+    </style>
+</head>
+<body class="min-h-screen font-inter flex flex-col" data-theme="day">
+    <!-- Header section, consistent with the app's branding -->
+    <header class="shadow-pixel border-b-2 p-4" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <div class="flex items-center justify-between">
+            <a href="dashboard.html" class="btn-pixel">
+                <span class="text-2xl" style="color: var(--secondary-text-color);">←</span>
+            </a>
+            <h1 class="text-xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">LEKSIYONITY - Leaderboard</h1>
+            <div class="w-6"></div> <!-- Spacer for balance -->
+        </div>
+    </header>
+
+    <main class="flex-grow p-4">
+        <!-- Podium Section -->
+        <div class="p-6 rounded-lg shadow-pixel border-2 mb-8 colorful-section-light" style="border-color: var(--card-border-color);">
+            <h2 class="text-2xl font-pixel font-bold mb-4 text-center" style="color: var(--theme-text-color);">Top Climbers!</h2>
+            <div class="flex justify-center items-end gap-8 mb-8"> <!-- Increased gap here -->
+                <!-- 2nd Place -->
+                <div class="text-center flex-1 min-w-[120px]"> <!-- Added flex-1 and min-w -->
+                    <div class="podium-2 border-2 border-black shadow-pixel flex items-center justify-center relative rounded-lg mx-auto">
+                        <span class="text-2xl font-pixel font-bold absolute -top-6" style="color: var(--theme-text-color);">2</span>
+                    </div>
+                    <p class="mt-2 font-pixel font-bold text-sm sm:text-base" style="color: var(--theme-text-color);">Albert Dagocupam</p> <!-- Adjusted font size for responsiveness -->
+                    <p class="text-xs font-pixel" style="color: var(--secondary-text-color);">770 XP</p> <!-- Applied font-pixel -->
+                </div>
+                
+                <!-- 1st Place -->
+                <div class="text-center flex-1 min-w-[120px]"> <!-- Added flex-1 and min-w -->
+                    <div class="podium-1 border-2 border-black shadow-pixel flex items-center justify-center relative rounded-lg mx-auto">
+                        <span class="text-2xl font-pixel font-bold absolute -top-6" style="color: var(--theme-text-color);">1</span>
+                    </div>
+                    <p class="mt-2 font-pixel font-bold text-sm sm:text-base" style="color: var(--theme-text-color);">Veronica Yoon</p> <!-- Adjusted font size for responsiveness -->
+                    <p class="text-xs font-pixel" style="color: var(--secondary-text-color);">999 XP</p> <!-- Applied font-pixel -->
+                </div>
+                
+                <!-- 3rd Place -->
+                <div class="text-center flex-1 min-w-[120px]"> <!-- Added flex-1 and min-w -->
+                    <div class="podium-3 border-2 border-black shadow-pixel flex items-center justify-center relative rounded-lg mx-auto">
+                        <span class="text-2xl font-pixel font-bold absolute -top-6" style="color: var(--theme-text-color);">3</span>
+                    </div>
+                    <p class="mt-2 font-pixel font-bold text-sm sm:text-base" style="color: var(--theme-text-color);">Pamela Carlotta</p> <!-- Adjusted font size for responsiveness -->
+                    <p class="text-xs font-pixel" style="color: var(--secondary-text-color);">500 XP</p> <!-- Applied font-pixel -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard List -->
+        <div class="p-4 rounded-lg shadow-pixel border-2 colorful-section-dark" style="border-color: var(--card-border-color);">
+            <h2 class="text-lg font-pixel font-bold mb-3" style="color: var(--theme-text-color);">Full Leaderboard</h2>
+            <div class="space-y-3">
+                <!-- Rank 1 -->
+                <div class="leaderboard-item p-3 rounded border-2 colorful-section-light">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="font-pixel font-bold mr-3 w-6 text-center" style="color: var(--theme-text-color);">1</span>
+                            <img src="https://placehold.co/40x40/7c3aed/white?text=VY" 
+                                 alt="Profile" 
+                                 class="w-10 h-10 rounded-full border-2 border-black mr-3 pixel-art">
+                            <div>
+                                <p class="font-pixel font-bold" style="color: var(--theme-text-color);">Veronica Yoon</p>
+                                <p class="text-xs" style="color: var(--secondary-text-color);">Microbiology Expert</p>
+                            </div>
+                        </div>
+                        <span class="font-pixel font-bold" style="color: var(--theme-text-color);">999 XP</span>
+                    </div>
+                </div>
+                
+                <!-- Rank 2 -->
+                <div class="leaderboard-item p-3 rounded border-2 colorful-section-light">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="font-pixel font-bold mr-3 w-6 text-center" style="color: var(--theme-text-color);">2</span>
+                            <img src="https://placehold.co/40x40/22c55e/white?text=AD" 
+                                 alt="Profile" 
+                                 class="w-10 h-10 rounded-full border-2 border-black mr-3 pixel-art">
+                            <div>
+                                <p class="font-pixel font-bold" style="color: var(--theme-text-color);">Albert Dagocupam</p>
+                                <p class="text-xs" style="color: var(--secondary-text-color);">Biology Wizard</p>
+                            </div>
+                        </div>
+                        <span class="font-pixel font-bold" style="color: var(--theme-text-color);">770 XP</span>
+                    </div>
+                </div>
+                
+                <!-- Rank 3 -->
+                <div class="leaderboard-item p-3 rounded border-2 colorful-section-light">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="font-pixel font-bold mr-3 w-6 text-center" style="color: var(--theme-text-color);">3</span>
+                            <img src="https://placehold.co/40x40/facc15/white?text=PC" 
+                                 alt="Profile" 
+                                 class="w-10 h-10 rounded-full border-2 border-black mr-3 pixel-art">
+                            <div>
+                                <p class="font-pixel font-bold" style="color: var(--theme-text-color);">Pamela Carlotta</p>
+                                <p class="text-xs" style="color: var(--secondary-text-color);">Lab Specialist</p>
+                            </div>
+                        </div>
+                        <span class="font-pixel font-bold" style="color: var(--theme-text-color);">500 XP</span>
+                    </div>
+                </div>
+                
+                <!-- Rank 4 -->
+                <div class="leaderboard-item p-3 rounded border-2 colorful-section-light">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="font-pixel font-bold mr-3 w-6 text-center" style="color: var(--theme-text-color);">4</span>
+                            <img src="https://placehold.co/40x40/a855f7/white?text=KJ" 
+                                 alt="Profile" 
+                                 class="w-10 h-10 rounded-full border-2 border-black mr-3 pixel-art">
+                            <div>
+                                <p class="font-pixel font-bold" style="color: var(--theme-text-color);">Keith Jasper</p>
+                                <p class="text-xs" style="color: var(--secondary-text-color);">Biology Enthusiast</p>
+                            </div>
+                        </div>
+                        <span class="font-pixel font-bold" style="color: var(--theme-text-color);">350 XP</span>
+                    </div>
+                </div>
+                
+                <!-- Rank 5 -->
+                <div class="leaderboard-item p-3 rounded border-2 colorful-section-light">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="font-pixel font-bold mr-3 w-6 text-center" style="color: var(--theme-text-color);">5</span>
+                            <img src="https://placehold.co/40x40/ef4444/white?text=MW" 
+                                 alt="Profile" 
+                                 class="w-10 h-10 rounded-full border-2 border-black mr-3 pixel-art">
+                            <div>
+                                <p class="font-pixel font-bold" style="color: var(--theme-text-color);">Miran Wandagan</p>
+                                <p class="text-xs" style="color: var(--secondary-text-color);">Student</p>
+                            </div>
+                        </div>
+                        <span class="font-pixel font-bold" style="color: var(--theme-text-color);">210 XP</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="grid grid-cols-2 gap-4 mt-6">
+            <button onclick="showComingSoonModal()" class="bg-pixel-red text-white p-3 rounded-lg shadow-pixel border-2 border-black font-bold btn-pixel">
+                <span class="font-pixel">Refresh Rankings</span>
+            </button>
+            <a href="dashboard.html" class="bg-pixel-blue text-white p-3 rounded-lg shadow-pixel border-2 border-black font-bold text-center btn-pixel">
+                <span class="font-pixel">HOME</span>
+            </a>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation, consistent with the dashboard -->
+    <nav class="border-t-2 shadow-pixel flex justify-around p-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <a href="dashboard.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🏠</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Home</span>
+        </a>
+        <a href="music.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🎵</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Music</span>
+        </a>
+        <a href="explore.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🗺️</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Explore</span>
+        </a>
+        <a href="tools.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🛠️</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Tools</span>
+        </a>
+        <a href="profile.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">👤</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Profile</span>
+        </a>
+    </nav>
+
+    <!-- Coming Soon Modal - Reused from dashboard for consistency -->
+    <div id="comingSoonModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="p-6 rounded-lg shadow-pixel border-2 max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+            <h3 class="text-lg font-pixel font-bold mb-2" style="color: var(--theme-text-color);">Coming Soon!</h3>
+            <p class="mb-4" style="color: var(--secondary-text-color);">This feature is under development.</p>
+            <button onclick="document.getElementById('comingSoonModal').classList.add('hidden')"
+                class="bg-pixel-blue text-white py-2 px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Function to show the "Coming Soon" modal
+        function showComingSoonModal() {
+            document.getElementById('comingSoonModal').classList.remove('hidden');
+        }
+
+        // Apply saved theme on page load for consistency across pages
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'day';
+            document.body.setAttribute('data-theme', savedTheme);
+        });
+    </script>
+</body>
+</html>

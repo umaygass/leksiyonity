@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leksiyonity - Tools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script>
+        // Tailwind CSS configuration for custom colors and shadows.
+        // It now includes CSS variables for main theme colors to enable dynamic theme switching.
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                        pixel: ['"Press Start 2P"', 'cursive'], // Added pixelated font
+                    },
+                    colors: {
+                        'pixel-blue': '#3b82f6',
+                        'pixel-green': '#22c55e',
+                        'pixel-yellow': '#facc15',
+                        'pixel-purple': '#a855f7',
+                        'pixel-red': '#ef4444',
+                        'pixel-orange': '#f97316',
+                        'chat-bg': '#e0f2f7',
+                        'chat-user': '#d1fae5',
+                        'chat-ai': '#bfdbfe',
+                        'teal-500': '#14b8a6',
+                        'music-light': '#f0f9ff',
+                        'music-dark': '#4b5563',
+                        // CSS variables for dynamic theme colors
+                        'theme-bg': 'var(--theme-bg-color)',
+                        'theme-text': 'var(--theme-text-color)',
+                        'card-bg': 'var(--card-bg-color)',
+                        'card-border': 'var(--card-border-color)',
+                        'secondary-text': 'var(--secondary-text-color)',
+                        'accent-bg-light': 'var(--accent-bg-light-color)', // For colorful sections
+                        'accent-bg-dark': 'var(--accent-bg-dark-color)',   // For colorful sections
+                    },
+                    boxShadow: {
+                        'pixel': '4px 4px 0px 0px rgba(0,0,0,1)',
+                        'pixel-sm': '2px 2px 0px 0px rgba(0,0,0,1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom CSS for pixel art rendering and button effects */
+        .pixel-art {
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        .btn-pixel {
+            transition: all 0.1s ease;
+        }
+        .btn-pixel:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+        }
+
+        /* Define CSS variables for Day and Dark themes */
+        /* Default (Day Mode) */
+        :root, [data-theme='day'] {
+            --theme-bg-color: #eff6ff; /* bg-blue-50 */
+            --theme-text-color: #1f2937; /* text-gray-800 */
+            --card-bg-color: #ffffff; /* bg-white */
+            --card-border-color: #000000; /* border-black */
+            --secondary-text-color: #4b5563; /* text-gray-600 */
+            --accent-bg-light-color: #e0f2f7; /* Light blue for colorful sections */
+            --accent-bg-dark-color: #bfdbfe; /* Slightly darker blue for contrast */
+        }
+
+        /* Dark Mode */
+        [data-theme='dark'] {
+            --theme-bg-color: #1f2937; /* Dark gray background */
+            --theme-text-color: #f3f4f6; /* Light gray text */
+            --card-bg-color: #374151; /* Darker gray for cards */
+            --card-border-color: #6b7280; /* Lighter gray border */
+            --secondary-text-color: #9ca3af; /* Lighter gray for secondary text */
+            --accent-bg-light-color: #2d3748; /* Darker shade for colorful sections */
+            --accent-bg-dark-color: #4a5568;   /* Even darker shade for contrast */
+        }
+
+        /* Apply theme variables to core elements */
+        body {
+            background-color: var(--theme-bg-color);
+            color: var(--theme-text-color);
+        }
+
+        /* Override specific Tailwind classes to use CSS variables for theme consistency */
+        .bg-white { /* Applies to header, main cards */
+            background-color: var(--card-bg-color);
+        }
+        .border-black { /* Applies to borders of cards, header, nav */
+            border-color: var(--card-border-color);
+        }
+        .text-gray-600 { /* Applies to secondary text like descriptions */
+            color: var(--secondary-text-color);
+        }
+        .bg-blue-50 { /* Applies to main body background, but overridden by body style */
+            background-color: var(--theme-bg-color);
+        }
+    </style>
+</head>
+<body class="min-h-screen font-inter flex flex-col" data-theme="day">
+    <!-- Header section, consistent with the app's branding -->
+    <header class="shadow-pixel border-b-2 p-4" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <div class="flex items-center justify-between">
+            <a href="dashboard.html" class="btn-pixel">
+                <span class="text-2xl" style="color: var(--secondary-text-color);">←</span>
+            </a>
+            <h1 class="text-xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">LEKSIYONITY - Tools</h1>
+            <div class="w-6"></div> <!-- Spacer for balance -->
+        </div>
+    </header>
+
+    <main class="flex-grow p-4">
+        <!-- Tools Section -->
+        <div class="p-6 rounded-lg shadow-pixel border-2 mb-4 colorful-section-light" style="border-color: var(--card-border-color);">
+            <h2 class="text-2xl font-pixel font-bold mb-4 text-center" style="color: var(--theme-text-color);">Tools & Settings</h2>
+            
+            <!-- Change Profile Name Section -->
+            <div class="p-4 rounded-lg border-2 shadow-pixel-sm mb-6 colorful-section-dark" style="border-color: var(--card-border-color);">
+                <h3 class="font-pixel text-lg mb-3" style="color: var(--theme-text-color);">Change Profile Name</h3>
+                <input type="text" id="profileNameInput" placeholder="Enter new name"
+                       class="w-full p-2 border-2 rounded-lg mb-3 focus:outline-none focus:border-pixel-blue shadow-pixel-sm"
+                       style="background-color: var(--card-bg-color); color: var(--theme-text-color); border-color: var(--card-border-color);">
+                <button id="saveNameBtn"
+                        class="w-full bg-pixel-blue text-white py-2 px-4 rounded-lg font-bold 
+                               shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600 font-pixel">
+                    Save Name
+                </button>
+            </div>
+
+            <!-- Theme Switcher Section -->
+            <div class="p-4 rounded-lg border-2 shadow-pixel-sm mb-6 colorful-section-dark" style="background-color: var(--theme-bg-color); border-color: var(--card-border-color);">
+                <h3 class="font-pixel text-lg mb-3" style="color: var(--theme-text-color);">App Theme</h3>
+                <div class="flex justify-center items-center space-x-4">
+                    <button id="dayModeBtn"
+                            class="flex-1 bg-pixel-yellow text-white py-2 px-4 rounded-lg font-bold 
+                                   shadow-pixel border-2 border-black btn-pixel hover:bg-yellow-600 font-pixel">
+                        ☀️ Day Mode
+                    </button>
+                    <button id="darkModeBtn"
+                            class="flex-1 bg-gray-800 text-white py-2 px-4 rounded-lg font-bold 
+                                   shadow-pixel border-2 border-black btn-pixel hover:bg-gray-900 font-pixel">
+                        🌙 Dark Mode
+                    </button>
+                </div>
+            </div>
+
+            <!-- Other Tools (Coming Soon) -->
+            <button onclick="showComingSoonModal()" 
+                    class="w-full bg-pixel-purple text-white py-3 px-6 rounded-lg font-bold 
+                           shadow-pixel border-2 border-black btn-pixel hover:bg-purple-600 font-pixel">
+                Other Tools (Coming Soon)
+            </button>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation, consistent with the dashboard -->
+    <nav class="border-t-2 shadow-pixel flex justify-around p-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <a href="dashboard.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🏠</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Home</span>
+        </a>
+        <a href="music.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🎵</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Music</span>
+        </a>
+        <a href="explore.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🗺️</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Explore</span>
+        </a>
+        <a href="tools.html" class="flex flex-col items-center text-pixel-blue">
+            <span class="text-2xl">🛠️</span>
+            <span class="text-xs">Tools</span>
+        </a>
+        <a href="profile.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">👤</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Profile</span>
+        </a>
+    </nav>
+
+    <!-- Coming Soon Modal / Custom Alert Modal -->
+    <div id="comingSoonModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="p-6 rounded-lg shadow-pixel border-2 max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+            <h3 class="text-lg font-pixel font-bold mb-2" style="color: var(--theme-text-color);">Coming Soon!</h3>
+            <p class="mb-4" style="color: var(--secondary-text-color);">This feature is under development.</p>
+            <button onclick="document.getElementById('comingSoonModal').classList.add('hidden')"
+                class="bg-pixel-blue text-white py-2 px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600 font-pixel">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Function to show the "Coming Soon" modal
+        function showComingSoonModal() {
+            document.getElementById('comingSoonModal').classList.remove('hidden');
+        }
+
+        // --- Profile Name Change Logic ---
+        const profileNameInput = document.getElementById('profileNameInput');
+        const saveNameBtn = document.getElementById('saveNameBtn');
+
+        // Function to apply the selected theme and update button visuals
+        function applyTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            // Update button styles to indicate active theme
+            if (theme === 'dark') {
+                document.getElementById('darkModeBtn').classList.add('border-pixel-blue', 'border-4');
+                document.getElementById('dayModeBtn').classList.remove('border-pixel-blue', 'border-4');
+            } else {
+                document.getElementById('dayModeBtn').classList.add('border-pixel-blue', 'border-4');
+                document.getElementById('darkModeBtn').classList.remove('border-pixel-blue', 'border-4');
+            }
+        }
+
+        // --- Custom Alert/Message Box (replacing alert()) ---
+        function alertMessage(message, type = 'info') {
+            const modal = document.getElementById('comingSoonModal'); // Reusing the existing modal structure
+            const modalTitle = modal.querySelector('h3');
+            const modalMessage = modal.querySelector('p');
+            const modalButton = modal.querySelector('button');
+
+            modalTitle.textContent = type === 'success' ? 'Success!' : (type === 'error' ? 'Error!' : 'Info');
+            modalMessage.textContent = message;
+            modalButton.onclick = () => modal.classList.add('hidden');
+            modal.classList.remove('hidden');
+        }
+
+        // Event listener for DOMContentLoaded to apply saved theme and name
+        document.addEventListener('DOMContentLoaded', () => {
+            // Apply saved theme
+            const savedTheme = localStorage.getItem('theme') || 'day';
+            applyTheme(savedTheme); // Call applyTheme to also update button visuals
+
+            // Load saved name
+            const savedName = localStorage.getItem('userName');
+            if (savedName) {
+                profileNameInput.value = savedName;
+            } else {
+                profileNameInput.value = "Veronica Yoon"; // Default name
+            }
+        });
+
+        // Save name when button is clicked
+        saveNameBtn.addEventListener('click', () => {
+            const newName = profileNameInput.value.trim();
+            if (newName) {
+                localStorage.setItem('userName', newName);
+                alertMessage('Profile name updated!', 'success'); // Use custom alert
+            } else {
+                alertMessage('Please enter a name.', 'error'); // Use custom alert
+            }
+        });
+
+        // Event listeners for theme buttons
+        document.getElementById('dayModeBtn').addEventListener('click', () => applyTheme('day'));
+        document.getElementById('darkModeBtn').addEventListener('click', () => applyTheme('dark'));
+    </script>
+</body>
+</html>

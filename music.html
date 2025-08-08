@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leksiyonity - Music</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script>
+        // Tailwind CSS configuration for custom colors and shadows, consistent with the app's theme.
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                        pixel: ['"Press Start 2P"', 'cursive'], // Added pixelated font
+                    },
+                    colors: {
+                        'pixel-blue': '#3b82f6',
+                        'pixel-green': '#22c55e',
+                        'pixel-yellow': '#facc15',
+                        'pixel-purple': '#a855f7',
+                        'pixel-red': '#ef4444',
+                        'pixel-orange': '#f97316',
+                        'chat-bg': '#e0f2f7',
+                        'chat-user': '#d1fae5',
+                        'chat-ai': '#bfdbfe',
+                        'teal-500': '#14b8a6',
+                        'music-light': '#f0f9ff', /* Light background for music elements */
+                        'music-dark': '#4b5563',  /* Darker shade for controls */
+                        // CSS variables for dynamic theme colors
+                        'theme-bg': 'var(--theme-bg-color)',
+                        'theme-text': 'var(--theme-text-color)',
+                        'card-bg': 'var(--card-bg-color)',
+                        'card-border': 'var(--card-border-color)',
+                        'secondary-text': 'var(--secondary-text-color)',
+                        'accent-bg-light': 'var(--accent-bg-light-color)', // For colorful sections
+                        'accent-bg-dark': 'var(--accent-bg-dark-color)',   // For colorful sections
+                    },
+                    boxShadow: {
+                        'pixel': '4px 4px 0px 0px rgba(0,0,0,1)',
+                        'pixel-sm': '2px 2px 0px 0px rgba(0,0,0,1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom CSS for pixel art rendering and button effects */
+        .pixel-art {
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        .btn-pixel {
+            transition: all 0.1s ease;
+        }
+        .btn-pixel:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+        }
+        /* Custom scrollbar for song list */
+        .song-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        .song-list::-webkit-scrollbar-track {
+            background: var(--theme-bg-color); /* Theme-aware scrollbar track */
+            border-radius: 10px;
+        }
+        .song-list::-webkit-scrollbar-thumb {
+            background: var(--secondary-text-color); /* Theme-aware scrollbar thumb */
+            border-radius: 10px;
+        }
+        .song-list::-webkit-scrollbar-thumb:hover {
+            background: var(--theme-text-color); /* Theme-aware hover */
+        }
+
+        /* Define CSS variables for Day and Dark themes */
+        /* Default (Day Mode) */
+        :root, [data-theme='day'] {
+            --theme-bg-color: #eff6ff; /* bg-blue-50 */
+            --theme-text-color: #1f2937; /* text-gray-800 */
+            --card-bg-color: #ffffff; /* bg-white */
+            --card-border-color: #000000; /* border-black */
+            --secondary-text-color: #4b5563; /* text-gray-600 */
+            --music-player-bg: #f0f9ff; /* music-light */
+            --music-control-color: #4b5563; /* music-dark */
+            --song-list-bg: #f9fafb; /* gray-50 */
+            --accent-bg-light-color: #e0f2f7; /* Light blue for colorful sections */
+            --accent-bg-dark-color: #bfdbfe; /* Slightly darker blue for contrast */
+        }
+
+        /* Dark Mode */
+        [data-theme='dark'] {
+            --theme-bg-color: #1f2937; /* Dark gray background */
+            --theme-text-color: #f3f4f6; /* Light gray text */
+            --card-bg-color: #374151; /* Darker gray for cards */
+            --card-border-color: #6b7280; /* Lighter gray border */
+            --secondary-text-color: #9ca3af; /* Lighter gray for secondary text */
+            --music-player-bg: #4a5568; /* Darker shade for music player */
+            --music-control-color: #e2e8f0; /* Lighter color for controls */
+            --song-list-bg: #2d3748; /* Even darker for song list */
+            --accent-bg-light-color: #2d3748; /* Darker shade for colorful sections */
+            --accent-bg-dark-color: #4a5568;   /* Even darker shade for contrast */
+        }
+
+        /* Apply theme variables to core elements */
+        body {
+            background-color: var(--theme-bg-color);
+            color: var(--theme-text-color);
+        }
+
+        /* Override specific Tailwind classes to use CSS variables for theme consistency */
+        .bg-white { /* Applies to header, main cards */
+            background-color: var(--card-bg-color);
+        }
+        .border-black { /* Applies to borders of cards, header, nav */
+            border-color: var(--card-border-color);
+        }
+        .text-gray-600 { /* Applies to secondary text like descriptions */
+            color: var(--secondary-text-color);
+        }
+        .bg-blue-50 { /* Applies to main body background, but overridden by body style */
+            background-color: var(--theme-bg-color);
+        }
+        /* Music specific elements */
+        .bg-music-light { /* Now Playing section background */
+            background-color: var(--music-player-bg);
+        }
+        .text-music-dark { /* Music control icons */
+            color: var(--music-control-color);
+        }
+        .song-list { /* Song list background */
+            background-color: var(--song-list-bg);
+        }
+        .song-list-item { /* Individual song item background */
+            background-color: var(--card-bg-color);
+            border-color: var(--card-border-color);
+        }
+        .song-list-item .text-gray-500, .song-list-item .text-gray-600 {
+            color: var(--secondary-text-color);
+        }
+    </style>
+</head>
+<body class="min-h-screen font-inter flex flex-col" data-theme="day">
+    <!-- Header section, consistent with the app's branding -->
+    <header class="shadow-pixel border-b-2 p-4" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <div class="flex items-center justify-between">
+            <a href="dashboard.html" class="btn-pixel">
+                <span class="text-2xl" style="color: var(--secondary-text-color);">←</span>
+            </a>
+            <h1 class="text-xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">LEKSIYONITY - Music</h1>
+            <div class="w-6"></div> <!-- Spacer for balance -->
+        </div>
+    </header>
+
+    <main class="flex-grow p-4">
+        <!-- Music Player Section -->
+        <div class="p-4 rounded-lg shadow-pixel border-2 mb-4 colorful-section-light" style="border-color: var(--card-border-color);">
+            <h2 class="text-2xl font-pixel font-bold mb-4 text-center" style="color: var(--theme-text-color);">Music Player</h2>
+            
+            <!-- Now Playing Section -->
+            <div class="bg-music-light p-4 rounded-lg border-2 border-black shadow-pixel-sm mb-6 flex items-center">
+                <img src="https://placehold.co/80x80/facc15/white?text=Album" 
+                     alt="Album Art" 
+                     class="w-20 h-20 rounded-lg border-2 border-black shadow-pixel-sm mr-4 pixel-art">
+                <div>
+                    <p class="text-lg font-pixel font-bold" id="nowPlayingTitle" style="color: var(--theme-text-color);">Study Beats Vol. 1</p>
+                    <p class="text-sm font-pixel" id="nowPlayingArtist" style="color: var(--secondary-text-color);">Lofi Chill Mix</p>
+                    <div class="flex items-center mt-2">
+                        <button onclick="showComingSoonModal()" class="text-music-dark text-2xl mx-1 btn-pixel">⏮️</button>
+                        <button onclick="togglePlayPause()" id="playPauseBtn" class="text-music-dark text-4xl mx-2 btn-pixel">▶️</button>
+                        <button onclick="showComingSoonModal()" class="text-music-dark text-2xl mx-1 btn-pixel">⏭️</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Song List -->
+            <h3 class="text-xl font-pixel font-bold mb-3" style="color: var(--theme-text-color);">Playlists & Tracks</h3>
+            <div class="song-list overflow-y-auto h-64 space-y-3 p-2 border-2 border-black rounded-lg shadow-pixel-sm" style="background-color: var(--song-list-bg);">
+                <!-- Dummy Track 1 -->
+                <div class="song-list-item flex items-center justify-between p-2 rounded border shadow-pixel-sm colorful-section-dark">
+                    <div class="flex items-center">
+                        <span class="font-pixel text-gray-500 mr-2">1.</span>
+                        <div>
+                            <p class="font-pixel font-semibold" style="color: var(--theme-text-color);">Focused Flow</p>
+                            <p class="text-xs font-pixel" style="color: var(--secondary-text-color);">Ambient Study</p>
+                        </div>
+                    </div>
+                    <button onclick="selectTrack('Focused Flow', 'Ambient Study')" class="bg-pixel-blue text-white py-1 px-2 rounded font-bold text-sm shadow-pixel-sm border border-black btn-pixel hover:bg-blue-600 font-pixel">
+                        Select
+                    </button>
+                </div>
+                <!-- Dummy Track 2 -->
+                <div class="song-list-item flex items-center justify-between p-2 rounded border shadow-pixel-sm colorful-section-light">
+                    <div class="flex items-center">
+                        <span class="font-pixel text-gray-500 mr-2">2.</span>
+                        <div>
+                            <p class="font-pixel font-semibold" style="color: var(--theme-text-color);">Pixel Dreams</p>
+                            <p class="text-xs font-pixel" style="color: var(--secondary-text-color);">Retro Synth</p>
+                        </div>
+                    </div>
+                    <button onclick="selectTrack('Pixel Dreams', 'Retro Synth')" class="bg-pixel-blue text-white py-1 px-2 rounded font-bold text-sm shadow-pixel-sm border border-black btn-pixel hover:bg-blue-600 font-pixel">
+                        Select
+                    </button>
+                </div>
+                <!-- Dummy Track 3 -->
+                <div class="song-list-item flex items-center justify-between p-2 rounded border shadow-pixel-sm colorful-section-dark">
+                    <div class="flex items-center">
+                        <span class="font-pixel text-gray-500 mr-2">3.</span>
+                        <div>
+                            <p class="font-pixel font-semibold" style="color: var(--theme-text-color);">Coding Cadence</p>
+                            <p class="text-xs font-pixel" style="color: var(--secondary-text-color);">Instrumental Focus</p>
+                        </div>
+                    </div>
+                    <button onclick="selectTrack('Coding Cadence', 'Instrumental Focus')" class="bg-pixel-blue text-white py-1 px-2 rounded font-bold text-sm shadow-pixel-sm border border-black btn-pixel hover:bg-blue-600 font-pixel">
+                        Select
+                    </button>
+                </div>
+                <!-- Dummy Track 4 -->
+                <div class="song-list-item flex items-center justify-between p-2 rounded border shadow-pixel-sm colorful-section-light">
+                    <div class="flex items-center">
+                        <span class="font-pixel text-gray-500 mr-2">4.</span>
+                        <div>
+                            <p class="font-pixel font-semibold" style="color: var(--theme-text-color);">Lofi Study Session</p>
+                            <p class="text-xs font-pixel" style="color: var(--secondary-text-color);">Relaxing Beats</p>
+                        </div>
+                    </div>
+                    <button onclick="selectTrack('Lofi Study Session', 'Relaxing Beats')" class="bg-pixel-blue text-white py-1 px-2 rounded font-bold text-sm shadow-pixel-sm border border-black btn-pixel hover:bg-blue-600 font-pixel">
+                        Select
+                    </button>
+                </div>
+            </div>
+            
+            <button onclick="showComingSoonModal()" 
+                    class="mt-6 w-full bg-pixel-purple text-white py-3 px-6 rounded-lg font-bold 
+                           shadow-pixel border-2 border-black btn-pixel hover:bg-purple-600 font-pixel">
+                Browse More Music
+            </button>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation, consistent with the dashboard -->
+    <nav class="border-t-2 shadow-pixel flex justify-around p-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <a href="dashboard.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🏠</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Home</span>
+        </a>
+        <a href="music.html" class="flex flex-col items-center text-pixel-blue">
+            <span class="text-2xl">🎵</span>
+            <span class="text-xs">Music</span>
+        </a>
+        <a href="explore.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🗺️</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Explore</span>
+        </a>
+        <a href="tools.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🛠️</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Tools</span>
+        </a>
+        <a href="profile.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">👤</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Profile</span>
+        </a>
+    </nav>
+
+    <!-- Coming Soon Modal - Reused from dashboard for consistency -->
+    <div id="comingSoonModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="p-6 rounded-lg shadow-pixel border-2 max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+            <h3 class="text-lg font-pixel font-bold mb-2" style="color: var(--theme-text-color);">Coming Soon!</h3>
+            <p class="mb-4" style="color: var(--secondary-text-color);">This feature is under development.</p>
+            <button onclick="document.getElementById('comingSoonModal').classList.add('hidden')"
+                class="bg-pixel-blue text-white py-2 px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600 font-pixel">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let isPlaying = false;
+        let currentTrack = { title: "Study Beats Vol. 1", artist: "Lofi Chill Mix" };
+
+        // Function to toggle play/pause button and state
+        function togglePlayPause() {
+            isPlaying = !isPlaying;
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            if (isPlaying) {
+                playPauseBtn.textContent = '⏸️'; // Pause icon
+                // In a real app, you would start playing audio here
+                console.log(`Playing: ${currentTrack.title} by ${currentTrack.artist}`);
+            } else {
+                playPauseBtn.textContent = '▶️'; // Play icon
+                // In a real app, you would pause audio here
+                console.log(`Paused: ${currentTrack.title} by ${currentTrack.artist}`);
+            }
+        }
+
+        // Function to select a track and update "Now Playing"
+        function selectTrack(title, artist) {
+            currentTrack = { title, artist };
+            document.getElementById('nowPlayingTitle').textContent = title;
+            document.getElementById('nowPlayingArtist').textContent = artist;
+            // Automatically "play" the selected track
+            if (!isPlaying) {
+                togglePlayPause();
+            } else {
+                console.log(`Switched to: ${currentTrack.title} by ${currentTrack.artist}`);
+            }
+        }
+
+        // Function to show the "Coming Soon" modal
+        function showComingSoonModal() {
+            document.getElementById('comingSoonModal').classList.remove('hidden');
+        }
+
+        // Apply saved theme on page load for consistency across pages
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'day';
+            document.body.setAttribute('data-theme', savedTheme);
+        });
+    </script>
+</body>
+</html>

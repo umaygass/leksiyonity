@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leksiyonity - Subscriptions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                        pixel: ['"Press Start 2P"', 'cursive'],
+                    },
+                    colors: {
+                        'pixel-blue': '#3b82f6',
+                        'pixel-green': '#22c55e',
+                        'pixel-yellow': '#facc15',
+                        'pixel-purple': '#a855f7',
+                        'pixel-red': '#ef4444',
+                        'pixel-orange': '#f97316',
+                        'chat-bg': '#e0f2f7',
+                        'chat-user': '#d1fae5',
+                        'chat-ai': '#bfdbfe',
+                        'teal-500': '#14b8a6',
+                        'music-light': '#f0f9ff',
+                        'music-dark': '#4b5563',
+                        'theme-bg': 'var(--theme-bg-color)',
+                        'theme-text': 'var(--theme-text-color)',
+                        'card-bg': 'var(--card-bg-color)',
+                        'card-border': 'var(--card-border-color)',
+                        'secondary-text': 'var(--secondary-text-color)',
+                        'accent-bg-light': 'var(--accent-bg-light-color)',
+                        'accent-bg-dark': 'var(--accent-bg-dark-color)',
+                    },
+                    boxShadow: {
+                        'pixel': '4px 4px 0px 0px rgba(0,0,0,1)',
+                        'pixel-sm': '2px 2px 0px 0px rgba(0,0,0,1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .pixel-art {
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        .btn-pixel {
+            transition: all 0.1s ease;
+        }
+        .btn-pixel:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+        }
+
+        /* Theme Definitions */
+        :root, [data-theme='day'] {
+            --theme-bg-color: #eff6ff;
+            --theme-text-color: #1f2937;
+            --card-bg-color: #ffffff;
+            --card-border-color: #000000;
+            --secondary-text-color: #4b5563;
+            --accent-bg-light-color: #e0f2f7;
+            --accent-bg-dark-color: #bfdbfe;
+            --plan-header-text: #000000; /* Black text in day mode */
+            --pixel-yellow: #facc15;
+            --pixel-green: #22c55e;
+            --pixel-purple: #a855f7;
+        }
+
+        [data-theme='dark'] {
+            --theme-bg-color: #1f2937;
+            --theme-text-color: #f3f4f6;
+            --card-bg-color: #374151;
+            --card-border-color: #6b7280;
+            --secondary-text-color: #9ca3af;
+            --accent-bg-light-color: #2d3748;
+            --accent-bg-dark-color: #4a5568;
+            --plan-header-text: #ffffff; /* White text in dark mode */
+            --pixel-yellow: #d97706; /* Darker yellow */
+            --pixel-green: #16a34a;  /* Darker green */
+            --pixel-purple: #7e22ce; /* Darker purple */
+        }
+
+        body {
+            background-color: var(--theme-bg-color);
+            color: var(--theme-text-color);
+        }
+
+        .bg-white {
+            background-color: var(--card-bg-color);
+        }
+        .border-black {
+            border-color: var(--card-border-color);
+        }
+        .text-gray-600 {
+            color: var(--secondary-text-color);
+        }
+        .bg-blue-50 {
+            background-color: var(--theme-bg-color);
+        }
+
+        /* Subscription Plan Headers */
+        .plan-header-free {
+            background-color: #a8a8a8;
+            color: var(--plan-header-text);
+        }
+        .plan-header-starter {
+            background-color: var(--pixel-yellow);
+            color: var(--plan-header-text);
+        }
+        .plan-header-plus {
+            background-color: var(--pixel-green);
+            color: var(--plan-header-text);
+        }
+        .plan-header-pro {
+            background-color: var(--pixel-purple);
+            color: var(--plan-header-text);
+        }
+
+        .subscription-card {
+            border-color: var(--card-border-color);
+            background-color: var(--card-bg-color);
+        }
+        .subscription-card.highlighted {
+            border-color: var(--pixel-blue);
+            box-shadow: 6px 6px 0px 0px var(--pixel-blue);
+        }
+        .subscription-card .price {
+            color: var(--pixel-blue);
+        }
+        .subscription-card ul li {
+            color: var(--theme-text-color);
+        }
+        .subscription-card ul li::before {
+            content: '✅';
+            margin-right: 0.5rem;
+        }
+        .subscription-card .content-section {
+            padding: 1.5rem;
+            border-top: 2px solid var(--card-border-color);
+        }
+        .subscription-card .content-section p,
+        .subscription-card .content-section ul li {
+            color: var(--theme-text-color);
+        }
+        .subscription-card .content-section .secondary-text {
+            color: var(--secondary-text-color);
+        }
+    </style>
+</head>
+<body class="min-h-screen font-inter flex flex-col" data-theme="day">
+    <!-- Header section -->
+    <header class="shadow-pixel border-b-2 p-4" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <div class="flex items-center justify-between">
+            <a href="dashboard.html" class="btn-pixel">
+                <span class="text-2xl" style="color: var(--secondary-text-color);">←</span>
+            </a>
+            <h1 class="text-xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">LEKSIYONITY - Subscriptions</h1>
+            <div class="w-6"></div>
+        </div>
+    </header>
+
+    <main class="flex-grow p-4">
+        <!-- Subscription Plans Header -->
+        <div class="p-6 rounded-lg shadow-pixel border-2 mb-6 colorful-section-light" style="border-color: var(--card-border-color);">
+            <h2 class="text-2xl font-pixel font-bold text-center mb-2" style="color: var(--theme-text-color);">OUR SUBSCRIPTION PLANS</h2>
+            <p class="text-center text-lg font-inter" style="color: var(--secondary-text-color);">Choose the plan that's right for you!</p>
+        </div>
+
+        <!-- Subscription Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Free Plan Card -->
+            <div class="subscription-card rounded-lg shadow-pixel border-2 overflow-hidden">
+                <div class="plan-header-free p-4 text-center">
+                    <h3 class="text-xl font-pixel font-bold">Free Plan</h3>
+                    <p class="text-sm font-inter">₱0/month</p>
+                </div>
+                <div class="content-section colorful-section-dark">
+                    <p class="text-sm font-pixel font-bold mb-2" style="color: var(--theme-text-color);">Target:</p>
+                    <p class="text-sm font-inter mb-4 secondary-text">Students or users exploring the app</p>
+                    <p class="text-sm font-pixel font-bold mb-2" style="color: var(--theme-text-color);">Features:</p>
+                    <ul class="list-none space-y-2 mb-6 text-sm font-inter">
+                        <li>Access to basic learning modules (e.g., first 2 levels/lessons per subject)</li>
+                        <li>Daily login rewards</li>
+                        <li>Ads included</li>
+                        <li>Limited quizzes per day (e.g., 3 quizzes/day)</li>
+                        <li>Community leaderboard (limited access)</li>
+                    </ul>
+                    <p class="text-xs font-pixel font-bold mb-4" style="color: var(--theme-text-color);">Goal:</p>
+                    <p class="text-xs font-inter mb-6 secondary-text">Attract users and let them experience the value before upgrading.</p>
+                    <button onclick="showComingSoonModal()" class="w-full bg-pixel-blue text-white py-3 px-6 rounded-lg font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600 font-pixel">
+                        Current Plan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Starter Plan Card -->
+            <div class="subscription-card rounded-lg shadow-pixel border-2 overflow-hidden">
+                <div class="plan-header-starter p-4 text-center">
+                    <h3 class="text-xl font-pixel font-bold">Starter Plan</h3>
+                    <p class="text-sm font-inter">₱199/month</p>
+                </div>
+                <div class="content-section colorful-section-light">
+                    <p class="text-sm font-pixel font-bold mb-2" style="color: var(--theme-text-color);">Target:</p>
+                    <p class="text-sm font-inter mb-4 secondary-text">Entry-level learners who want more than the basics</p>
+                    <p class="text-sm font-pixel font-bold mb-2" style="color: var(--theme-text-color);">Features:</p>
+                    <ul class="list-none space-y-2 mb-6 text-sm font-inter">
+                        <li>No ads</li>
+                        <li>Full access to all learning levels for 2 subjects</li>
+                        <li>Unlock daily missions and challenges</li>
+                        <li>1x Weekly performance report</li>
+                        <li>Access to limited customization (e.g., avatars/themes)</li>
+                    </ul>
+                    <p class="text-xs font-pixel font-bold mb-4" style="color: var(--theme-text-color);">Annually Cost:</p>
+                    <p class="text-xs font-inter mb-6 secondary-text">₱1,915 (₱160/mo) save - 20%</p>
+                    <button onclick="showComingSoonModal()" class="w-full bg-pixel-blue text-white py-3 px-6 rounded-lg font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600 font-pixel">
+                        Subscribe
+                    </button>
+                </div>
+            </div>
+
+            <!-- Plus Plan Card -->
+            <div class="subscription-card rounded-lg shadow-pixel border-2 overflow-hidden">
+                <div class="plan-header-plus p-4 text-center">
+                    <h3 class="text-xl font-pixel font-bold">Plus Plan</h3>
+                    <p class="text-sm font-inter">₱349/month</p>
+                </div>
+                <div class="content-section colorful-section-dark">
+                    <p class="text-sm font-pixel font-bold mb-2" style="color: var(--theme-text-color);">Target:</p>
+                    <p class="text-sm font-inter mb-4 secondary-text">Regular users or students aiming for better learning outcomes</p>
+                    <p class="text-sm font-pixel font-bold mb-2" style="color: var(--theme-text-color);">Features:</p>
+                    <ul class="list-none space-y-2 mb-6 text-sm font-inter">
+                        <li>Everything in Starter Plan</li>
+                        <li>Access to all subjects</li>
+                        <li>Personalized learning paths</li>
+                        <li>Parental dashboard access (progress, scores, weak areas)</li>
+                        <li>Daily challenges with bonus XP</li>
+                        <li>Monthly leaderboard badges</li>
+                        <li>Offline access to lessons</li>
+                    </ul>
+                    <p class="text-xs font-pixel font-bold mb-4" style="color: var(--theme-text-color);">Annually Cost:</p>
+                    <p class="text-xs font-inter mb-6 secondary-text">₱3,345 (₱279/mo)</p>
+                    <button onclick="showComingSoonModal()" class="w-full bg-pixel-blue text-white py-3 px-6 rounded-lg font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600 font-pixel">
+                        Subscribe
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pro Plan Card -->
+            <div class="subscription-card rounded-lg shadow-pixel border-2 overflow-hidden">
+                <div class="plan-header-pro p-4 text-center">
+                    <h3 class="text-xl font-pixel font-bold">Pro Plan</h3>
+                    <p class="text-sm font-inter">₱599/month</p>
+                </div>
+                <div class="content-section colorful-section-light">
+                    <p class="text-sm font-pixel font-bold mb-2" style="color: var(--theme-text-color);">Target:</p>
+                    <p class="text-sm font-inter mb-4 secondary-text">Dedicated learners, or educators who want the full experience</p>
+                    <p class="text-sm font-pixel font-bold mb-2" style="color: var(--theme-text-color);">Features:</p>
+                    <ul class="list-none space-y-2 mb-6 text-sm font-inter">
+                        <li>Everything in Plus Plan</li>
+                        <li>Live tutorial sessions (1x/month or group-based)</li>
+                        <li>Weekly personalized reports with insights</li>
+                        <li>Early access to new content</li>
+                        <li>Priority support</li>
+                        <li>Gamified collaboration – join or create a learning team</li>
+                        <li>Advanced customization (themes, avatars, music, power-ups)</li>
+                    </ul>
+                    <p class="text-xs font-pixel font-bold mb-4" style="color: var(--theme-text-color);">Annually Cost:</p>
+                    <p class="text-xs font-inter mb-6 secondary-text">₱5,750 (₱479/mo)</p>
+                    <button onclick="showComingSoonModal()" class="w-full bg-pixel-blue text-white py-3 px-6 rounded-lg font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600 font-pixel">
+                        Subscribe
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="border-t-2 shadow-pixel flex justify-around p-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <a href="dashboard.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🏠</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Home</span>
+        </a>
+        <a href="music.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🎵</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Music</span>
+        </a>
+        <a href="explore.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🗺️</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Explore</span>
+        </a>
+        <a href="tools.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🛠️</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Tools</span>
+        </a>
+        <a href="profile.html" class="flex flex-col items-center text-pixel-blue">
+            <span class="text-2xl">👤</span>
+            <span class="text-xs">Profile</span>
+        </a>
+    </nav>
+
+    <!-- Coming Soon Modal -->
+    <div id="comingSoonModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="p-6 rounded-lg shadow-pixel border-2 max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+            <h3 class="text-lg font-pixel font-bold mb-2" style="color: var(--theme-text-color);">Coming Soon!</h3>
+            <p class="mb-4" style="color: var(--secondary-text-color);">This feature is under development.</p>
+            <button onclick="document.getElementById('comingSoonModal').classList.add('hidden')"
+                class="bg-pixel-blue text-white py-2 px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600 font-pixel">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'day';
+            document.body.setAttribute('data-theme', savedTheme);
+        });
+
+        function showComingSoonModal() {
+            document.getElementById('comingSoonModal').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leksiyonity - Explore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script>
+        // Tailwind CSS configuration for custom colors and shadows, consistent with the app's theme.
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                        pixel: ['"Press Start 2P"', 'cursive'], // Added pixelated font
+                    },
+                    colors: {
+                        'pixel-blue': '#3b82f6',
+                        'pixel-green': '#22c55e',
+                        'pixel-yellow': '#facc15',
+                        'pixel-purple': '#a855f7',
+                        'pixel-red': '#ef4444',
+                        'pixel-orange': '#f97316',
+                        'chat-bg': '#e0f2f7',
+                        'chat-user': '#d1fae5',
+                        'chat-ai': '#bfdbfe',
+                        'teal-500': '#14b8a6',
+                        'music-light': '#f0f9ff',
+                        'music-dark': '#4b5563',
+                        // CSS variables for dynamic theme colors (for consistency across pages)
+                        'theme-bg': 'var(--theme-bg-color)',
+                        'theme-text': 'var(--theme-text-color)',
+                        'card-bg': 'var(--card-bg-color)',
+                        'card-border': 'var(--card-border-color)',
+                        'secondary-text': 'var(--secondary-text-color)',
+                        'accent-bg-light': 'var(--accent-bg-light-color)', // For colorful sections
+                        'accent-bg-dark': 'var(--accent-bg-dark-color)',   // For colorful sections
+                    },
+                    boxShadow: {
+                        'pixel': '4px 4px 0px 0px rgba(0,0,0,1)',
+                        'pixel-sm': '2px 2px 0px 0px rgba(0,0,0,1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom CSS for pixel art rendering and button effects */
+        .pixel-art {
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        .btn-pixel {
+            transition: all 0.1s ease;
+        }
+        .btn-pixel:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+        }
+
+        /* Define CSS variables for Day and Dark themes (for consistency across pages) */
+        /* Default (Day Mode) */
+        :root, [data-theme='day'] {
+            --theme-bg-color: #eff6ff; /* bg-blue-50 */
+            --theme-text-color: #1f2937; /* text-gray-800 */
+            --card-bg-color: #ffffff; /* bg-white */
+            --card-border-color: #000000; /* border-black */
+            --secondary-text-color: #4b5563; /* text-gray-600 */
+            --accent-bg-light-color: #e0f2f7; /* Light blue for colorful sections */
+            --accent-bg-dark-color: #bfdbfe; /* Slightly darker blue for contrast */
+        }
+
+        /* Dark Mode */
+        [data-theme='dark'] {
+            --theme-bg-color: #1f2937; /* Dark gray background */
+            --theme-text-color: #f3f4f6; /* Light gray text */
+            --card-bg-color: #374151; /* Darker gray for cards */
+            --card-border-color: #6b7280; /* Lighter gray border */
+            --secondary-text-color: #9ca3af; /* Lighter gray for secondary text */
+            --accent-bg-light-color: #2d3748; /* Darker shade for colorful sections */
+            --accent-bg-dark-color: #4a5568;   /* Even darker shade for contrast */
+        }
+
+        /* Apply theme variables to core elements (for consistency across pages) */
+        body {
+            background-color: var(--theme-bg-color);
+            color: var(--theme-text-color);
+        }
+
+        .bg-white { /* Applies to header, main cards */
+            background-color: var(--card-bg-color);
+        }
+        .border-black { /* Applies to borders of cards, header, nav */
+            border-color: var(--card-border-color);
+        }
+        .text-gray-600 { /* Applies to secondary text like descriptions */
+            color: var(--secondary-text-color);
+        }
+        .bg-blue-50 { /* Applies to main body background, but overridden by body style */
+            background-color: var(--theme-bg-color);
+        }
+    </style>
+</head>
+<body class="min-h-screen font-inter flex flex-col" data-theme="day">
+    <!-- Header section, consistent with the app's branding -->
+    <header class="shadow-pixel border-b-2 p-4" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <h1 class="text-2xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">LEKSIYONITY</h1>
+    </header>
+
+    <main class="flex-grow p-4">
+        <!-- Explore Section -->
+        <div class="p-6 rounded-lg shadow-pixel border-2 mb-4 colorful-section-light" style="border-color: var(--card-border-color);">
+            <h2 class="text-2xl font-pixel font-bold mb-4 text-center" style="color: var(--theme-text-color);">Explore Your Surroundings</h2>
+            
+            <!-- Google Maps Embed (using iframe for prototype) -->
+            <div class="relative w-full h-64 mb-6 rounded-lg border-2 border-black shadow-pixel overflow-hidden">
+                <!-- 
+                    For a real Google Maps integration, you would typically use the Google Maps JavaScript API
+                    and initialize the map dynamically with your API key.
+                    Example: <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+                    <div id="map" class="w-full h-full"></div>
+                    
+                    For this prototype, we're using a simple iframe embed of a public location (University of the Cordilleras).
+                    This provides a visual representation of a map without requiring an API key or complex setup.
+                -->
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3830.402636906232!2d120.59604167500193!3d16.40203008432322!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3391a166291a13e5%3A0x86c6020786963283!2sUniversity%20of%20the%20Cordilleras!5e0!3m2!1sen!2sph!4v1701000000000!5m2!1sen!2sph" 
+                    width="100%" 
+                    height="100%" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+
+            <!-- Points of Interest / Discoveries -->
+            <h3 class="font-pixel text-xl mb-3" style="color: var(--theme-text-color);">Nearby Discoveries</h3>
+            <div class="space-y-4">
+                <!-- Discovery Item 1 -->
+                <div class="p-3 rounded-lg border-2 shadow-pixel-sm flex items-center colorful-section-dark" style="border-color: var(--card-border-color);">
+                    <div class="w-12 h-12 bg-pixel-green flex items-center justify-center rounded-lg mr-3 shadow-pixel-sm pixel-art">
+                        <span class="text-white text-xl">🌳</span>
+                    </div>
+                    <div>
+                        <p class="font-pixel text-lg" style="color: var(--theme-text-color);">Botanical Garden</p>
+                        <p class="text-sm" style="color: var(--secondary-text-color);">A peaceful spot for study and reflection.</p>
+                    </div>
+                </div>
+
+                <!-- Discovery Item 2 -->
+                <div class="p-3 rounded-lg border-2 shadow-pixel-sm flex items-center colorful-section-light" style="border-color: var(--card-border-color);">
+                    <div class="w-12 h-12 bg-pixel-yellow flex items-center justify-center rounded-lg mr-3 shadow-pixel-sm pixel-art">
+                        <span class="text-white text-xl">🏛️</span>
+                    </div>
+                    <div>
+                        <p class="font-pixel text-lg" style="color: var(--theme-text-color);">University Library</p>
+                        <p class="text-sm" style="color: var(--secondary-text-color);">Access to vast knowledge resources.</p>
+                    </div>
+                </div>
+
+                <!-- Discovery Item 3 -->
+                <div class="p-3 rounded-lg border-2 shadow-pixel-sm flex items-center colorful-section-dark" style="border-color: var(--card-border-color);">
+                    <div class="w-12 h-12 bg-pixel-orange flex items-center justify-center rounded-lg mr-3 shadow-pixel-sm pixel-art">
+                        <span class="text-white text-xl">☕</span>
+                    </div>
+                    <div>
+                        <p class="font-pixel text-lg" style="color: var(--theme-text-color);">Student Cafe</p>
+                        <p class="text-sm" style="color: var(--secondary-text-color);">Grab a coffee and meet friends.</p>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="showComingSoonModal()" 
+                    class="mt-6 w-full bg-pixel-blue text-white py-3 px-6 rounded-lg font-bold 
+                           shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600">
+                <span class="font-pixel">Discover More Locations</span>
+            </button>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation, consistent with the dashboard -->
+    <nav class="border-t-2 shadow-pixel flex justify-around p-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <a href="dashboard.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🏠</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Home</span>
+        </a>
+        <a href="music.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🎵</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Music</span>
+        </a>
+        <a href="explore.html" class="flex flex-col items-center text-pixel-blue">
+            <span class="text-2xl">🗺️</span>
+            <span class="text-xs">Explore</span>
+        </a>
+        <a href="tools.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🛠️</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Tools</span>
+        </a>
+        <a href="profile.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">👤</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Profile</span>
+        </a>
+    </nav>
+
+    <!-- Coming Soon Modal - Reused from dashboard for consistency -->
+    <div id="comingSoonModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="p-6 rounded-lg shadow-pixel border-2 max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+            <h3 class="text-lg font-bold mb-2" style="color: var(--theme-text-color);">Coming Soon!</h3>
+            <p class="mb-4" style="color: var(--secondary-text-color);">This feature is under development.</p>
+            <button onclick="document.getElementById('comingSoonModal').classList.add('hidden')"
+                class="bg-pixel-blue text-white py-2 px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Function to show the "Coming Soon" modal
+        function showComingSoonModal() {
+            document.getElementById('comingSoonModal').classList.remove('hidden');
+        }
+
+        // Apply saved theme on page load for consistency across pages
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'day';
+            document.body.setAttribute('data-theme', savedTheme);
+        });
+    </script>
+</body>
+</html>

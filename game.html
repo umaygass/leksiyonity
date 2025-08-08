@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leksiyonity - Trivia Tower</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Terraria-like pixel font -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        /* Custom pixel font styling */
+        body {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            line-height: 1.5;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        
+        /* Scale up font sizes for better readability while keeping pixel aesthetic */
+        h1, h2, h3 {
+            font-size: 14px;
+        }
+        
+        .btn-pixel {
+            font-size: 12px;
+            transition: all 0.1s ease;
+        }
+        
+        .btn-pixel:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+        }
+        
+        /* Pixel art elements */
+        .pixel-art {
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        
+        /* Terraria-style borders */
+        .pixel-border {
+            border: 4px solid;
+            border-color: #6b4b1f #9e7b4b #9e7b4b #6b4b1f;
+        }
+        
+        /* Terraria-style buttons */
+        .terraria-btn {
+            background-color: #5a4a3a;
+            color: #f8e8b8;
+            border: 4px solid;
+            border-color: #9e7b4b #6b4b1f #6b4b1f #9e7b4b;
+            padding: 8px 16px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+        }
+        
+        .terraria-btn:hover {
+            background-color: #6b5a4a;
+        }
+        
+        /* Tower blocks with Terraria stone texture */
+        .tower-block {
+            width: 80%;
+            height: 40px;
+            background-color: #8c8c8c;
+            background-image: 
+                linear-gradient(45deg, #7a7a7a 25%, transparent 25%),
+                linear-gradient(-45deg, #7a7a7a 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #7a7a7a 75%),
+                linear-gradient(-45deg, transparent 75%, #7a7a7a 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            border: 4px solid;
+            border-color: #9e9e9e #6b6b6b #6b6b6b #9e9e9e;
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #f8e8b8;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+        }
+        
+        /* Active (current) tower block */
+        .tower-block.active {
+            background-color: #8c8c8c;
+            background-image: 
+                linear-gradient(45deg, #7a7a7a 25%, transparent 25%),
+                linear-gradient(-45deg, #7a7a7a 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #7a7a7a 75%),
+                linear-gradient(-45deg, transparent 75%, #7a7a7a 75%);
+            border-color: #f8e8b8 #d4b873 #d4b873 #f8e8b8;
+        }
+        
+        /* Completed tower blocks */
+        .tower-block.completed {
+            background-color: #5a4a3a;
+            background-image: none;
+            border-color: #9e7b4b #6b4b1f #6b4b1f #9e7b4b;
+        }
+        
+        /* Terraria-style UI panels */
+        .terraria-panel {
+            background-color: #5a4a3a;
+            border: 4px solid;
+            border-color: #9e7b4b #6b4b1f #6b4b1f #9e7b4b;
+            color: #f8e8b8;
+            padding: 12px;
+        }
+        
+        /* Progress bar styles */
+        .progress-container {
+            width: 100%;
+            height: 20px;
+            background-color: #3a2a1a;
+            border: 4px solid;
+            border-color: #6b4b1f #3a2a1a #3a2a1a #6b4b1f;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: #4caf50;
+            background-image: 
+                linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(255,255,255,0.2) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.2) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.2) 75%);
+            background-size: 20px 20px;
+            transition: width 0.5s ease;
+        }
+        
+        /* Timer styles */
+        .timer {
+            font-family: 'Press Start 2P', cursive;
+            font-weight: bold;
+            color: #f8e8b8;
+        }
+        
+        .timer.warning {
+            color: #ff9800;
+        }
+        
+        .timer.danger {
+            color: #f44336;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* Difficulty indicators */
+        .difficulty-easy {
+            color: #4caf50;
+        }
+        
+        .difficulty-medium {
+            color: #ff9800;
+        }
+        
+        .difficulty-hard {
+            color: #f44336;
+        }
+        
+        .difficulty-expert {
+            color: #9c27b0;
+        }
+        
+        /* Terraria-style character */
+        #character {
+            width: 48px;
+            height: 48px;
+            background-color: #5a4a3a;
+            border: 4px solid;
+            border-color: #9e7b4b #6b4b1f #6b4b1f #9e7b4b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #f8e8b8;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'press-start': ['"Press Start 2P"', 'cursive'],
+                    },
+                    colors: {
+                        'terraria-brown': '#5a4a3a',
+                        'terraria-gold': '#f8e8b8',
+                        'terraria-dark-brown': '#3a2a1a',
+                        'terraria-light-brown': '#9e7b4b',
+                        'terraria-stone': '#8c8c8c',
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen bg-terraria-dark-brown text-terraria-gold flex flex-col" style="font-family: 'Press Start 2P', cursive;">
+    <!-- Header section with Terraria style -->
+    <header class="terraria-panel border-b-2 p-4">
+        <div class="flex items-center justify-between">
+            <a href="dashboard.html" class="text-xl">&larr;</a>
+            <h1 class="text-xl text-center">TRIVIA TOWER</h1>
+            <button id="themeToggle" class="text-xl">🌓</button>
+        </div>
+    </header>
+
+    <main class="flex-grow p-4">
+        <!-- Tower Progress Section -->
+        <div class="terraria-panel mb-4">
+            <div class="flex justify-between items-center mb-3">
+                <div>
+                    <span class="font-bold">FLOOR: </span>
+                    <span id="currentFloor">0</span>
+                    <span id="difficultyIndicator" class="ml-2"></span>
+                </div>
+                <div>
+                    <span class="font-bold">XP: </span>
+                    <span id="towerXp">0</span>
+                </div>
+            </div>
+            
+            <!-- XP Progress Bar -->
+            <div class="mb-3">
+                <div class="flex justify-between text-xs mb-1">
+                    <span>LEVEL 1</span>
+                    <span id="nextLevelXP">100 XP NEXT</span>
+                </div>
+                <div class="progress-container">
+                    <div id="xpProgress" class="progress-bar" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Tower Visualization -->
+            <div class="flex flex-col items-center mb-4">
+                <div id="towerBase" class="w-full h-8 bg-terraria-brown rounded terraria-panel"></div>
+                <div id="towerBlocks" class="w-full flex flex-col items-center space-y-1">
+                    <!-- Tower blocks will be added here by JavaScript -->
+                </div>
+                <div id="character" class="mt-2">
+                    👩‍🔬
+                </div>
+            </div>
+
+            <!-- Question Area -->
+            <div id="questionArea" class="terraria-panel mb-3">
+                <div class="flex justify-between items-center mb-2">
+                    <span id="questionNumber" class="text-xs">Q 1/5</span>
+                    <span id="timer" class="timer text-xs">15s</span>
+                </div>
+                <p id="towerQuestion" class="font-bold mb-2">READY TO CLIMB? ANSWER TO MOVE UP!</p>
+                <div id="answerOptions" class="grid grid-cols-2 gap-2">
+                    <!-- Answer buttons will be added here -->
+                </div>
+            </div>
+
+            <div id="gameControls" class="flex gap-2">
+                <button id="startButton" onclick="startTower()"
+                    class="terraria-btn flex-1">
+                    START CLIMBING!
+                </button>
+                <button id="hintButton" onclick="useHint()" class="terraria-btn hidden">
+                    HINT (3)
+                </button>
+            </div>
+            
+            <!-- Power-ups Section -->
+            <div id="powerups" class="mt-4 hidden">
+                <h3 class="text-sm font-bold mb-2">POWER-UPS</h3>
+                <div class="grid grid-cols-3 gap-2">
+                    <button onclick="usePowerUp('doubleXP')" class="terraria-btn text-xs">
+                        2X XP (1)
+                    </button>
+                    <button onclick="usePowerUp('timeFreeze')" class="terraria-btn text-xs">
+                        +TIME (1)
+                    </button>
+                    <button onclick="usePowerUp('skipQuestion')" class="terraria-btn text-xs">
+                        SKIP (1)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Preview -->
+        <div class="terraria-panel">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-lg">TOP CLIMBERS</h2>
+                <button onclick="showFullLeaderboard()" class="text-xs underline" style="color: #9e7b4b;">VIEW ALL</button>
+            </div>
+            <div id="leaderboard" class="space-y-2">
+                <!-- Leaderboard will be populated by JavaScript -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="terraria-panel flex justify-around p-2">
+        <a href="dashboard.html" class="flex flex-col items-center">
+            <span class="text-xl">🏠</span>
+            <span class="text-xs">HOME</span>
+        </a>
+        <a href="music.html" class="flex flex-col items-center">
+            <span class="text-xl">🎵</span>
+            <span class="text-xs">MUSIC</span>
+        </a>
+        <a href="explore.html" class="flex flex-col items-center">
+            <span class="text-xl">🗺️</span>
+            <span class="text-xs">EXPLORE</span>
+        </a>
+        <a href="tools.html" class="flex flex-col items-center">
+            <span class="text-xl">🛠️</span>
+            <span class="text-xs">TOOLS</span>
+        </a>
+        <a href="profile.html" class="flex flex-col items-center">
+            <span class="text-xl">👤</span>
+            <span class="text-xs">PROFILE</span>
+        </a>
+    </nav>
+
+    <!-- Game Over Modal -->
+    <div id="gameOverModal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div class="terraria-panel max-w-sm w-full">
+            <h3 id="gameOverTitle" class="text-lg font-bold mb-2">GAME OVER!</h3>
+            <p id="gameOverMessage" class="mb-2">YOU REACHED FLOOR <span id="finalFloor">0</span> AND EARNED <span id="finalXP">0</span> XP!</p>
+            <div id="newUnlocks" class="mb-4 hidden">
+                <p class="font-bold" style="color: #9e7b4b;">NEW UNLOCKS:</p>
+                <ul class="list-disc pl-5">
+                    <!-- Unlocks will be added here -->
+                </ul>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="startTower()"
+                    class="terraria-btn flex-1">
+                    PLAY AGAIN
+                </button>
+                <button onclick="document.getElementById('gameOverModal').classList.add('hidden')"
+                    class="terraria-btn flex-1">
+                    CLOSE
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaderboard Modal -->
+    <div id="leaderboardModal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div class="terraria-panel max-w-sm w-full max-h-[80vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold">LEADERBOARD</h3>
+                <button onclick="document.getElementById('leaderboardModal').classList.add('hidden')" class="text-xl">&times;</button>
+            </div>
+            <div id="fullLeaderboard" class="space-y-2">
+                <!-- Full leaderboard will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let currentFloor = 0;
+        let towerXp = 0;
+        let playerLevel = 1;
+        let xpToNextLevel = 100;
+        let timer;
+        let timeLeft = 15;
+        let gameActive = false;
+        let currentQuestionIndex = 0;
+        let questionsPerFloor = 5;
+        let correctAnswers = 0;
+        let doubleXPActive = false;
+        let timeFreezeActive = false;
+        let hintsRemaining = 3;
+        let powerUps = {
+            doubleXP: 1,
+            timeFreeze: 1,
+            skipQuestion: 1
+        };
+        
+        // Categories and questions
+        const categories = {
+            microbiology: {
+                name: "Microbiology",
+                questions: [
+                    {
+                        question: "WHICH MICROORGANISM MAKES YOGURT?",
+                        answers: ["E. COLI", "LACTOBACILLUS", "STAPHYLOCOCCUS", "SALMONELLA"],
+                        correct: 1,
+                        difficulty: "easy",
+                        hint: "FERMENTS MILK"
+                    },
+                    {
+                        question: "WHAT IS THE STUDY OF FUNGI CALLED?",
+                        answers: ["BACTERIOLOGY", "VIROLOGY", "MYCOLOGY", "PARASITOLOGY"],
+                        correct: 2,
+                        difficulty: "easy",
+                        hint: "STARTS WITH 'MYCO-'"
+                    },
+                    {
+                        question: "WHICH IS NOT A SHAPE OF BACTERIA?",
+                        answers: ["COCCUS", "BACILLUS", "SPIRAL", "SQUARE"],
+                        correct: 3,
+                        difficulty: "medium",
+                        hint: "TYPICALLY ROUNDED OR SPIRAL"
+                    },
+                    {
+                        question: "WHAT DOES 'MICRO' MEAN?",
+                        answers: ["LARGE", "SMALL", "ROUND", "DANGEROUS"],
+                        correct: 1,
+                        difficulty: "easy",
+                        hint: "OPPOSITE OF 'MACRO'"
+                    },
+                    {
+                        question: "WHICH MICROORGANISM CAUSES MALARIA?",
+                        answers: ["BACTERIA", "VIRUS", "PROTOZOA", "FUNGUS"],
+                        correct: 2,
+                        difficulty: "medium",
+                        hint: "SPREAD BY MOSQUITOES"
+                    },
+                    {
+                        question: "HOW DO BACTERIA REPRODUCE?",
+                        answers: ["MITOSIS", "MEIOSIS", "BINARY FISSION", "BUDDING"],
+                        correct: 2,
+                        difficulty: "medium",
+                        hint: "SPLITS INTO TWO"
+                    },
+                    {
+                        question: "WHICH IS NOT A METHOD OF STERILIZATION?",
+                        answers: ["AUTOCLAVING", "PASTEURIZATION", "FILTRATION", "REFRIGERATION"],
+                        correct: 3,
+                        difficulty: "hard",
+                        hint: "ONLY SLOWS GROWTH"
+                    },
+                    {
+                        question: "PRIMARY COMPONENT OF BACTERIAL CELL WALLS?",
+                        answers: ["CELLULOSE", "CHITIN", "PEPTIDOGLYCAN", "SILICA"],
+                        correct: 2,
+                        difficulty: "hard",
+                        hint: "SUGARS + AMINO ACIDS"
+                    },
+                    {
+                        question: "'FATHER OF MICROBIOLOGY'?",
+                        answers: ["LOUIS PASTEUR", "ROBERT KOCH", "ANTONIE LEEUWENHOEK", "ALEXANDER FLEMING"],
+                        correct: 2,
+                        difficulty: "medium",
+                        hint: "FIRST MICROSCOPE VIEWS"
+                    },
+                    {
+                        question: "WHAT CAUSES COVID-19?",
+                        answers: ["BACTERIUM", "VIRUS", "FUNGUS", "PROTOZOAN"],
+                        correct: 1,
+                        difficulty: "easy",
+                        hint: "RNA VIRUS"
+                    }
+                ]
+            }
+        };
+        
+        // Leaderboard data
+        const leaderboard = [
+            { name: "VERONICA YOON", floor: 12, xp: 1250 },
+            { name: "ALBERT DAGOCUPAM", floor: 9, xp: 980 },
+            { name: "PAMELA CARLOTTA", floor: 7, xp: 750 },
+            { name: "MARCUS LEE", floor: 6, xp: 600 },
+            { name: "SOPHIA RODRIGUEZ", floor: 5, xp: 500 },
+            { name: "ETHAN JOHNSON", floor: 4, xp: 400 },
+            { name: "OLIVIA MARTINEZ", floor: 3, xp: 300 },
+            { name: "LIAM WILSON", floor: 2, xp: 200 },
+            { name: "EMMA ANDERSON", floor: 1, xp: 100 },
+            { name: "NOAH THOMPSON", floor: 1, xp: 50 }
+        ];
+
+        // Initialize the game
+        document.addEventListener('DOMContentLoaded', () => {
+            updateLeaderboardPreview();
+        });
+
+        function updateLeaderboardPreview() {
+            const leaderboardContainer = document.getElementById('leaderboard');
+            leaderboardContainer.innerHTML = '';
+            
+            // Show top 3
+            for (let i = 0; i < 3; i++) {
+                const player = leaderboard[i];
+                const playerElement = document.createElement('div');
+                playerElement.className = 'terraria-panel p-2';
+                
+                playerElement.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="font-bold mr-2">${i + 1}</span>
+                            <span>${player.name}</span>
+                        </div>
+                        <span class="font-bold">FLOOR ${player.floor}</span>
+                    </div>
+                `;
+                leaderboardContainer.appendChild(playerElement);
+            }
+        }
+
+        function showFullLeaderboard() {
+            const fullLeaderboard = document.getElementById('fullLeaderboard');
+            fullLeaderboard.innerHTML = '';
+            
+            leaderboard.forEach((player, index) => {
+                const playerElement = document.createElement('div');
+                playerElement.className = `terraria-panel p-2 ${index < 3 ? 'bg-yellow-900' : ''}`;
+                
+                playerElement.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="font-bold mr-2">${index + 1}</span>
+                            <span>${player.name}</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-4">FLOOR ${player.floor}</span>
+                            <span class="text-xs">${player.xp} XP</span>
+                        </div>
+                    </div>
+                `;
+                fullLeaderboard.appendChild(playerElement);
+            });
+            
+            document.getElementById('leaderboardModal').classList.remove('hidden');
+        }
+
+        // Start or restart the tower game
+        function startTower() {
+            currentFloor = 1;
+            towerXp = 0;
+            correctAnswers = 0;
+            currentQuestionIndex = 0;
+            gameActive = true;
+            
+            // Reset power-ups
+            hintsRemaining = 3;
+            powerUps = {
+                doubleXP: 1,
+                timeFreeze: 1,
+                skipQuestion: 1
+            };
+            
+            updateTowerDisplay();
+            document.getElementById('startButton').classList.add('hidden');
+            document.getElementById('hintButton').classList.remove('hidden');
+            document.getElementById('hintButton').textContent = `HINT (${hintsRemaining})`;
+            document.getElementById('powerups').classList.remove('hidden');
+            updatePowerUpButtons();
+            
+            askQuestion();
+        }
+
+        // Update the visual display of the tower and stats
+        function updateTowerDisplay() {
+            document.getElementById('currentFloor').textContent = currentFloor;
+            document.getElementById('towerXp').textContent = towerXp;
+            
+            // Update XP progress
+            const xpPercentage = (towerXp % xpToNextLevel) / xpToNextLevel * 100;
+            document.getElementById('xpProgress').style.width = `${xpPercentage}%`;
+            
+            // Check for level up
+            if (towerXp >= xpToNextLevel) {
+                levelUp();
+            }
+            
+            // Update difficulty indicator
+            const difficultyIndicator = document.getElementById('difficultyIndicator');
+            difficultyIndicator.className = '';
+            
+            if (currentFloor <= 3) {
+                difficultyIndicator.textContent = 'EASY';
+                difficultyIndicator.classList.add('difficulty-easy');
+            } else if (currentFloor <= 6) {
+                difficultyIndicator.textContent = 'MEDIUM';
+                difficultyIndicator.classList.add('difficulty-medium');
+            } else if (currentFloor <= 9) {
+                difficultyIndicator.textContent = 'HARD';
+                difficultyIndicator.classList.add('difficulty-hard');
+            } else {
+                difficultyIndicator.textContent = 'EXPERT';
+                difficultyIndicator.classList.add('difficulty-expert');
+            }
+            
+            const towerBlocksContainer = document.getElementById('towerBlocks');
+            towerBlocksContainer.innerHTML = '';
+            
+            // Add blocks based on current floor
+            for (let i = 0; i < currentFloor; i++) {
+                const block = document.createElement('div');
+                block.className = 'tower-block';
+                
+                if (i === currentFloor - 1) {
+                    block.classList.add('active');
+                    block.textContent = '🏆';
+                } else {
+                    block.classList.add('completed');
+                    block.textContent = `FLOOR ${i + 1}`;
+                }
+                
+                towerBlocksContainer.prepend(block);
+            }
+        }
+
+        function levelUp() {
+            playerLevel++;
+            towerXp = towerXp % xpToNextLevel;
+            xpToNextLevel = Math.floor(xpToNextLevel * 1.5);
+            
+            // Show level up message
+            const gameOverTitle = document.getElementById('gameOverTitle');
+            const gameOverMessage = document.getElementById('gameOverMessage');
+            const newUnlocks = document.getElementById('newUnlocks');
+            
+            gameOverTitle.textContent = "LEVEL UP!";
+            gameOverMessage.textContent = `LEVEL ${playerLevel}!`;
+            newUnlocks.innerHTML = `
+                <p class="font-bold" style="color: #9e7b4b;">NEW UNLOCKS:</p>
+                <ul class="list-disc pl-5">
+                    <li>TIME FREEZE POWER-UP</li>
+                    <li>+1 HINT</li>
+                </ul>
+            `;
+            newUnlocks.classList.remove('hidden');
+            
+            // Award power-ups
+            hintsRemaining += 1;
+            powerUps.timeFreeze += 1;
+            updatePowerUpButtons();
+            
+            document.getElementById('gameOverModal').classList.remove('hidden');
+        }
+
+        // Ask a new trivia question
+        function askQuestion() {
+            currentQuestionIndex++;
+            
+            // Reset timer
+            clearInterval(timer);
+            timeLeft = 15;
+            updateTimerDisplay();
+            
+            // Get a random question based on difficulty
+            let questionPool = categories.microbiology.questions;
+            
+            // Filter by difficulty
+            if (currentFloor <= 3) {
+                questionPool = questionPool.filter(q => q.difficulty === "easy");
+            } else if (currentFloor <= 6) {
+                questionPool = questionPool.filter(q => q.difficulty === "easy" || q.difficulty === "medium");
+            } else if (currentFloor <= 9) {
+                questionPool = questionPool.filter(q => q.difficulty === "medium" || q.difficulty === "hard");
+            } else {
+                questionPool = questionPool;
+            }
+            
+            const randomQuestion = questionPool[Math.floor(Math.random() * questionPool.length)];
+            
+            document.getElementById('towerQuestion').textContent = randomQuestion.question;
+            document.getElementById('questionNumber').textContent = `Q ${currentQuestionIndex}/${questionsPerFloor}`;
+            
+            const answerOptions = document.getElementById('answerOptions');
+            answerOptions.innerHTML = '';
+            
+            // Shuffle answers
+            const shuffledAnswers = [...randomQuestion.answers];
+            for (let i = shuffledAnswers.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledAnswers[i], shuffledAnswers[j]] = [shuffledAnswers[j], shuffledAnswers[i]];
+            }
+            
+            shuffledAnswers.forEach((answer, index) => {
+                const originalIndex = randomQuestion.answers.indexOf(answer);
+                const button = document.createElement('button');
+                button.className = 'terraria-btn';
+                button.textContent = answer;
+                button.dataset.correct = originalIndex === randomQuestion.correct;
+                button.onclick = function() {
+                    checkAnswer(this);
+                };
+                answerOptions.appendChild(button);
+            });
+            
+            // Start timer
+            timer = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    timeUp();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const timerElement = document.getElementById('timer');
+            timerElement.textContent = `${timeLeft}S`;
+            timerElement.className = 'timer text-xs';
+            
+            if (timeLeft <= 5) {
+                timerElement.classList.add('danger');
+            } else if (timeLeft <= 10) {
+                timerElement.classList.add('warning');
+            }
+        }
+
+        function timeUp() {
+            clearInterval(timer);
+            document.getElementById('towerQuestion').textContent = "TIME'S UP! CORRECT ANSWER HIGHLIGHTED.";
+            
+            // Highlight correct answer
+            const buttons = document.querySelectorAll('#answerOptions button');
+            buttons.forEach(button => {
+                if (button.dataset.correct === "true") {
+                    button.style.backgroundColor = '#4caf50';
+                } else {
+                    button.disabled = true;
+                }
+            });
+            
+            setTimeout(() => {
+                nextQuestionOrFloor(false);
+            }, 2000);
+        }
+
+        // Check the selected answer
+        function checkAnswer(selectedButton) {
+            if (!gameActive) return;
+            
+            clearInterval(timer);
+            
+            const buttons = document.querySelectorAll('#answerOptions button');
+            let isCorrect = selectedButton.dataset.correct === "true";
+            
+            // Disable all buttons
+            buttons.forEach(button => {
+                button.disabled = true;
+                
+                // Highlight correct answer
+                if (button.dataset.correct === "true") {
+                    button.style.backgroundColor = '#4caf50';
+                }
+            });
+            
+            // Visual feedback
+            if (isCorrect) {
+                selectedButton.classList.add('animate-celebrate');
+                correctAnswers++;
+                
+                // Calculate XP
+                let xpEarned = 10 + Math.floor(timeLeft / 3);
+                
+                // Difficulty multiplier
+                if (currentFloor > 6) xpEarned = Math.floor(xpEarned * 1.5);
+                if (currentFloor > 9) xpEarned = Math.floor(xpEarned * 2);
+                
+                // Double XP power-up
+                if (doubleXPActive) {
+                    xpEarned *= 2;
+                    doubleXPActive = false;
+                }
+                
+                towerXp += xpEarned;
+                
+                // Show XP earned
+                const xpPopup = document.createElement('div');
+                xpPopup.className = 'absolute bg-yellow-500 text-black px-2 py-1 rounded terraria-panel text-xs';
+                xpPopup.textContent = `+${xpEarned} XP`;
+                xpPopup.style.top = `${selectedButton.offsetTop - 30}px`;
+                xpPopup.style.left = `${selectedButton.offsetLeft + selectedButton.offsetWidth/2 - 30}px`;
+                xpPopup.style.transform = 'translateY(-20px)';
+                xpPopup.style.opacity = '0';
+                xpPopup.style.transition = 'all 0.5s ease';
+                
+                selectedButton.parentElement.appendChild(xpPopup);
+                
+                setTimeout(() => {
+                    xpPopup.style.transform = 'translateY(-40px)';
+                    xpPopup.style.opacity = '1';
+                }, 10);
+                
+                setTimeout(() => {
+                    xpPopup.remove();
+                }, 1000);
+            } else {
+                selectedButton.style.backgroundColor = '#f44336';
+                selectedButton.classList.add('animate-shake');
+            }
+            
+            updateTowerDisplay();
+            
+            setTimeout(() => {
+                nextQuestionOrFloor(isCorrect);
+            }, 1500);
+        }
+
+        function nextQuestionOrFloor(wasCorrect) {
+            if (currentQuestionIndex < questionsPerFloor) {
+                askQuestion();
+            } else {
+                // Finished all questions for this floor
+                if (correctAnswers >= Math.floor(questionsPerFloor * 0.7)) {
+                    currentFloor++;
+                    correctAnswers = 0;
+                    currentQuestionIndex = 0;
+                    
+                    if (currentFloor > 12) {
+                        endGame(true);
+                    } else {
+                        askQuestion();
+                    }
+                } else {
+                    endGame(false);
+                }
+            }
+        }
+
+        function endGame(success) {
+            gameActive = false;
+            clearInterval(timer);
+            
+            const gameOverTitle = document.getElementById('gameOverTitle');
+            const gameOverMessage = document.getElementById('gameOverMessage');
+            const newUnlocks = document.getElementById('newUnlocks');
+            const finalFloor = document.getElementById('finalFloor');
+            const finalXP = document.getElementById('finalXP');
+            
+            finalFloor.textContent = currentFloor;
+            finalXP.textContent = towerXp;
+            
+            if (success) {
+                gameOverTitle.textContent = "TOWER CONQUERED!";
+                gameOverMessage.textContent = `YOU REACHED THE TOP WITH ${towerXp} XP!`;
+                newUnlocks.innerHTML = `
+                    <p class="font-bold" style="color: #9e7b4b;">NEW UNLOCKS:</p>
+                    <ul class="list-disc pl-5">
+                        <li>WIZARD CHARACTER</li>
+                        <li>GOLDEN TOWER SKIN</li>
+                    </ul>
+                `;
+                newUnlocks.classList.remove('hidden');
+            } else {
+                gameOverTitle.textContent = "GAME OVER!";
+                gameOverMessage.textContent = `FLOOR ${currentFloor} | ${towerXp} XP`;
+                newUnlocks.classList.add('hidden');
+            }
+            
+            document.getElementById('gameOverModal').classList.remove('hidden');
+        }
+
+        function useHint() {
+            if (hintsRemaining <= 0 || !gameActive) return;
+            
+            hintsRemaining--;
+            document.getElementById('hintButton').textContent = `HINT (${hintsRemaining})`;
+            
+            // Find the current question
+            const questionText = document.getElementById('towerQuestion').textContent;
+            let currentQuestion = null;
+            
+            for (const category in categories) {
+                currentQuestion = categories[category].questions.find(q => q.question === questionText);
+                if (currentQuestion) break;
+            }
+            
+            if (currentQuestion && currentQuestion.hint) {
+                // Show hint temporarily
+                const originalText = document.getElementById('towerQuestion').textContent;
+                document.getElementById('towerQuestion').textContent = `HINT: ${currentQuestion.hint}`;
+                
+                setTimeout(() => {
+                    document.getElementById('towerQuestion').textContent = originalText;
+                }, 3000);
+            }
+        }
+
+        function usePowerUp(powerUpType) {
+            if (powerUps[powerUpType] <= 0 || !gameActive) return;
+            
+            powerUps[powerUpType]--;
+            updatePowerUpButtons();
+            
+            switch (powerUpType) {
+                case 'doubleXP':
+                    doubleXPActive = true;
+                    showPowerUpMessage("2X XP ACTIVATED!");
+                    break;
+                case 'timeFreeze':
+                    timeFreezeActive = true;
+                    timeLeft += 10;
+                    updateTimerDisplay();
+                    showPowerUpMessage("+10 SECONDS!");
+                    break;
+                case 'skipQuestion':
+                    nextQuestionOrFloor(true);
+                    showPowerUpMessage("QUESTION SKIPPED!");
+                    break;
+            }
+        }
+
+        function updatePowerUpButtons() {
+            document.querySelector('[onclick="usePowerUp(\'doubleXP\')"]').textContent = `2X XP (${powerUps.doubleXP})`;
+            document.querySelector('[onclick="usePowerUp(\'timeFreeze\')"]').textContent = `+TIME (${powerUps.timeFreeze})`;
+            document.querySelector('[onclick="usePowerUp(\'skipQuestion\')"]').textContent = `SKIP (${powerUps.skipQuestion})`;
+            
+            // Disable buttons if no power-ups left
+            document.querySelector('[onclick="usePowerUp(\'doubleXP\')"]').disabled = powerUps.doubleXP <= 0;
+            document.querySelector('[onclick="usePowerUp(\'timeFreeze\')"]').disabled = powerUps.timeFreeze <= 0;
+            document.querySelector('[onclick="usePowerUp(\'skipQuestion\')"]').disabled = powerUps.skipQuestion <= 0;
+        }
+
+        function showPowerUpMessage(message) {
+            const powerUpMessage = document.createElement('div');
+            powerUpMessage.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-purple-800 text-white px-4 py-2 rounded terraria-panel z-50';
+            powerUpMessage.textContent = message;
+            
+            document.body.appendChild(powerUpMessage);
+            
+            setTimeout(() => {
+                powerUpMessage.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                setTimeout(() => {
+                    powerUpMessage.remove();
+                }, 500);
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leksiyonity - Tasks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script>
+        // Tailwind CSS configuration for custom colors and shadows, consistent with the app's theme.
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                        pixel: ['"Press Start 2P"', 'cursive'], // Added pixelated font
+                    },
+                    colors: {
+                        'pixel-blue': '#3b82f6',
+                        'pixel-green': '#22c55e',
+                        'pixel-yellow': '#facc15',
+                        'pixel-purple': '#a855f7',
+                        'pixel-red': '#ef4444',
+                        'pixel-orange': '#f97316',
+                        'chat-bg': '#e0f2f7',
+                        'chat-user': '#d1fae5',
+                        'chat-ai': '#bfdbfe',
+                        'teal-500': '#14b8a6',
+                        'music-light': '#f0f9ff',
+                        'music-dark': '#4b5563',
+                        // CSS variables for dynamic theme colors
+                        'theme-bg': 'var(--theme-bg-color)',
+                        'theme-text': 'var(--theme-text-color)',
+                        'card-bg': 'var(--card-bg-color)',
+                        'card-border': 'var(--card-border-color)',
+                        'secondary-text': 'var(--secondary-text-color)',
+                        'accent-bg-light': 'var(--accent-bg-light-color)', // For colorful sections
+                        'accent-bg-dark': 'var(--accent-bg-dark-color)',   // For colorful sections
+                    },
+                    boxShadow: {
+                        'pixel': '4px 4px 0px 0px rgba(0,0,0,1)',
+                        'pixel-sm': '2px 2px 0px 0px rgba(0,0,0,1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom CSS for pixel art rendering and button effects */
+        .pixel-art {
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        .btn-pixel {
+            transition: all 0.1s ease;
+        }
+        .btn-pixel:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+        }
+        .task-card {
+            transition: all 0.2s ease;
+            background-color: var(--card-bg-color); /* Apply theme color */
+            border-color: var(--card-border-color); /* Apply theme color */
+        }
+        .task-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
+        }
+        .task-card .text-gray-600 {
+            color: var(--secondary-text-color);
+        }
+        /* Define CSS variables for Day and Dark themes */
+        /* Default (Day Mode) */
+        :root, [data-theme='day'] {
+            --theme-bg-color: #eff6ff; /* bg-blue-50 */
+            --theme-text-color: #1f2937; /* text-gray-800 */
+            --card-bg-color: #ffffff; /* bg-white */
+            --card-border-color: #000000; /* border-black */
+            --secondary-text-color: #4b5563; /* text-gray-600 */
+            --accent-bg-light-color: #e0f2f7; /* Light blue for colorful sections */
+            --accent-bg-dark-color: #bfdbfe; /* Slightly darker blue for contrast */
+        }
+
+        /* Dark Mode */
+        [data-theme='dark'] {
+            --theme-bg-color: #1f2937; /* Dark gray background */
+            --theme-text-color: #f3f4f6; /* Light gray text */
+            --card-bg-color: #374151; /* Darker gray for cards */
+            --card-border-color: #6b7280; /* Lighter gray border */
+            --secondary-text-color: #9ca3af; /* Lighter gray for secondary text */
+            --accent-bg-light-color: #2d3748; /* Darker shade for colorful sections */
+            --accent-bg-dark-color: #4a5568;   /* Even darker shade for contrast */
+        }
+
+        /* Apply theme variables to core elements */
+        body {
+            background-color: var(--theme-bg-color);
+            color: var(--theme-text-color);
+        }
+
+        /* Override specific Tailwind classes to use CSS variables for theme consistency */
+        .bg-white { /* Applies to header, main cards */
+            background-color: var(--card-bg-color);
+        }
+        .border-black { /* Applies to borders of cards, header, nav */
+            border-color: var(--card-border-color);
+        }
+        .text-gray-600 { /* Applies to secondary text like descriptions */
+            color: var(--secondary-text-color);
+        }
+        .bg-blue-50 { /* Applies to main body background, but overridden by body style */
+            background-color: var(--theme-bg-color);
+        }
+    </style>
+</head>
+<body class="min-h-screen font-inter flex flex-col" data-theme="day">
+    <!-- Header section, consistent with the app's branding -->
+    <header class="shadow-pixel border-b-2 p-4" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <div class="flex items-center justify-between">
+            <a href="dashboard.html" class="btn-pixel">
+                <span class="text-2xl" style="color: var(--secondary-text-color);">←</span>
+            </a>
+            <h1 class="text-xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">LEKSIYONITY - Tasks</h1>
+            <div class="w-6"></div> <!-- Spacer for balance -->
+        </div>
+    </header>
+
+    <main class="flex-grow p-4">
+        <!-- Search Bar -->
+        <div class="relative mb-4 p-3 rounded-lg shadow-pixel border-2 colorful-section-light" style="border-color: var(--card-border-color);">
+            <input type="text" placeholder="Search tasks..." 
+                   class="w-full p-2 pl-10 rounded-lg shadow-pixel-sm border-2 focus:outline-none"
+                   style="background-color: var(--card-bg-color); color: var(--theme-text-color); border-color: var(--card-border-color);">
+            <span class="absolute left-3 top-2.5" style="color: var(--secondary-text-color);">🔍</span>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="flex overflow-x-auto space-x-2 mb-4 pb-2">
+            <button class="filter-btn active px-4 py-2 rounded-full shadow-pixel-sm border-2 border-black whitespace-nowrap btn-pixel font-pixel">
+                All Tasks
+            </button>
+            <button class="filter-btn px-4 py-2 rounded-full shadow-pixel-sm border-2 border-black whitespace-nowrap btn-pixel font-pixel">
+                Daily
+            </button>
+            <button class="filter-btn px-4 py-2 rounded-full shadow-pixel-sm border-2 border-black whitespace-nowrap btn-pixel font-pixel">
+                Weekly
+            </button>
+            <button class="filter-btn px-4 py-2 rounded-full shadow-pixel-sm border-2 border-black whitespace-nowrap btn-pixel font-pixel">
+                Completed
+            </button>
+            <button class="filter-btn px-4 py-2 rounded-full shadow-pixel-sm border-2 border-black whitespace-nowrap btn-pixel font-pixel">
+                Pending
+            </button>
+        </div>
+
+        <!-- Task List -->
+        <div class="grid grid-cols-1 gap-4">
+            <!-- Task 1: Complete Biology Quiz -->
+            <div class="task-card p-4 rounded-lg shadow-pixel border-2 colorful-section-dark">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h3 class="font-pixel text-lg" style="color: var(--theme-text-color);">Biology Quiz: Cell Structure</h3>
+                        <p class="text-sm mb-2" style="color: var(--secondary-text-color);">Due: Tomorrow</p>
+                    </div>
+                    <span class="bg-pixel-yellow text-white text-xs px-2 py-1 rounded shadow-pixel-sm border border-black font-pixel">PENDING</span>
+                </div>
+                <p class="text-sm mt-2" style="color: var(--theme-text-color);">Answer 10 multiple-choice questions on cell organelles and functions.</p>
+                <div class="flex justify-between items-center mt-3">
+                    <span class="text-sm font-pixel" style="color: var(--pixel-green);">+50 XP</span>
+                    <button onclick="showComingSoonModal()" class="bg-pixel-blue text-white px-3 py-1 rounded shadow-pixel-sm border-2 border-black text-sm btn-pixel font-pixel">
+                        Start Task
+                    </button>
+                </div>
+            </div>
+
+            <!-- Task 2: Read Chemistry Chapter 3 -->
+            <div class="task-card p-4 rounded-lg shadow-pixel border-2 colorful-section-light">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h3 class="font-pixel text-lg" style="color: var(--theme-text-color);">Chemistry: Stoichiometry</h3>
+                        <p class="text-sm mb-2" style="color: var(--secondary-text-color);">Due: Friday</p>
+                    </div>
+                    <span class="bg-pixel-yellow text-white text-xs px-2 py-1 rounded shadow-pixel-sm border border-black font-pixel">PENDING</span>
+                </div>
+                <p class="text-sm mt-2" style="color: var(--theme-text-color);">Read Chapter 3 and summarize key concepts of chemical reactions.</p>
+                <div class="flex justify-between items-center mt-3">
+                    <span class="text-sm font-pixel" style="color: var(--pixel-green);">+30 XP</span>
+                    <button onclick="showComingSoonModal()" class="bg-pixel-blue text-white px-3 py-1 rounded shadow-pixel-sm border-2 border-black text-sm btn-pixel font-pixel">
+                        Start Task
+                    </button>
+                </div>
+            </div>
+
+            <!-- Task 3: Physics Problem Set -->
+            <div class="task-card p-4 rounded-lg shadow-pixel border-2 colorful-section-dark">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h3 class="font-pixel text-lg" style="color: var(--theme-text-color);">Physics: Kinematics Problems</h3>
+                        <p class="text-sm mb-2" style="color: var(--secondary-text-color);">Due: Next Monday</p>
+                    </div>
+                    <span class="bg-pixel-yellow text-white text-xs px-2 py-1 rounded shadow-pixel-sm border border-black font-pixel">PENDING</span>
+                </div>
+                <p class="text-sm mt-2" style="color: var(--theme-text-color);">Solve 5 problems related to motion in one and two dimensions.</p>
+                <div class="flex justify-between items-center mt-3">
+                    <span class="text-sm font-pixel" style="color: var(--pixel-green);">+70 XP</span>
+                    <button onclick="showComingSoonModal()" class="bg-pixel-blue text-white px-3 py-1 rounded shadow-pixel-sm border-2 border-black text-sm btn-pixel font-pixel">
+                        Start Task
+                    </button>
+                </div>
+            </div>
+
+            <!-- Task 4: Language Practice (Completed) -->
+            <div class="task-card p-4 rounded-lg shadow-pixel border-2 colorful-section-light">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h3 class="font-pixel text-lg line-through" style="color: var(--theme-text-color);">Language: Daily Spanish Practice</h3>
+                        <p class="text-sm mb-2" style="color: var(--secondary-text-color);">Completed: Today</p>
+                    </div>
+                    <span class="bg-pixel-green text-white text-xs px-2 py-1 rounded shadow-pixel-sm border border-black font-pixel">COMPLETED</span>
+                </div>
+                <p class="text-sm mt-2" style="color: var(--theme-text-color);">Practice daily Spanish vocabulary and grammar for 30 minutes.</p>
+                <div class="flex justify-between items-center mt-3">
+                    <span class="text-sm font-pixel" style="color: var(--pixel-green);">+20 XP</span>
+                    <button onclick="showComingSoonModal()" class="bg-gray-400 text-white px-3 py-1 rounded shadow-pixel-sm border-2 border-black text-sm btn-pixel font-pixel" disabled>
+                        View
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add New Task Button -->
+        <button onclick="showComingSoonModal()" 
+                class="bg-pixel-purple text-white py-3 px-4 rounded-lg shadow-pixel border-2 border-black font-bold mt-6 w-full btn-pixel font-pixel">
+            + Add New Task
+        </button>
+    </main>
+
+    <!-- Bottom Navigation, consistent with the dashboard -->
+    <nav class="border-t-2 shadow-pixel flex justify-around p-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <a href="dashboard.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🏠</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Home</span>
+        </a>
+        <a href="music.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🎵</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Music</span>
+        </a>
+        <a href="explore.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🗺️</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Explore</span>
+        </a>
+        <a href="tools.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🛠️</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Tools</span>
+        </a>
+        <a href="profile.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">👤</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Profile</span>
+        </a>
+    </nav>
+
+    <!-- Coming Soon Modal -->
+    <div id="comingSoonModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="p-6 rounded-lg shadow-pixel border-2 max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+            <h3 class="text-lg font-pixel font-bold mb-2" style="color: var(--theme-text-color);">Coming Soon!</h3>
+            <p class="mb-4" style="color: var(--secondary-text-color);">This feature is under development.</p>
+            <button onclick="document.getElementById('comingSoonModal').classList.add('hidden')"
+                class="bg-pixel-blue text-white py-2 px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600 font-pixel">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Function to show the "Coming Soon" modal
+        function showComingSoonModal() {
+            document.getElementById('comingSoonModal').classList.remove('hidden');
+        }
+
+        // Apply saved theme on page load for consistency across pages
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'day';
+            document.body.setAttribute('data-theme', savedTheme);
+        });
+
+        // Filter button functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all filter buttons
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('active', 'bg-pixel-blue', 'text-white');
+                    b.style.backgroundColor = 'var(--card-bg-color)'; // Reset to theme's card bg
+                    b.style.color = 'var(--theme-text-color)'; // Reset to theme's text color
+                });
+                // Add active class to the clicked button
+                this.classList.add('active', 'bg-pixel-blue', 'text-white');
+                this.style.backgroundColor = ''; // Let Tailwind handle active background
+                this.style.color = ''; // Let Tailwind handle active text color
+                
+                // In a real app, this would filter tasks
+                showComingSoonModal(); // Use the consistent modal function for filtering
+            });
+        });
+    </script>
+</body>
+</html>

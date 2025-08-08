@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leksiyonity - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        // Tailwind CSS configuration for custom colors and shadows, consistent with the app's theme.
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'pixel-blue': '#3b82f6',
+                        'pixel-green': '#22c55e',
+                        'pixel-yellow': '#facc15',
+                        'pixel-purple': '#a855f7',
+                        'pixel-red': '#ef4444',
+                        'pixel-orange': '#f97316',
+                        'chat-bg': '#e0f2f7',
+                        'chat-user': '#d1fae5',
+                        'chat-ai': '#bfdbfe',
+                        'teal-500': '#14b8a6',
+                        'music-light': '#f0f9ff',
+                        'music-dark': '#4b5563',
+                        // CSS variables for dynamic theme colors
+                        'theme-bg': 'var(--theme-bg-color)',
+                        'theme-text': 'var(--theme-text-color)',
+                        'card-bg': 'var(--card-bg-color)',
+                        'card-border': 'var(--card-border-color)',
+                        'secondary-text': 'var(--secondary-text-color)',
+                    },
+                    boxShadow: {
+                        'pixel': '4px 4px 0px 0px rgba(0,0,0,1)',
+                        'pixel-sm': '2px 2px 0px 0px rgba(0,0,0,1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom CSS for pixel art rendering and button effects */
+        .pixel-art {
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        .btn-pixel {
+            transition: all 0.1s ease;
+        }
+        .btn-pixel:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+        }
+
+        /* Define CSS variables for Day and Dark themes */
+        /* Default (Day Mode) */
+        :root, [data-theme='day'] {
+            --theme-bg-color: #eff6ff; /* bg-blue-50 */
+            --theme-text-color: #1f2937; /* text-gray-800 */
+            --card-bg-color: #ffffff; /* bg-white */
+            --card-border-color: #000000; /* border-black */
+            --secondary-text-color: #4b5563; /* text-gray-600 */
+            --login-bg-image: url('https://ibb.co/dxC8yTm'); /* Use the provided background image */
+        }
+
+        /* Dark Mode */
+        [data-theme='dark'] {
+            --theme-bg-color: #1f2937; /* Dark gray background */
+            --theme-text-color: #f3f4f6; /* Light gray text */
+            --card-bg-color: #374151; /* Darker gray for cards */
+            --card-border-color: #6b7280; /* Lighter gray border */
+            --secondary-text-color: #9ca3af; /* Lighter gray for secondary text */
+            --login-bg-image: url('https://ibb.co/dxC8yTm'); /* Use the same background image for dark mode */
+        }
+
+        /* Apply theme variables to core elements */
+        body {
+            background-color: var(--theme-bg-color);
+            color: var(--theme-text-color);
+            background-image: var(--login-bg-image); /* Apply background image */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Override specific Tailwind classes to use CSS variables for theme consistency */
+        .bg-white { /* Applies to main login card */
+            background-color: var(--card-bg-color);
+        }
+        .border-black { /* Applies to borders */
+            border-color: var(--card-border-color);
+        }
+        .text-gray-600 { /* Applies to secondary text */
+            color: var(--secondary-text-color);
+        }
+        .text-gray-700 { /* Applies to form labels */
+            color: var(--secondary-text-color);
+        }
+        .text-gray-800 { /* Applies to main titles */
+            color: var(--theme-text-color);
+        }
+        input {
+            background-color: var(--theme-bg-color); /* Input background should match theme bg */
+            color: var(--theme-text-color); /* Input text color */
+            border-color: var(--card-border-color); /* Input border color */
+        }
+        input:focus {
+            border-color: var(--pixel-blue); /* Focus ring color */
+        }
+        .link-color { /* For "Forgot Password?" and "Create an account" */
+            color: var(--pixel-blue);
+        }
+    </style>
+</head>
+<body data-theme="day">
+    <!-- Main content area, centered -->
+    <main class="flex-grow flex flex-col items-center justify-center px-4 py-8 relative z-10">
+        <div class="w-full max-w-md p-6 rounded-lg shadow-pixel border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+            <!-- App Logo with Image -->
+            <div class="flex flex-col items-center mb-6">
+                <img src="logo.png" alt="Leksiyonity Logo" 
+                     class="w-48 h-48 object-contain pixel-art mb-2"> <!-- Changed w-32 h-32 to w-48 h-48 for a larger size -->
+                <h1 class="text-2xl font-bold mt-2" style="color: var(--theme-text-color);">WELCOME!</h1>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label for="email" class="block text-sm font-medium mb-1" style="color: var(--secondary-text-color);">Email</label>
+                    <input type="email" id="email" required placeholder="Enter your email"
+                        class="w-full px-3 py-2 border-2 rounded shadow-pixel-sm focus:outline-none focus:ring-2 focus:ring-pixel-blue"
+                        style="background-color: var(--theme-bg-color); color: var(--theme-text-color); border-color: var(--card-border-color);">
+                </div>
+                <div>
+                    <label for="password" class="block text-sm font-medium mb-1" style="color: var(--secondary-text-color);">Password</label>
+                    <input type="password" id="password" required placeholder="Enter your password"
+                        class="w-full px-3 py-2 border-2 rounded shadow-pixel-sm focus:outline-none focus:ring-2 focus:ring-pixel-blue"
+                        style="background-color: var(--theme-bg-color); color: var(--theme-text-color); border-color: var(--card-border-color);">
+                </div>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input id="remember" type="checkbox"
+                            class="w-4 h-4 border-2 border-black rounded shadow-pixel-sm focus:ring-pixel-blue"
+                            style="border-color: var(--card-border-color);">
+                        <label for="remember" class="ml-2 text-sm" style="color: var(--secondary-text-color);">Remember Me</label>
+                    </div>
+                    <a href="#" onclick="showComingSoonModal()" class="text-sm link-color hover:underline">Forgot Password?</a>
+                </div>
+                <button type="submit"
+                    class="w-full bg-pixel-blue text-white py-2 px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600 transition-colors">
+                    LOGIN
+                </button>
+                <div class="text-center text-sm" style="color: var(--secondary-text-color);">
+                    Don't have an account? <a href="#" onclick="showComingSoonModal()" class="link-color hover:underline">Create an account</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Error Modal - Reused as a general message modal -->
+    <div id="errorModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="p-6 rounded-lg shadow-pixel border-2 max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+            <h3 class="text-lg font-bold mb-2" id="modalTitle" style="color: var(--theme-text-color);">Login Failed</h3>
+            <p id="modalMessage" class="mb-4" style="color: var(--secondary-text-color);">Invalid credentials. Please try again.</p>
+            <button onclick="document.getElementById('errorModal').classList.add('hidden')"
+                class="bg-pixel-blue text-white py-2 px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Function to show the general message modal (replaces alert/confirm)
+        function showMessageModal(title, message) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('errorModal').classList.remove('hidden');
+        }
+
+        // Function to show the "Coming Soon" modal (specific message)
+        function showComingSoonModal() {
+            showMessageModal('Coming Soon!', 'This feature is under development.');
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Default credentials
+            if (email === 'human@gmail.com' && password === '1234') {
+                window.location.href = 'dashboard.html';
+            } else {
+                const errorMessage = email === '' || password === '' ? 
+                                     'Please fill in all fields.' : 
+                                     'Invalid credentials. Please try again.';
+                showMessageModal('Login Failed', errorMessage);
+            }
+        });
+
+        // Apply saved theme on page load for consistency across pages
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'day';
+            document.body.setAttribute('data-theme', savedTheme);
+        });
+    </script>
+</body>
+</html>

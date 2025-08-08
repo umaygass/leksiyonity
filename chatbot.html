@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leksiyonity - Chatbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script>
+        // Tailwind CSS configuration for custom colors and shadows, consistent with the app's theme.
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                        pixel: ['"Press Start 2P"', 'cursive'], // Added pixelated font
+                    },
+                    colors: {
+                        'pixel-blue': '#3b82f6',
+                        'pixel-green': '#22c55e',
+                        'pixel-yellow': '#facc15',
+                        'pixel-purple': '#a855f7',
+                        'pixel-red': '#ef4444',
+                        'pixel-orange': '#f97316',
+                        'chat-bg': '#e0f2f7', /* Light blue for chat background */
+                        'chat-user': '#d1fae5', /* Light green for user messages */
+                        'chat-ai': '#bfdbfe', /* Light blue for AI messages */
+                        'teal-500': '#14b8a6',
+                        'music-light': '#f0f9ff',
+                        'music-dark': '#4b5563',
+                        // CSS variables for dynamic theme colors
+                        'theme-bg': 'var(--theme-bg-color)',
+                        'theme-text': 'var(--theme-text-color)',
+                        'card-bg': 'var(--card-bg-color)',
+                        'card-border': 'var(--card-border-color)',
+                        'secondary-text': 'var(--secondary-text-color)',
+                        'accent-bg-light': 'var(--accent-bg-light-color)', // For colorful sections
+                        'accent-bg-dark': 'var(--accent-bg-dark-color)',   // For colorful sections
+                    },
+                    boxShadow: {
+                        'pixel': '4px 4px 0px 0px rgba(0,0,0,1)',
+                        'pixel-sm': '2px 2px 0px 0px rgba(0,0,0,1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom CSS for pixel art rendering and button effects */
+        .pixel-art {
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        .btn-pixel {
+            transition: all 0.1s ease;
+        }
+        .btn-pixel:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+        }
+        /* Custom scrollbar for chat messages */
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Define CSS variables for Day and Dark themes */
+        /* Default (Day Mode) */
+        :root, [data-theme='day'] {
+            --theme-bg-color: #eff6ff; /* bg-blue-50 */
+            --theme-text-color: #1f2937; /* text-gray-800 */
+            --card-bg-color: #ffffff; /* bg-white */
+            --card-border-color: #000000; /* border-black */
+            --secondary-text-color: #4b5563; /* text-gray-600 */
+            --accent-bg-light-color: #e0f2f7; /* Light blue for colorful sections */
+            --accent-bg-dark-color: #bfdbfe; /* Slightly darker blue for contrast */
+        }
+
+        /* Dark Mode */
+        [data-theme='dark'] {
+            --theme-bg-color: #1f2937; /* Dark gray background */
+            --theme-text-color: #f3f4f6; /* Light gray text */
+            --card-bg-color: #374151; /* Darker gray for cards */
+            --card-border-color: #6b7280; /* Lighter gray border */
+            --secondary-text-color: #9ca3af; /* Lighter gray for secondary text */
+            --accent-bg-light-color: #2d3748; /* Darker shade for colorful sections */
+            --accent-bg-dark-color: #4a5568;   /* Even darker shade for contrast */
+        }
+
+        /* Apply theme variables to core elements */
+        body {
+            background-color: var(--theme-bg-color);
+            color: var(--theme-text-color);
+        }
+
+        /* Override specific Tailwind classes to use CSS variables for theme consistency */
+        .bg-white { /* Applies to header, main cards */
+            background-color: var(--card-bg-color);
+        }
+        .border-black { /* Applies to borders of cards, header, nav */
+            border-color: var(--card-border-color);
+        }
+        .text-gray-600 { /* Applies to secondary text like descriptions */
+            color: var(--secondary-text-color);
+        }
+        .bg-blue-50 { /* Applies to main body background, but overridden by body style */
+            background-color: var(--theme-bg-color);
+        }
+        /* Chat specific background colors, these should remain distinct */
+        .bg-chat-bg {
+            background-color: var(--accent-bg-light-color); /* Use theme accent for chat area */
+        }
+        .bg-chat-user {
+            background-color: var(--chat-user); /* Keep light green for user messages */
+        }
+        .bg-chat-ai {
+            background-color: var(--chat-ai); /* Keep light blue for AI messages */
+        }
+    </style>
+</head>
+<body class="min-h-screen font-inter flex flex-col" data-theme="day">
+    <!-- Header section, consistent with the app's branding -->
+    <header class="shadow-pixel border-b-2 p-4" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <h1 class="text-2xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">LEKSIYONITY</h1>
+    </header>
+
+    <main class="flex-grow p-4 flex items-center justify-center">
+        <!-- Chatbot Overlay Container -->
+        <div id="chatbotOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="p-4 rounded-lg shadow-pixel border-2 w-11/12 max-w-md h-5/6 flex flex-col colorful-section-dark" style="border-color: var(--card-border-color);">
+                <!-- Chatbot Header -->
+                <div class="flex justify-between items-center border-b-2 pb-2 mb-4" style="border-color: var(--card-border-color);">
+                    <h2 class="text-xl font-pixel font-bold" style="color: var(--theme-text-color);">AI Chatbot</h2>
+                    <button id="closeChatbot" class="text-gray-600 hover:text-gray-900 text-2xl font-bold btn-pixel" style="color: var(--secondary-text-color);">✖</button>
+                </div>
+
+                <!-- Chat Messages Display Area -->
+                <div id="chatMessages" class="flex-grow overflow-y-auto chat-messages p-2 mb-4 bg-chat-bg rounded border-2 border-black">
+                    <!-- Messages will be appended here -->
+                    <div class="mb-2 p-2 rounded-lg bg-chat-ai shadow-pixel-sm border border-gray-300">
+                        <p class="text-sm">Hello! I'm your Leksiyonity AI assistant. How can I help you today?</p>
+                    </div>
+                </div>
+
+                <!-- Loading Indicator -->
+                <div id="loadingIndicator" class="hidden text-center text-gray-500 mb-2" style="color: var(--secondary-text-color);">
+                    AI is thinking...
+                </div>
+
+                <!-- Chat Input Area -->
+                <div class="flex">
+                    <input type="text" id="chatInput" placeholder="Type your message..."
+                            class="flex-grow p-2 border-2 rounded-l-lg focus:outline-none focus:border-pixel-blue shadow-pixel-sm"
+                            style="background-color: var(--card-bg-color); color: var(--theme-text-color); border-color: var(--card-border-color);">
+                    <button id="sendMessage"
+                             class="bg-pixel-blue text-white py-2 px-4 rounded-r-lg font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600">
+                        Send
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation, consistent with the dashboard -->
+    <nav class="border-t-2 shadow-pixel flex justify-around p-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <a href="dashboard.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🏠</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Home</span>
+        </a>
+        <a href="music.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🎵</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Music</span>
+        </a>
+        <a href="explore.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🗺️</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Explore</span>
+        </a>
+        <a href="tools.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">🛠️</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Tools</span>
+        </a>
+        <a href="profile.html" class="flex flex-col items-center">
+            <span class="text-2xl" style="color: var(--secondary-text-color);">👤</span>
+            <span class="text-xs" style="color: var(--secondary-text-color);">Profile</span>
+        </a>
+    </nav>
+
+    <!-- Coming Soon Modal (Reused from dashboard for consistency) -->
+    <div id="comingSoonModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="p-6 rounded-lg shadow-pixel border-2 max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+            <h3 class="text-lg font-bold mb-2" style="color: var(--theme-text-color);">Coming Soon!</h3>
+            <p class="mb-4" style="color: var(--secondary-text-color);">This feature is under development.</p>
+            <button onclick="document.getElementById('comingSoonModal').classList.add('hidden')"
+                class="bg-pixel-blue text-white py-2 px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        // Global variables for Firebase (even if not directly used by chatbot, included for app consistency)
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // --- Chatbot Logic ---
+        const chatInput = document.getElementById('chatInput');
+        const sendMessageBtn = document.getElementById('sendMessage');
+        const chatMessages = document.getElementById('chatMessages');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const chatbotOverlay = document.getElementById('chatbotOverlay');
+        const closeChatbotBtn = document.getElementById('closeChatbot');
+
+        // Chat history to maintain conversation context
+        let chatHistory = [{ role: "model", parts: [{ text: "Hello! I'm your Leksiyonity AI assistant. How can I help you today?" }] }];
+
+        // Function to append a message to the chat display
+        function appendMessage(role, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('mb-2', 'p-2', 'rounded-lg', 'shadow-pixel-sm', 'border');
+
+            if (role === 'user') {
+                messageDiv.classList.add('bg-chat-user', 'ml-auto', 'text-right', 'border-gray-300');
+            } else {
+                messageDiv.classList.add('bg-chat-ai', 'mr-auto', 'border-gray-300');
+            }
+            
+            messageDiv.innerHTML = `<p class="text-sm">${text}</p>`;
+            chatMessages.appendChild(messageDiv);
+            // Scroll to the bottom of the chat
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Exponential backoff for API retries
+        async function fetchWithExponentialBackoff(url, options, retries = 3, delay = 1000) {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) {
+                        // If response is not OK, throw an error to trigger retry
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response;
+                } catch (error) {
+                    if (i < retries - 1) {
+                        // Only retry if not the last attempt
+                        await new Promise(res => setTimeout(res, delay * Math.pow(2, i)));
+                    } else {
+                        throw error; // Re-throw error if all retries fail
+                    }
+                }
+            }
+        }
+
+        // Function to send a message and get AI response
+        async function sendMessage() {
+            const userMessage = chatInput.value.trim();
+            if (userMessage === '') return;
+
+            // Append user message to display and history
+            appendMessage('user', userMessage);
+            chatHistory.push({ role: "user", parts: [{ text: userMessage }] });
+            chatInput.value = ''; // Clear input field
+
+            loadingIndicator.classList.remove('hidden'); // Show loading indicator
+            sendMessageBtn.disabled = true; // Disable send button
+
+            try {
+                const payload = { contents: chatHistory };
+                const apiKey = ""; // Canvas will automatically provide this at runtime
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+                const response = await fetchWithExponentialBackoff(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const aiResponseText = result.candidates[0].content.parts[0].text;
+                    appendMessage('model', aiResponseText);
+                    chatHistory.push({ role: "model", parts: [{ text: aiResponseText }] });
+                } else {
+                    appendMessage('model', 'Sorry, I could not get a response. Please try again.');
+                    console.error('Unexpected API response structure:', result);
+                }
+            } catch (error) {
+                appendMessage('model', 'An error occurred while connecting to the AI. Please check your internet connection and try again.');
+                console.error('Error fetching AI response:', error);
+            } finally {
+                loadingIndicator.classList.add('hidden'); // Hide loading indicator
+                sendMessageBtn.disabled = false; // Enable send button
+            }
+        }
+
+        // Event listeners for sending messages
+        sendMessageBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Event listener to close the chatbot overlay
+        closeChatbotBtn.addEventListener('click', function() {
+            chatbotOverlay.classList.add('hidden');
+            // Optionally redirect back to dashboard or previous page
+            window.location.href = 'dashboard.html'; 
+        });
+
+        // --- Coming Soon Modal Logic (Reused for consistency) ---
+        function showComingSoonModal() {
+            document.getElementById('comingSoonModal').classList.remove('hidden');
+        }
+
+        // Expose to global scope for onclick attributes
+        window.showComingSoonModal = showComingSoonModal;
+
+        // Apply saved theme on page load for consistency across pages
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'day';
+            document.body.setAttribute('data-theme', savedTheme);
+        });
+    </script>
+</body>
+</html>

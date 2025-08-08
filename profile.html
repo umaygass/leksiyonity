@@ -2,18 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Leksiyonity - Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
     <script>
-        // Tailwind CSS configuration for custom colors and shadows, consistent with the app's theme.
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
                         inter: ['Inter', 'sans-serif'],
-                        pixel: ['"Press Start 2P"', 'cursive'], // Added pixelated font
+                        pixel: ['"Press Start 2P"', 'cursive'],
                     },
                     colors: {
                         'pixel-blue': '#3b82f6',
@@ -28,14 +27,13 @@
                         'teal-500': '#14b8a6',
                         'music-light': '#f0f9ff',
                         'music-dark': '#4b5563',
-                        // CSS variables for dynamic theme colors
                         'theme-bg': 'var(--theme-bg-color)',
                         'theme-text': 'var(--theme-text-color)',
                         'card-bg': 'var(--card-bg-color)',
                         'card-border': 'var(--card-border-color)',
                         'secondary-text': 'var(--secondary-text-color)',
-                        'accent-bg-light': 'var(--accent-bg-light-color)', // For colorful sections
-                        'accent-bg-dark': 'var(--accent-bg-dark-color)',   // For colorful sections
+                        'accent-bg-light': 'var(--accent-bg-light-color)',
+                        'accent-bg-dark': 'var(--accent-bg-dark-color)',
                     },
                     boxShadow: {
                         'pixel': '4px 4px 0px 0px rgba(0,0,0,1)',
@@ -46,7 +44,6 @@
         }
     </script>
     <style>
-        /* Custom CSS for pixel art rendering and button effects */
         .pixel-art {
             image-rendering: pixelated;
             image-rendering: -moz-crisp-edges;
@@ -60,148 +57,159 @@
             box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
         }
 
-        /* Define CSS variables for Day and Dark themes */
-        /* Default (Day Mode) */
         :root, [data-theme='day'] {
-            --theme-bg-color: #eff6ff; /* bg-blue-50 */
-            --theme-text-color: #1f2937; /* text-gray-800 */
-            --card-bg-color: #ffffff; /* bg-white */
-            --card-border-color: #000000; /* border-black */
-            --secondary-text-color: #4b5563; /* text-gray-600 */
-            --accent-bg-light-color: #e0f2f7; /* Light blue for colorful sections */
-            --accent-bg-dark-color: #bfdbfe; /* Slightly darker blue for contrast */
+            --theme-bg-color: #eff6ff;
+            --theme-text-color: #1f2937;
+            --card-bg-color: #ffffff;
+            --card-border-color: #000000;
+            --secondary-text-color: #4b5563;
+            --accent-bg-light-color: #e0f2f7;
+            --accent-bg-dark-color: #bfdbfe;
         }
 
-        /* Dark Mode */
         [data-theme='dark'] {
-            --theme-bg-color: #1f2937; /* Dark gray background */
-            --theme-text-color: #f3f4f6; /* Light gray text */
-            --card-bg-color: #374151; /* Darker gray for cards */
-            --card-border-color: #6b7280; /* Lighter gray border */
-            --secondary-text-color: #9ca3af; /* Lighter gray for secondary text */
-            --accent-bg-light-color: #2d3748; /* Darker shade for colorful sections */
-            --accent-bg-dark-color: #4a5568;   /* Even darker shade for contrast */
+            --theme-bg-color: #1f2937;
+            --theme-text-color: #f3f4f6;
+            --card-bg-color: #374151;
+            --card-border-color: #6b7280;
+            --secondary-text-color: #9ca3af;
+            --accent-bg-light-color: #2d3748;
+            --accent-bg-dark-color: #4a5568;
         }
 
-        /* Apply theme variables to core elements */
         body {
             background-color: var(--theme-bg-color);
             color: var(--theme-text-color);
+            font-size: 16px;
         }
 
-        /* Override specific Tailwind classes to use CSS variables for theme consistency */
-        .bg-white { /* Applies to header, main cards */
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            body {
+                font-size: 14px;
+            }
+            
+            .text-xl {
+                font-size: 1.25rem;
+            }
+            
+            .text-2xl {
+                font-size: 1.5rem;
+            }
+            
+            .text-lg {
+                font-size: 1.125rem;
+            }
+        }
+
+        .bg-white {
             background-color: var(--card-bg-color);
         }
-        .border-black { /* Applies to borders of cards, header, nav */
+        .border-black {
             border-color: var(--card-border-color);
         }
-        .text-gray-600 { /* Applies to secondary text like descriptions */
+        .text-gray-600 {
             color: var(--secondary-text-color);
         }
-        .bg-blue-50 { /* Applies to main body background, but overridden by body style */
+        .bg-blue-50 {
             background-color: var(--theme-bg-color);
         }
     </style>
 </head>
 <body class="min-h-screen font-inter flex flex-col" data-theme="day">
-    <!-- Header section, consistent with the app's branding -->
-    <header class="shadow-pixel border-b-2 p-4" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+    <!-- Header section -->
+    <header class="shadow-pixel border-b-2 p-3 md:p-4" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
         <div class="flex items-center justify-between">
             <a href="dashboard.html" class="btn-pixel">
-                <span class="text-2xl" style="color: var(--secondary-text-color);">←</span>
+                <span class="text-xl md:text-2xl" style="color: var(--secondary-text-color);">←</span>
             </a>
-            <h1 class="text-xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">LEKSIYONITY - Profile</h1>
-            <div class="w-6"></div> <!-- Spacer for balance -->
+            <h1 class="text-lg md:text-xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">LEKSIYONITY - Profile</h1>
+            <div class="w-6"></div>
         </div>
     </header>
 
-    <main class="flex-grow p-4">
-        <div class="p-6 rounded-lg shadow-pixel border-2 mb-4 colorful-section-light" style="border-color: var(--card-border-color);">
-            <div class="flex flex-col items-center mb-6">
+    <main class="flex-grow p-3 md:p-4">
+        <div class="p-4 md:p-6 rounded-lg shadow-pixel border-2 mb-3 md:mb-4 colorful-section-light" style="border-color: var(--card-border-color);">
+            <div class="flex flex-col items-center mb-4 md:mb-6">
                 <img src="https://placehold.co/120x120/7c3aed/white?text=VY" 
                      alt="Profile" 
-                     class="w-28 h-28 rounded-full border-4 border-black shadow-pixel-sm mb-3 pixel-art">
-                <h2 class="text-2xl font-pixel font-bold" id="profileName" style="color: var(--theme-text-color);">Veronica Yoon</h2>
-                <p class="text-sm font-pixel" style="color: var(--secondary-text-color);">Rank #1</p>
+                     class="w-20 md:w-28 h-20 md:h-28 rounded-full border-4 border-black shadow-pixel-sm mb-2 md:mb-3 pixel-art">
+                <h2 class="text-xl md:text-2xl font-pixel font-bold" id="profileName" style="color: var(--theme-text-color);">Veronica Yoon</h2>
+                <p class="text-xs md:text-sm font-pixel" style="color: var(--secondary-text-color);">Rank #1</p>
             </div>
 
-            <div class="grid grid-cols-2 gap-4 mb-6 text-center">
-                <div class="p-4 rounded-lg border-2 shadow-pixel-sm colorful-section-dark" style="border-color: var(--card-border-color);">
-                    <p class="font-pixel font-bold text-lg" style="color: var(--theme-text-color);">999</p>
-                    <p class="text-sm font-pixel" style="color: var(--secondary-text-color);">XP Earned</p>
+            <div class="grid grid-cols-2 gap-3 md:gap-4 mb-4 md:mb-6 text-center">
+                <div class="p-3 md:p-4 rounded-lg border-2 shadow-pixel-sm colorful-section-dark" style="border-color: var(--card-border-color);">
+                    <p class="font-pixel font-bold text-base md:text-lg" style="color: var(--theme-text-color);">999</p>
+                    <p class="text-xs md:text-sm font-pixel" style="color: var(--secondary-text-color);">XP Earned</p>
                 </div>
-                <div class="p-4 rounded-lg border-2 shadow-pixel-sm colorful-section-dark" style="border-color: var(--card-border-color);">
-                    <p class="font-pixel font-bold text-lg" style="color: var(--theme-text-color);">24</p>
-                    <p class="text-sm font-pixel" style="color: var(--secondary-text-color);">Achievements</p>
+                <div class="p-3 md:p-4 rounded-lg border-2 shadow-pixel-sm colorful-section-dark" style="border-color: var(--card-border-color);">
+                    <p class="font-pixel font-bold text-base md:text-lg" style="color: var(--theme-text-color);">24</p>
+                    <p class="text-xs md:text-sm font-pixel" style="color: var(--secondary-text-color);">Achievements</p>
                 </div>
-                <div class="p-4 rounded-lg border-2 shadow-pixel-sm colorful-section-dark" style="border-color: var(--card-border-color);">
-                    <p class="font-pixel font-bold text-lg" style="color: var(--theme-text-color);">12</p>
-                    <p class="text-sm font-pixel" style="color: var(--secondary-text-color);">Servers</p>
+                <div class="p-3 md:p-4 rounded-lg border-2 shadow-pixel-sm colorful-section-dark" style="border-color: var(--card-border-color);">
+                    <p class="font-pixel font-bold text-base md:text-lg" style="color: var(--theme-text-color);">12</p>
+                    <p class="text-xs md:text-sm font-pixel" style="color: var(--secondary-text-color);">Servers</p>
                 </div>
-                <div class="p-4 rounded-lg border-2 shadow-pixel-sm colorful-section-dark" style="border-color: var(--card-border-color);">
-                    <p class="font-pixel font-bold text-lg" style="color: var(--theme-text-color);">2</p>
-                    <p class="text-sm font-pixel" style="color: var(--secondary-text-color);">Friends</p>
+                <div class="p-3 md:p-4 rounded-lg border-2 shadow-pixel-sm colorful-section-dark" style="border-color: var(--card-border-color);">
+                    <p class="font-pixel font-bold text-base md:text-lg" style="color: var(--theme-text-color);">2</p>
+                    <p class="text-xs md:text-sm font-pixel" style="color: var(--secondary-text-color);">Friends</p>
                 </div>
             </div>
 
             <button onclick="showComingSoonModal()" 
-                    class="w-full bg-pixel-purple text-white py-3 px-6 rounded-lg font-bold 
-                           shadow-pixel border-2 border-black btn-pixel hover:bg-purple-600 font-pixel">
+                    class="w-full bg-pixel-purple text-white py-2 md:py-3 px-4 md:px-6 rounded-lg font-bold 
+                           shadow-pixel border-2 border-black btn-pixel hover:bg-purple-600 font-pixel text-sm md:text-base">
                 View Achievements
             </button>
         </div>
     </main>
 
-    <!-- Bottom Navigation, consistent with the dashboard -->
+    <!-- Bottom Navigation -->
     <nav class="border-t-2 shadow-pixel flex justify-around p-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
         <a href="dashboard.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🏠</span>
-            <span class="text-xs" style="color: var(--secondary-text-color); font-family: 'Inter', sans-serif;">Home</span>
+            <span class="text-xl md:text-2xl" style="color: var(--secondary-text-color);">🏠</span>
+            <span class="text-2xs md:text-xs" style="color: var(--secondary-text-color); font-family: 'Inter', sans-serif;">Home</span>
         </a>
         <a href="music.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🎵</span>
-            <span class="text-xs" style="color: var(--secondary-text-color); font-family: 'Inter', sans-serif;">Music</span>
+            <span class="text-xl md:text-2xl" style="color: var(--secondary-text-color);">🎵</span>
+            <span class="text-2xs md:text-xs" style="color: var(--secondary-text-color); font-family: 'Inter', sans-serif;">Music</span>
         </a>
         <a href="explore.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🗺️</span>
-            <span class="text-xs" style="color: var(--secondary-text-color); font-family: 'Inter', sans-serif;">Explore</span>
+            <span class="text-xl md:text-2xl" style="color: var(--secondary-text-color);">🗺️</span>
+            <span class="text-2xs md:text-xs" style="color: var(--secondary-text-color); font-family: 'Inter', sans-serif;">Explore</span>
         </a>
         <a href="tools.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🛠️</span>
-            <span class="text-xs" style="color: var(--secondary-text-color); font-family: 'Inter', sans-serif;">Tools</span>
+            <span class="text-xl md:text-2xl" style="color: var(--secondary-text-color);">🛠️</span>
+            <span class="text-2xs md:text-xs" style="color: var(--secondary-text-color); font-family: 'Inter', sans-serif;">Tools</span>
         </a>
         <a href="profile.html" class="flex flex-col items-center text-pixel-blue">
-            <span class="text-2xl">👤</span>
-            <span class="text-xs" style="font-family: 'Inter', sans-serif;">Profile</span>
+            <span class="text-xl md:text-2xl">👤</span>
+            <span class="text-2xs md:text-xs" style="font-family: 'Inter', sans-serif;">Profile</span>
         </a>
     </nav>
 
     <!-- Coming Soon Modal -->
     <div id="comingSoonModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="p-6 rounded-lg shadow-pixel border-2 max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-            <h3 class="text-lg font-pixel font-bold mb-2" style="color: var(--theme-text-color);">Coming Soon!</h3>
-            <p class="mb-4" style="color: var(--secondary-text-color);">This feature is under development.</p>
+        <div class="p-4 md:p-6 rounded-lg shadow-pixel border-2 max-w-xs md:max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+            <h3 class="text-base md:text-lg font-pixel font-bold mb-2" style="color: var(--theme-text-color);">Coming Soon!</h3>
+            <p class="text-sm md:text-base mb-3 md:mb-4" style="color: var(--secondary-text-color);">This feature is under development.</p>
             <button onclick="document.getElementById('comingSoonModal').classList.add('hidden')"
-                class="bg-pixel-blue text-white py-2 px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600 font-pixel">
+                class="bg-pixel-blue text-white py-1 md:py-2 px-3 md:px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600 font-pixel text-sm md:text-base">
                 OK
             </button>
         </div>
     </div>
 
     <script>
-        // Function to show the "Coming Soon" modal
         function showComingSoonModal() {
             document.getElementById('comingSoonModal').classList.remove('hidden');
         }
 
-        // Apply saved theme and profile name on page load
         document.addEventListener('DOMContentLoaded', () => {
-            // Apply saved theme from local storage
             const savedTheme = localStorage.getItem('theme') || 'day';
             document.body.setAttribute('data-theme', savedTheme);
 
-            // Apply saved profile name from local storage
             const profileNameElement = document.getElementById('profileName');
             const savedName = localStorage.getItem('userName');
             if (savedName) {

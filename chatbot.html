@@ -61,7 +61,7 @@
         }
         /* Custom scrollbar for chat messages */
         .chat-messages::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
         .chat-messages::-webkit-scrollbar-track {
             background: #f1f1f1;
@@ -127,44 +127,83 @@
         .bg-chat-ai {
             background-color: var(--chat-ai); /* Keep light blue for AI messages */
         }
+        
+        /* Mobile-specific adjustments */
+        @media (max-width: 640px) {
+            .font-pixel {
+                font-size: 0.7rem; /* Smaller pixel font for mobile */
+                line-height: 1.2;
+            }
+            .header-title {
+                font-size: 1.5rem; /* Smaller header title */
+            }
+            .chatbot-title {
+                font-size: 1rem; /* Smaller chatbot title */
+            }
+            .message-text {
+                font-size: 0.85rem; /* Smaller message text */
+            }
+            .loading-text {
+                font-size: 0.8rem; /* Smaller loading text */
+            }
+            .input-text {
+                font-size: 0.9rem; /* Smaller input text */
+                padding: 0.5rem;
+            }
+            .nav-icon {
+                font-size: 1.5rem; /* Slightly smaller nav icons */
+            }
+            .nav-text {
+                font-size: 0.6rem; /* Smaller nav text */
+            }
+            .modal-content {
+                width: 90%; /* Wider modal on mobile */
+                max-width: none;
+            }
+            .chatbot-container {
+                width: 95%; /* Wider chat container on mobile */
+                height: 85%; /* Slightly shorter height */
+                max-width: none;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen font-inter flex flex-col" data-theme="day">
     <!-- Header section, consistent with the app's branding -->
-    <header class="shadow-pixel border-b-2 p-4" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-        <h1 class="text-2xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">LEKSIYONITY</h1>
+    <header class="shadow-pixel border-b-2 p-3 md:p-4" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <h1 class="header-title text-xl md:text-2xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">LEKSIYONITY</h1>
     </header>
 
-    <main class="flex-grow p-4 flex items-center justify-center">
+    <main class="flex-grow p-2 md:p-4 flex items-center justify-center">
         <!-- Chatbot Overlay Container -->
         <div id="chatbotOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div class="p-4 rounded-lg shadow-pixel border-2 w-11/12 max-w-md h-5/6 flex flex-col colorful-section-dark" style="border-color: var(--card-border-color);">
+            <div class="p-3 md:p-4 rounded-lg shadow-pixel border-2 chatbot-container w-11/12 max-w-md h-5/6 flex flex-col colorful-section-dark" style="border-color: var(--card-border-color);">
                 <!-- Chatbot Header -->
-                <div class="flex justify-between items-center border-b-2 pb-2 mb-4" style="border-color: var(--card-border-color);">
-                    <h2 class="text-xl font-pixel font-bold" style="color: var(--theme-text-color);">AI Chatbot</h2>
-                    <button id="closeChatbot" class="text-gray-600 hover:text-gray-900 text-2xl font-bold btn-pixel" style="color: var(--secondary-text-color);">✖</button>
+                <div class="flex justify-between items-center border-b-2 pb-2 mb-3 md:mb-4" style="border-color: var(--card-border-color);">
+                    <h2 class="chatbot-title text-lg md:text-xl font-pixel font-bold" style="color: var(--theme-text-color);">AI Chatbot</h2>
+                    <button id="closeChatbot" class="text-gray-600 hover:text-gray-900 text-xl md:text-2xl font-bold btn-pixel" style="color: var(--secondary-text-color);">✖</button>
                 </div>
 
                 <!-- Chat Messages Display Area -->
-                <div id="chatMessages" class="flex-grow overflow-y-auto chat-messages p-2 mb-4 bg-chat-bg rounded border-2 border-black">
+                <div id="chatMessages" class="flex-grow overflow-y-auto chat-messages p-2 mb-3 md:mb-4 bg-chat-bg rounded border-2 border-black">
                     <!-- Messages will be appended here -->
                     <div class="mb-2 p-2 rounded-lg bg-chat-ai shadow-pixel-sm border border-gray-300">
-                        <p class="text-sm">Hello! I'm your Leksiyonity AI assistant. How can I help you today?</p>
+                        <p class="message-text text-sm">Hello! I'm your Leksiyonity AI assistant. How can I help you today?</p>
                     </div>
                 </div>
 
                 <!-- Loading Indicator -->
-                <div id="loadingIndicator" class="hidden text-center text-gray-500 mb-2" style="color: var(--secondary-text-color);">
+                <div id="loadingIndicator" class="hidden text-center text-gray-500 mb-2 loading-text" style="color: var(--secondary-text-color);">
                     AI is thinking...
                 </div>
 
                 <!-- Chat Input Area -->
                 <div class="flex">
                     <input type="text" id="chatInput" placeholder="Type your message..."
-                            class="flex-grow p-2 border-2 rounded-l-lg focus:outline-none focus:border-pixel-blue shadow-pixel-sm"
+                            class="flex-grow p-2 border-2 rounded-l-lg focus:outline-none focus:border-pixel-blue shadow-pixel-sm input-text"
                             style="background-color: var(--card-bg-color); color: var(--theme-text-color); border-color: var(--card-border-color);">
                     <button id="sendMessage"
-                             class="bg-pixel-blue text-white py-2 px-4 rounded-r-lg font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600">
+                             class="bg-pixel-blue text-white py-2 px-3 md:px-4 rounded-r-lg font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600">
                         Send
                     </button>
                 </div>
@@ -175,34 +214,34 @@
     <!-- Bottom Navigation, consistent with the dashboard -->
     <nav class="border-t-2 shadow-pixel flex justify-around p-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
         <a href="dashboard.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🏠</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Home</span>
+            <span class="nav-icon" style="color: var(--secondary-text-color);">🏠</span>
+            <span class="nav-text" style="color: var(--secondary-text-color);">Home</span>
         </a>
         <a href="music.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🎵</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Music</span>
+            <span class="nav-icon" style="color: var(--secondary-text-color);">🎵</span>
+            <span class="nav-text" style="color: var(--secondary-text-color);">Music</span>
         </a>
         <a href="explore.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🗺️</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Explore</span>
+            <span class="nav-icon" style="color: var(--secondary-text-color);">🗺️</span>
+            <span class="nav-text" style="color: var(--secondary-text-color);">Explore</span>
         </a>
         <a href="tools.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🛠️</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Tools</span>
+            <span class="nav-icon" style="color: var(--secondary-text-color);">🛠️</span>
+            <span class="nav-text" style="color: var(--secondary-text-color);">Tools</span>
         </a>
         <a href="profile.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">👤</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Profile</span>
+            <span class="nav-icon" style="color: var(--secondary-text-color);">👤</span>
+            <span class="nav-text" style="color: var(--secondary-text-color);">Profile</span>
         </a>
     </nav>
 
     <!-- Coming Soon Modal (Reused from dashboard for consistency) -->
     <div id="comingSoonModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="p-6 rounded-lg shadow-pixel border-2 max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-            <h3 class="text-lg font-bold mb-2" style="color: var(--theme-text-color);">Coming Soon!</h3>
-            <p class="mb-4" style="color: var(--secondary-text-color);">This feature is under development.</p>
+        <div class="p-4 md:p-6 rounded-lg shadow-pixel border-2 modal-content" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+            <h3 class="text-base md:text-lg font-bold mb-2" style="color: var(--theme-text-color);">Coming Soon!</h3>
+            <p class="mb-4 text-sm md:text-base" style="color: var(--secondary-text-color);">This feature is under development.</p>
             <button onclick="document.getElementById('comingSoonModal').classList.add('hidden')"
-                class="bg-pixel-blue text-white py-2 px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600">
+                class="bg-pixel-blue text-white py-1 px-3 md:py-2 md:px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600">
                 OK
             </button>
         </div>
@@ -236,7 +275,11 @@
                 messageDiv.classList.add('bg-chat-ai', 'mr-auto', 'border-gray-300');
             }
             
-            messageDiv.innerHTML = `<p class="text-sm">${text}</p>`;
+            const messageText = document.createElement('p');
+            messageText.classList.add('message-text', 'text-sm');
+            messageText.textContent = text;
+            messageDiv.appendChild(messageText);
+            
             chatMessages.appendChild(messageDiv);
             // Scroll to the bottom of the chat
             chatMessages.scrollTop = chatMessages.scrollHeight;

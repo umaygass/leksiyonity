@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Leksiyonity - Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -38,6 +38,10 @@
                     boxShadow: {
                         'pixel': '4px 4px 0px 0px rgba(0,0,0,1)',
                         'pixel-sm': '2px 2px 0px 0px rgba(0,0,0,1)',
+                    },
+                    fontSize: {
+                        'xxs': '0.625rem', // 10px
+                        '3.5xl': '2rem',  // 32px
                     }
                 }
             }
@@ -58,7 +62,7 @@
             box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
         }
         .progress-bar {
-            height: 20px;
+            height: 1.25rem; /* 20px */
             background-color: #e5e7eb; /* Default light gray for track */
             border: 2px solid var(--card-border-color); /* Theme-aware border */
             box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
@@ -96,6 +100,18 @@
         body {
             background-color: var(--theme-bg-color);
             color: var(--theme-text-color);
+            font-size: 1rem; /* Base font size */
+        }
+
+        /* Responsive font sizes */
+        @media (max-width: 640px) {
+            html {
+                font-size: 14px;
+            }
+            .font-pixel {
+                font-size: 0.7em !important; /* Scale down pixel font on mobile */
+                letter-spacing: -0.5px;
+            }
         }
 
         /* Override specific Tailwind classes to use CSS variables for theme consistency */
@@ -138,34 +154,55 @@
         .colorful-section-dark {
             background-color: var(--accent-bg-dark-color);
         }
+
+        /* Mobile-specific adjustments */
+        @media (max-width: 640px) {
+            .quick-action-btn {
+                padding: 0.75rem;
+                min-height: 5rem;
+            }
+            .quick-action-icon {
+                font-size: 1.75rem;
+                margin-bottom: 0.25rem;
+            }
+            .quick-action-text {
+                font-size: 0.8rem;
+            }
+            .nav-icon {
+                font-size: 1.5rem;
+            }
+            .nav-text {
+                font-size: 0.65rem;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen font-inter flex flex-col" data-theme="day">
     <!-- Header section, consistent with the app's branding -->
-    <header class="shadow-pixel border-b-2 p-4" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-        <h1 class="text-2xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">LEKSIYONITY</h1>
+    <header class="shadow-pixel border-b-2 p-3 sm:p-4" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+        <h1 class="text-xl sm:text-2xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">LEKSIYONITY</h1>
     </header>
 
-    <main class="flex-grow p-4">
+    <main class="flex-grow p-3 sm:p-4">
         <!-- Welcome Section: Displays user profile and rank -->
-        <div class="p-4 rounded-lg shadow-pixel border-2 mb-4 colorful-section-light" style="border-color: var(--card-border-color);">
-            <h2 class="text-lg font-pixel mb-2" style="color: var(--theme-text-color);">Welcome!</h2>
+        <div class="p-3 sm:p-4 rounded-lg shadow-pixel border-2 mb-3 sm:mb-4 colorful-section-light" style="border-color: var(--card-border-color);">
+            <h2 class="text-base sm:text-lg font-pixel mb-1 sm:mb-2" style="color: var(--theme-text-color);">Welcome!</h2>
             <div class="flex items-center">
                 <img src="https://placehold.co/60x60/7c3aed/white?text=VY" 
                      alt="Profile" 
-                     class="w-12 h-12 rounded-full border-2 border-black shadow-pixel-sm mr-3 pixel-art">
+                     class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-black shadow-pixel-sm mr-2 sm:mr-3 pixel-art">
                 <div>
-                    <h3 class="font-bold" style="color: var(--theme-text-color);" id="userName">Veronica Yoon</h3>
-                    <p class="text-sm" style="color: var(--secondary-text-color);">Rank #1</p>
+                    <h3 class="font-bold text-sm sm:text-base" style="color: var(--theme-text-color);" id="userName">Veronica Yoon</h3>
+                    <p class="text-xs sm:text-sm" style="color: var(--secondary-text-color);">Rank #1</p>
                 </div>
             </div>
         </div>
 
         <!-- Progress Bar: Shows dummy user progress -->
-        <div class="p-4 rounded-lg shadow-pixel border-2 mb-4 colorful-section-dark" style="border-color: var(--card-border-color);">
-            <div class="flex justify-between mb-2">
-                <span class="font-bold font-pixel" style="color: var(--theme-text-color);">Progress</span>
-                <span class="text-sm" id="progressText" style="color: var(--theme-text-color);">75%</span>
+        <div class="p-3 sm:p-4 rounded-lg shadow-pixel border-2 mb-3 sm:mb-4 colorful-section-dark" style="border-color: var(--card-border-color);">
+            <div class="flex justify-between mb-1 sm:mb-2">
+                <span class="font-bold font-pixel text-sm sm:text-base" style="color: var(--theme-text-color);">Progress</span>
+                <span class="text-xs sm:text-sm" id="progressText" style="color: var(--theme-text-color);">75%</span>
             </div>
             <div class="progress-bar rounded">
                 <div class="progress-fill rounded" id="progressBarFill" style="width: 75%"></div>
@@ -173,161 +210,161 @@
         </div>
 
         <!-- Quick Actions: Navigation buttons to various sections of the app -->
-        <div class="grid grid-cols-2 gap-4 mb-4">
-            <a href="classroom.html" class="p-4 rounded-lg shadow-pixel border-2 border-black flex flex-col items-center btn-pixel" style="background-color: var(--card-bg-color); color: var(--theme-text-color);">
-                <div class="w-10 h-10 bg-pixel-blue mb-2 flex items-center justify-center text-white font-bold text-xl">📚</div>
-                <span class="font-pixel">Classroom</span>
+        <div class="grid grid-cols-2 gap-3 sm:gap-4 mb-3 sm:mb-4">
+            <a href="classroom.html" class="quick-action-btn p-2 sm:p-4 rounded-lg shadow-pixel border-2 border-black flex flex-col items-center btn-pixel" style="background-color: var(--card-bg-color); color: var(--theme-text-color);">
+                <div class="quick-action-icon w-8 h-8 sm:w-10 sm:h-10 bg-pixel-blue mb-1 sm:mb-2 flex items-center justify-center text-white font-bold text-xl">📚</div>
+                <span class="quick-action-text font-pixel text-xs sm:text-sm">Classroom</span>
             </a>
-            <a href="activities.html" class="p-4 rounded-lg shadow-pixel border-2 border-black flex flex-col items-center btn-pixel" style="background-color: var(--card-bg-color); color: var(--theme-text-color);">
-                <span class="text-4xl mb-2">🎮</span>
-                <span class="font-pixel text-lg">Activities</span>
+            <a href="activities.html" class="quick-action-btn p-2 sm:p-4 rounded-lg shadow-pixel border-2 border-black flex flex-col items-center btn-pixel" style="background-color: var(--card-bg-color); color: var(--theme-text-color);">
+                <span class="quick-action-icon text-2xl sm:text-4xl mb-1 sm:mb-2">🎮</span>
+                <span class="quick-action-text font-pixel text-xs sm:text-sm">Activities</span>
             </a>
-            <a href="rankings.html" class="p-4 rounded-lg shadow-pixel border-2 border-black flex flex-col items-center btn-pixel" style="background-color: var(--card-bg-color); color: var(--theme-text-color);">
-                <span class="text-4xl mb-2">🏆</span>
-                <span class="font-pixel text-lg">Rankings</span>
+            <a href="rankings.html" class="quick-action-btn p-2 sm:p-4 rounded-lg shadow-pixel border-2 border-black flex flex-col items-center btn-pixel" style="background-color: var(--card-bg-color); color: var(--theme-text-color);">
+                <span class="quick-action-icon text-2xl sm:text-4xl mb-1 sm:mb-2">🏆</span>
+                <span class="quick-action-text font-pixel text-xs sm:text-sm">Rankings</span>
             </a>
-            <a href="tasks.html" class="p-4 rounded-lg shadow-pixel border-2 border-black flex flex-col items-center btn-pixel" style="background-color: var(--card-bg-color); color: var(--theme-text-color);">
-                <span class="text-4xl mb-2">✅</span>
-                <span class="font-pixel text-lg">Tasks</span>
+            <a href="tasks.html" class="quick-action-btn p-2 sm:p-4 rounded-lg shadow-pixel border-2 border-black flex flex-col items-center btn-pixel" style="background-color: var(--card-bg-color); color: var(--theme-text-color);">
+                <span class="quick-action-icon text-2xl sm:text-4xl mb-1 sm:mb-2">✅</span>
+                <span class="quick-action-text font-pixel text-xs sm:text-sm">Tasks</span>
             </a>
             <!-- Servers button -->
-            <a href="servers.html" class="p-4 rounded-lg shadow-pixel border-2 border-black flex flex-col items-center btn-pixel" style="background-color: var(--card-bg-color); color: var(--theme-text-color);">
-                <span class="text-4xl mb-2">🌐</span>
-                <span class="font-pixel text-lg">Servers</span>
+            <a href="servers.html" class="quick-action-btn p-2 sm:p-4 rounded-lg shadow-pixel border-2 border-black flex flex-col items-center btn-pixel" style="background-color: var(--card-bg-color); color: var(--theme-text-color);">
+                <span class="quick-action-icon text-2xl sm:text-4xl mb-1 sm:mb-2">🌐</span>
+                <span class="quick-action-text font-pixel text-xs sm:text-sm">Servers</span>
             </a>
             <!-- Friends button -->
-            <a href="friends.html" class="p-4 rounded-lg shadow-pixel border-2 border-black flex flex-col items-center btn-pixel" style="background-color: var(--card-bg-color); color: var(--theme-text-color);">
-                <span class="text-4xl mb-2">🤝</span>
-                <span class="font-pixel text-lg">Friends</span>
+            <a href="friends.html" class="quick-action-btn p-2 sm:p-4 rounded-lg shadow-pixel border-2 border-black flex flex-col items-center btn-pixel" style="background-color: var(--card-bg-color); color: var(--theme-text-color);">
+                <span class="quick-action-icon text-2xl sm:text-4xl mb-1 sm:mb-2">🤝</span>
+                <span class="quick-action-text font-pixel text-xs sm:text-sm">Friends</span>
             </a>
             <!-- University button -->
-            <a href="university.html" class="p-4 rounded-lg shadow-pixel border-2 border-black flex flex-col items-center btn-pixel" style="background-color: var(--card-bg-color); color: var(--theme-text-color);">
-                <span class="text-4xl mb-2">🎓</span>
-                <span class="font-pixel text-lg">University</span>
+            <a href="university.html" class="quick-action-btn p-2 sm:p-4 rounded-lg shadow-pixel border-2 border-black flex flex-col items-center btn-pixel" style="background-color: var(--card-bg-color); color: var(--theme-text-color);">
+                <span class="quick-action-icon text-2xl sm:text-4xl mb-1 sm:mb-2">🎓</span>
+                <span class="quick-action-text font-pixel text-xs sm:text-sm">University</span>
             </a>
             <!-- Chatbot button -->
-            <a href="chatbot.html" class="p-4 rounded-lg shadow-pixel border-2 border-black flex flex-col items-center btn-pixel" style="background-color: var(--card-bg-color); color: var(--theme-text-color);">
-                <span class="text-4xl mb-2">🤖</span>
-                <span class="font-pixel text-lg">Chatbot</span>
+            <a href="chatbot.html" class="quick-action-btn p-2 sm:p-4 rounded-lg shadow-pixel border-2 border-black flex flex-col items-center btn-pixel" style="background-color: var(--card-bg-color); color: var(--theme-text-color);">
+                <span class="quick-action-icon text-2xl sm:text-4xl mb-1 sm:mb-2">🤖</span>
+                <span class="quick-action-text font-pixel text-xs sm:text-sm">Chatbot</span>
             </a>
-            <!-- NEW: About button -->
-            <a href="about.html" class="p-4 rounded-lg shadow-pixel border-2 border-black flex flex-col items-center btn-pixel" style="background-color: var(--card-bg-color); color: var(--theme-text-color);">
-                <span class="text-4xl mb-2">ℹ️</span>
-                <span class="font-pixel text-lg">About</span>
+            <!-- About button -->
+            <a href="about.html" class="quick-action-btn p-2 sm:p-4 rounded-lg shadow-pixel border-2 border-black flex flex-col items-center btn-pixel" style="background-color: var(--card-bg-color); color: var(--theme-text-color);">
+                <span class="quick-action-icon text-2xl sm:text-4xl mb-1 sm:mb-2">ℹ️</span>
+                <span class="quick-action-text font-pixel text-xs sm:text-sm">About</span>
             </a>
-            <!-- NEW: Subscriptions button -->
-            <a href="subscription.html" class="p-4 rounded-lg shadow-pixel border-2 border-black flex flex-col items-center btn-pixel" style="background-color: var(--card-bg-color); color: var(--theme-text-color);">
-                <span class="text-4xl mb-2">💰</span>
-                <span class="font-pixel text-lg">Subscriptions</span>
+            <!-- Subscriptions button -->
+            <a href="subscription.html" class="quick-action-btn p-2 sm:p-4 rounded-lg shadow-pixel border-2 border-black flex flex-col items-center btn-pixel" style="background-color: var(--card-bg-color); color: var(--theme-text-color);">
+                <span class="quick-action-icon text-2xl sm:text-4xl mb-1 sm:mb-2">💰</span>
+                <span class="quick-action-text font-pixel text-xs sm:text-sm">Subscriptions</span>
             </a>
         </div>
 
         <!-- Leaderboard Preview: Displays top learners -->
-        <div class="p-4 rounded-lg shadow-pixel border-2 mb-4 colorful-section-light" style="border-color: var(--card-border-color);">
-            <h2 class="text-lg font-pixel mb-3" style="color: var(--theme-text-color);">Top Learners</h2>
-            <div class="space-y-3">
+        <div class="p-3 sm:p-4 rounded-lg shadow-pixel border-2 mb-3 sm:mb-4 colorful-section-light" style="border-color: var(--card-border-color);">
+            <h2 class="text-base sm:text-lg font-pixel mb-2 sm:mb-3" style="color: var(--theme-text-color);">Top Learners</h2>
+            <div class="space-y-2 sm:space-y-3">
                 <!-- Main user (Veronica Yoon) as Rank 1 -->
-                <div class="flex items-center justify-between leaderboard-item p-2 rounded border" style="background-color: var(--accent-bg-dark-color); border-color: var(--card-border-color);">
+                <div class="flex items-center justify-between leaderboard-item p-1.5 sm:p-2 rounded border" style="background-color: var(--accent-bg-dark-color); border-color: var(--card-border-color);">
                     <div class="flex items-center">
-                        <span class="font-bold mr-2" style="color: var(--theme-text-color);">1</span>
+                        <span class="font-bold text-xs sm:text-sm mr-1 sm:mr-2" style="color: var(--theme-text-color);">1</span>
                         <img src="https://placehold.co/40x40/7c3aed/white?text=VY" 
                              alt="Profile" 
-                             class="w-8 h-8 rounded-full border border-black mr-2 pixel-art">
-                        <span style="color: var(--theme-text-color);">Veronica Yoon</span>
+                             class="w-6 h-6 sm:w-8 sm:h-8 rounded-full border border-black mr-1 sm:mr-2 pixel-art">
+                        <span class="text-xs sm:text-sm" style="color: var(--theme-text-color);">Veronica Yoon</span>
                     </div>
-                    <span class="font-bold" style="color: var(--theme-text-color);">999 XP</span>
+                    <span class="font-bold text-xs sm:text-sm" style="color: var(--theme-text-color);">999 XP</span>
                 </div>
                 <!-- Dummy user 2 -->
-                <div class="flex items-center justify-between leaderboard-item p-2 rounded border">
+                <div class="flex items-center justify-between leaderboard-item p-1.5 sm:p-2 rounded border">
                     <div class="flex items-center">
-                        <span class="font-bold mr-2" style="color: var(--theme-text-color);">2</span>
+                        <span class="font-bold text-xs sm:text-sm mr-1 sm:mr-2" style="color: var(--theme-text-color);">2</span>
                         <img src="https://placehold.co/40x40/22c55e/white?text=AD" 
                              alt="Profile" 
-                             class="w-8 h-8 rounded-full border border-black mr-2 pixel-art">
-                        <span style="color: var(--theme-text-color);">Albert Dagocupam</span>
+                             class="w-6 h-6 sm:w-8 sm:h-8 rounded-full border border-black mr-1 sm:mr-2 pixel-art">
+                        <span class="text-xs sm:text-sm" style="color: var(--theme-text-color);">Albert Dagocupam</span>
                     </div>
-                    <span class="font-bold" style="color: var(--theme-text-color);">770 XP</span>
+                    <span class="font-bold text-xs sm:text-sm" style="color: var(--theme-text-color);">770 XP</span>
                 </div>
                 <!-- Dummy user 3 -->
-                <div class="flex items-center justify-between leaderboard-item p-2 rounded border">
+                <div class="flex items-center justify-between leaderboard-item p-1.5 sm:p-2 rounded border">
                     <div class="flex items-center">
-                        <span class="font-bold mr-2" style="color: var(--theme-text-color);">3</span>
+                        <span class="font-bold text-xs sm:text-sm mr-1 sm:mr-2" style="color: var(--theme-text-color);">3</span>
                         <img src="https://placehold.co/40x40/facc15/white?text=PC" 
                              alt="Profile" 
-                             class="w-8 h-8 rounded-full border border-black mr-2 pixel-art">
-                        <span style="color: var(--theme-text-color);">Pamela Carlotta</span>
+                             class="w-6 h-6 sm:w-8 sm:h-8 rounded-full border border-black mr-1 sm:mr-2 pixel-art">
+                        <span class="text-xs sm:text-sm" style="color: var(--theme-text-color);">Pamela Carlotta</span>
                     </div>
-                    <span class="font-bold" style="color: var(--theme-text-color);">500 XP</span>
+                    <span class="font-bold text-xs sm:text-sm" style="color: var(--theme-text-color);">500 XP</span>
                 </div>
             </div>
-            <a href="rankings.html" class="block text-center mt-3 text-pixel-blue hover:underline">View Full Leaderboard</a>
+            <a href="rankings.html" class="block text-center mt-2 sm:mt-3 text-xs sm:text-sm text-pixel-blue hover:underline">View Full Leaderboard</a>
         </div>
 
         <!-- Active Servers: Displays a dummy server -->
-        <div class="p-4 rounded-lg shadow-pixel border-2 mb-4 colorful-section-dark" style="border-color: var(--card-border-color);">
-            <h2 class="text-lg font-pixel mb-3" style="color: var(--theme-text-color);">Active Servers</h2>
-            <div class="server-preview-card p-3 rounded border flex items-center" style="background-color: var(--accent-bg-light-color); border-color: var(--card-border-color);">
-                <div class="w-16 h-16 bg-purple-200 border-2 border-black shadow-pixel-sm mr-3 flex-shrink-0 flex items-center justify-center pixel-art">
-                    <span class="text-xs font-pixel font-bold text-center">BIOLOGY HUB</span>
+        <div class="p-3 sm:p-4 rounded-lg shadow-pixel border-2 mb-3 sm:mb-4 colorful-section-dark" style="border-color: var(--card-border-color);">
+            <h2 class="text-base sm:text-lg font-pixel mb-2 sm:mb-3" style="color: var(--theme-text-color);">Active Servers</h2>
+            <div class="server-preview-card p-2 sm:p-3 rounded border flex items-center" style="background-color: var(--accent-bg-light-color); border-color: var(--card-border-color);">
+                <div class="w-12 h-12 sm:w-16 sm:h-16 bg-purple-200 border-2 border-black shadow-pixel-sm mr-2 sm:mr-3 flex-shrink-0 flex items-center justify-center pixel-art">
+                    <span class="text-xxs sm:text-xs font-pixel font-bold text-center">BIOLOGY HUB</span>
                 </div>
                 <div>
-                    <h3 class="font-pixel font-bold" style="color: var(--theme-text-color);">BIOLOGY HUB</h3>
-                    <p class="text-sm" style="color: var(--secondary-text-color);">45 Active, 1 PENDING</p>
+                    <h3 class="font-pixel font-bold text-sm sm:text-base" style="color: var(--theme-text-color);">BIOLOGY HUB</h3>
+                    <p class="text-xxs sm:text-xs" style="color: var(--secondary-text-color);">45 Active, 1 PENDING</p>
                 </div>
             </div>
         </div>
 
         <!-- Play Again Section: Quick links to games/activities -->
-        <div class="p-4 rounded-lg shadow-pixel border-2 colorful-section-light" style="border-color: var(--card-border-color);">
-            <h2 class="text-lg font-pixel mb-3" style="color: var(--theme-text-color);">Play Again!</h2>
-            <div class="grid grid-cols-2 gap-3">
-                <a href="game.html" class="play-again-card p-3 rounded border-2 border-black shadow-pixel-sm flex items-center btn-pixel">
-                    <div class="w-8 h-8 bg-green-500 border-2 border-black mr-2 flex items-center justify-center pixel-art">
-                        <span class="text-xs">🇵🇭</span>
+        <div class="p-3 sm:p-4 rounded-lg shadow-pixel border-2 colorful-section-light" style="border-color: var(--card-border-color);">
+            <h2 class="text-base sm:text-lg font-pixel mb-2 sm:mb-3" style="color: var(--theme-text-color);">Play Again!</h2>
+            <div class="grid grid-cols-2 gap-2 sm:gap-3">
+                <a href="game.html" class="play-again-card p-2 sm:p-3 rounded border-2 border-black shadow-pixel-sm flex items-center btn-pixel">
+                    <div class="w-6 h-6 sm:w-8 sm:h-8 bg-green-500 border-2 border-black mr-1 sm:mr-2 flex items-center justify-center pixel-art">
+                        <span class="text-xxs">🇵🇭</span>
                     </div>
-                    <span class="font-pixel" style="color: var(--theme-text-color);">BIOLOGY</span>
+                    <span class="font-pixel text-xs sm:text-sm" style="color: var(--theme-text-color);">BIOLOGY</span>
                 </a>
-                <a href="pingpong.html" class="play-again-card p-3 rounded border-2 border-black shadow-pixel-sm flex items-center btn-pixel">
-                    <div class="w-8 h-8 bg-blue-500 border-2 border-black mr-2 flex items-center justify-center pixel-art">
-                        <span class="text-xs">🔬</span>
+                <a href="pingpong.html" class="play-again-card p-2 sm:p-3 rounded border-2 border-black shadow-pixel-sm flex items-center btn-pixel">
+                    <div class="w-6 h-6 sm:w-8 sm:h-8 bg-blue-500 border-2 border-black mr-1 sm:mr-2 flex items-center justify-center pixel-art">
+                        <span class="text-xxs">🔬</span>
                     </div>
-                    <span class="font-pixel" style="color: var(--theme-text-color);">PING PONG</span>
+                    <span class="font-pixel text-xs sm:text-sm" style="color: var(--theme-text-color);">PING PONG</span>
                 </a>
             </div>
         </div>
     </main>
 
     <!-- Bottom Navigation: Standard navigation bar -->
-    <nav class="border-t-2 shadow-pixel flex justify-around p-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+    <nav class="border-t-2 shadow-pixel flex justify-around p-1 sm:p-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
         <a href="dashboard.html" class="flex flex-col items-center text-pixel-blue">
-            <span class="text-2xl">🏠</span>
-            <span class="text-xs">Home</span>
+            <span class="nav-icon text-xl sm:text-2xl">🏠</span>
+            <span class="nav-text text-xxs sm:text-xs">Home</span>
         </a>
         <a href="music.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🎵</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Music</span>
+            <span class="nav-icon text-xl sm:text-2xl" style="color: var(--secondary-text-color);">🎵</span>
+            <span class="nav-text text-xxs sm:text-xs" style="color: var(--secondary-text-color);">Music</span>
         </a>
         <a href="explore.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🗺️</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Explore</span>
+            <span class="nav-icon text-xl sm:text-2xl" style="color: var(--secondary-text-color);">🗺️</span>
+            <span class="nav-text text-xxs sm:text-xs" style="color: var(--secondary-text-color);">Explore</span>
         </a>
         <a href="tools.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🛠️</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Tools</span>
+            <span class="nav-icon text-xl sm:text-2xl" style="color: var(--secondary-text-color);">🛠️</span>
+            <span class="nav-text text-xxs sm:text-xs" style="color: var(--secondary-text-color);">Tools</span>
         </a>
         <a href="profile.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">👤</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Profile</span>
+            <span class="nav-icon text-xl sm:text-2xl" style="color: var(--secondary-text-color);">👤</span>
+            <span class="nav-text text-xxs sm:text-xs" style="color: var(--secondary-text-color);">Profile</span>
         </a>
     </nav>
 
     <!-- Coming Soon Modal: Reusable modal for unimplemented features -->
     <div id="comingSoonModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="p-6 rounded-lg shadow-pixel border-2 max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-            <h3 class="text-lg font-pixel font-bold mb-2" style="color: var(--theme-text-color);">Coming Soon!</h3>
-            <p class="mb-4" style="color: var(--secondary-text-color);">This feature is under development.</p>
+        <div class="p-4 sm:p-6 rounded-lg shadow-pixel border-2 max-w-xs sm:max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+            <h3 class="text-base sm:text-lg font-pixel font-bold mb-1 sm:mb-2" style="color: var(--theme-text-color);">Coming Soon!</h3>
+            <p class="mb-3 sm:mb-4 text-sm sm:text-base" style="color: var(--secondary-text-color);">This feature is under development.</p>
             <button onclick="document.getElementById('comingSoonModal').classList.add('hidden')"
-                class="bg-pixel-blue text-white py-2 px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600 font-pixel">
+                class="bg-pixel-blue text-white py-1.5 sm:py-2 px-3 sm:px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600 font-pixel text-sm sm:text-base">
                 OK
             </button>
         </div>

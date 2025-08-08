@@ -2,18 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Leksiyonity - About</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
     <script>
-        // Tailwind CSS configuration for custom colors and shadows, consistent with the app's theme.
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
                         inter: ['Inter', 'sans-serif'],
-                        pixel: ['"Press Start 2P"', 'cursive'], // Added pixelated font
+                        pixel: ['"Press Start 2P"', 'cursive'],
                     },
                     colors: {
                         'pixel-blue': '#3b82f6',
@@ -28,25 +27,26 @@
                         'teal-500': '#14b8a6',
                         'music-light': '#f0f9ff',
                         'music-dark': '#4b5563',
-                        // CSS variables for dynamic theme colors
                         'theme-bg': 'var(--theme-bg-color)',
                         'theme-text': 'var(--theme-text-color)',
                         'card-bg': 'var(--card-bg-color)',
                         'card-border': 'var(--card-border-color)',
                         'secondary-text': 'var(--secondary-text-color)',
-                        'accent-bg-light': 'var(--accent-bg-light-color)', // For colorful sections
-                        'accent-bg-dark': 'var(--accent-bg-dark-color)',   // For colorful sections
+                        'accent-bg-light': 'var(--accent-bg-light-color)',
+                        'accent-bg-dark': 'var(--accent-bg-dark-color)',
                     },
                     boxShadow: {
                         'pixel': '4px 4px 0px 0px rgba(0,0,0,1)',
                         'pixel-sm': '2px 2px 0px 0px rgba(0,0,0,1)',
+                    },
+                    fontSize: {
+                        'xxs': '0.625rem', // 10px
                     }
                 }
             }
         }
     </script>
     <style>
-        /* Custom CSS for pixel art rendering and button effects */
         .pixel-art {
             image-rendering: pixelated;
             image-rendering: -moz-crisp-edges;
@@ -60,244 +60,259 @@
             box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
         }
 
-        /* Define CSS variables for Day and Dark themes */
-        /* Default (Day Mode) */
+        /* Theme Variables */
         :root, [data-theme='day'] {
-            --theme-bg-color: #eff6ff; /* bg-blue-50 */
-            --theme-text-color: #1f2937; /* text-gray-800 */
-            --card-bg-color: #ffffff; /* bg-white */
-            --card-border-color: #000000; /* border-black */
-            --secondary-text-color: #4b5563; /* text-gray-600 */
-            --accent-bg-light-color: #e0f2f7; /* Light blue for colorful sections */
-            --accent-bg-dark-color: #bfdbfe; /* Slightly darker blue for contrast */
+            --theme-bg-color: #eff6ff;
+            --theme-text-color: #1f2937;
+            --card-bg-color: #ffffff;
+            --card-border-color: #000000;
+            --secondary-text-color: #4b5563;
+            --accent-bg-light-color: #e0f2f7;
+            --accent-bg-dark-color: #bfdbfe;
         }
 
-        /* Dark Mode */
         [data-theme='dark'] {
-            --theme-bg-color: #1f2937; /* Dark gray background */
-            --theme-text-color: #f3f4f6; /* Light gray text */
-            --card-bg-color: #374151; /* Darker gray for cards */
-            --card-border-color: #6b7280; /* Lighter gray border */
-            --secondary-text-color: #9ca3af; /* Lighter gray for secondary text */
-            --accent-bg-light-color: #2d3748; /* Darker shade for colorful sections */
-            --accent-bg-dark-color: #4a5568;   /* Even darker shade for contrast */
+            --theme-bg-color: #1f2937;
+            --theme-text-color: #f3f4f6;
+            --card-bg-color: #374151;
+            --card-border-color: #6b7280;
+            --secondary-text-color: #9ca3af;
+            --accent-bg-light-color: #2d3748;
+            --accent-bg-dark-color: #4a5568;
         }
 
-        /* Apply theme variables to core elements */
         body {
             background-color: var(--theme-bg-color);
             color: var(--theme-text-color);
+            font-size: 0.9rem;
         }
 
-        /* Override specific Tailwind classes to use CSS variables for theme consistency */
-        .bg-white { /* Applies to header, main cards */
+        @media (min-width: 640px) {
+            body {
+                font-size: 1rem;
+            }
+        }
+
+        /* Pixel font scaling for mobile */
+        @media (max-width: 640px) {
+            .font-pixel {
+                font-size: 0.7em !important;
+                letter-spacing: -0.5px;
+            }
+        }
+
+        .bg-white {
             background-color: var(--card-bg-color);
         }
-        .border-black { /* Applies to borders of cards, header, nav */
+        .border-black {
             border-color: var(--card-border-color);
         }
-        .text-gray-600 { /* Applies to secondary text like descriptions */
+        .text-gray-600 {
             color: var(--secondary-text-color);
         }
-        .bg-blue-50 { /* Applies to main body background, but overridden by body style */
+        .bg-blue-50 {
             background-color: var(--theme-bg-color);
+        }
+        .colorful-section-light {
+            background-color: var(--accent-bg-light-color);
+        }
+        .colorful-section-dark {
+            background-color: var(--accent-bg-dark-color);
         }
     </style>
 </head>
 <body class="min-h-screen font-inter flex flex-col" data-theme="day">
-    <!-- Header section, consistent with the app's branding -->
-    <header class="shadow-pixel border-b-2 p-4" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+    <!-- Header - Mobile Optimized -->
+    <header class="shadow-pixel border-b-2 p-3 sm:p-4" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
         <div class="flex items-center justify-between">
             <a href="dashboard.html" class="btn-pixel">
-                <span class="text-2xl" style="color: var(--secondary-text-color);">←</span>
+                <span class="text-xl sm:text-2xl" style="color: var(--secondary-text-color);">←</span>
             </a>
-            <h1 class="text-xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">LEKSIYONITY - About</h1>
-            <div class="w-6"></div> <!-- Spacer for balance -->
+            <h1 class="text-lg sm:text-xl font-pixel font-bold text-center" style="color: var(--theme-text-color);">About Leksiyonity</h1>
+            <div class="w-5 sm:w-6"></div>
         </div>
     </header>
 
-    <main class="flex-grow p-4">
+    <main class="flex-grow p-3 sm:p-4">
         <!-- About Leksiyonity Section -->
-        <div class="p-6 rounded-lg shadow-pixel border-2 mb-4 colorful-section-light" style="border-color: var(--card-border-color);">
-            <h2 class="text-2xl font-pixel font-bold text-center mb-4" style="color: var(--theme-text-color);">About Leksiyonity</h2>
-            <p class="text-center mb-6" style="color: var(--secondary-text-color);">
+        <div class="p-4 sm:p-6 rounded-lg shadow-pixel border-2 mb-3 sm:mb-4 colorful-section-light" style="border-color: var(--card-border-color);">
+            <h2 class="text-xl sm:text-2xl font-pixel font-bold text-center mb-3 sm:mb-4" style="color: var(--theme-text-color);">About Leksiyonity</h2>
+            <p class="text-center mb-4 sm:mb-6 text-sm sm:text-base" style="color: var(--secondary-text-color);">
                 Leksiyonity is designed to revolutionize the learning experience by integrating education with gamification, socialization, and organization. Our goal is to create a stress-free and engaging environment for all students.
             </p>
         </div>
 
         <!-- Problem Statement Section -->
-        <div class="p-6 rounded-lg shadow-pixel border-2 mb-4 colorful-section-dark" style="border-color: var(--card-border-color);">
-            <h2 class="text-2xl font-pixel font-bold text-center mb-4" style="color: var(--theme-text-color);">Problem Statement</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="p-4 rounded-lg shadow-pixel-sm border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-                    <p class="font-pixel text-sm mb-2" style="color: var(--theme-text-color);">Overloaded Curriculum</p>
-                    <p class="text-sm" style="color: var(--secondary-text-color);">Minimal breaks and poor pacing in academic schedules.</p>
+        <div class="p-4 sm:p-6 rounded-lg shadow-pixel border-2 mb-3 sm:mb-4 colorful-section-dark" style="border-color: var(--card-border-color);">
+            <h2 class="text-xl sm:text-2xl font-pixel font-bold text-center mb-3 sm:mb-4" style="color: var(--theme-text-color);">Problem Statement</h2>
+            <div class="grid grid-cols-1 gap-3 sm:gap-4">
+                <div class="p-3 sm:p-4 rounded-lg shadow-pixel-sm border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+                    <p class="font-pixel text-xs sm:text-sm mb-1 sm:mb-2" style="color: var(--theme-text-color);">Overloaded Curriculum</p>
+                    <p class="text-xs sm:text-sm" style="color: var(--secondary-text-color);">Minimal breaks and poor pacing in academic schedules.</p>
                 </div>
-                <div class="p-4 rounded-lg shadow-pixel-sm border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-                    <p class="font-pixel text-sm mb-2" style="color: var(--theme-text-color);">Lack of Mental Health Support</p>
-                    <p class="text-sm" style="color: var(--secondary-text-color);">Insufficient mental health support groups in universities.</p>
+                <div class="p-3 sm:p-4 rounded-lg shadow-pixel-sm border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+                    <p class="font-pixel text-xs sm:text-sm mb-1 sm:mb-2" style="color: var(--theme-text-color);">Lack of Mental Health Support</p>
+                    <p class="text-xs sm:text-sm" style="color: var(--secondary-text-color);">Insufficient mental health support groups in universities.</p>
                 </div>
-                <div class="p-4 rounded-lg shadow-pixel-sm border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-                    <p class="font-pixel text-sm mb-2" style="color: var(--theme-text-color);">Inaccessible Services</p>
-                    <p class="text-sm" style="color: var(--secondary-text-color);">High cost of tutoring, productivity apps, and wellness services.</p>
+                <div class="p-3 sm:p-4 rounded-lg shadow-pixel-sm border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+                    <p class="font-pixel text-xs sm:text-sm mb-1 sm:mb-2" style="color: var(--theme-text-color);">Inaccessible Services</p>
+                    <p class="text-xs sm:text-sm" style="color: var(--secondary-text-color);">High cost of tutoring, productivity apps, and wellness services.</p>
                 </div>
-                <div class="p-4 rounded-lg shadow-pixel-sm border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-                    <p class="font-pixel text-sm mb-2" style="color: var(--theme-text-color);">Disorganization & Stress</p>
-                    <p class="text-sm" style="color: var(--secondary-text-color);">Dependence on multiple applications leads to disorganization and increased stress.</p>
+                <div class="p-3 sm:p-4 rounded-lg shadow-pixel-sm border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+                    <p class="font-pixel text-xs sm:text-sm mb-1 sm:mb-2" style="color: var(--theme-text-color);">Disorganization & Stress</p>
+                    <p class="text-xs sm:text-sm" style="color: var(--secondary-text-color);">Dependence on multiple applications leads to disorganization and increased stress.</p>
                 </div>
             </div>
         </div>
 
         <!-- Solution Section -->
-        <div class="p-6 rounded-lg shadow-pixel border-2 mb-4 colorful-section-light" style="border-color: var(--card-border-color);">
-            <h2 class="text-2xl font-pixel font-bold text-center mb-4" style="color: var(--theme-text-color);">Our Solution</h2>
-            <p class="text-center mb-6" style="color: var(--secondary-text-color);">
+        <div class="p-4 sm:p-6 rounded-lg shadow-pixel border-2 mb-3 sm:mb-4 colorful-section-light" style="border-color: var(--card-border-color);">
+            <h2 class="text-xl sm:text-2xl font-pixel font-bold text-center mb-3 sm:mb-4" style="color: var(--theme-text-color);">Our Solution</h2>
+            <p class="text-center mb-4 sm:mb-6 text-sm sm:text-base" style="color: var(--secondary-text-color);">
                 To create a digital gaming application that is integrated with studying, socializing and organizing all in one to create a stress-free school environment for all students.
             </p>
-            <h3 class="text-xl font-pixel font-bold mb-3" style="color: var(--theme-text-color);">Key Benefits:</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="p-4 rounded-lg shadow-pixel-sm border-2 flex items-center" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-                    <span class="text-3xl mr-3">🎮</span>
+            <h3 class="text-lg sm:text-xl font-pixel font-bold mb-2 sm:mb-3" style="color: var(--theme-text-color);">Key Benefits:</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div class="p-3 sm:p-4 rounded-lg shadow-pixel-sm border-2 flex items-center" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+                    <span class="text-2xl sm:text-3xl mr-2 sm:mr-3">🎮</span>
                     <div>
-                        <p class="font-pixel text-base" style="color: var(--theme-text-color);">Engaging & Fun Learning</p>
-                        <p class="text-sm" style="color: var(--secondary-text-color);">Through Gamification</p>
+                        <p class="font-pixel text-sm sm:text-base" style="color: var(--theme-text-color);">Engaging & Fun Learning</p>
+                        <p class="text-xs sm:text-sm" style="color: var(--secondary-text-color);">Through Gamification</p>
                     </div>
                 </div>
-                <div class="p-4 rounded-lg shadow-pixel-sm border-2 flex items-center" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-                    <span class="text-3xl mr-3">🧘‍♀️</span>
+                <div class="p-3 sm:p-4 rounded-lg shadow-pixel-sm border-2 flex items-center" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+                    <span class="text-2xl sm:text-3xl mr-2 sm:mr-3">🧘‍♀️</span>
                     <div>
-                        <p class="font-pixel text-base" style="color: var(--theme-text-color);">Reduced Stress</p>
-                        <p class="text-sm" style="color: var(--secondary-text-color);">Balanced Learning</p>
+                        <p class="font-pixel text-sm sm:text-base" style="color: var(--theme-text-color);">Reduced Stress</p>
+                        <p class="text-xs sm:text-sm" style="color: var(--secondary-text-color);">Balanced Learning</p>
                     </div>
                 </div>
-                <div class="p-4 rounded-lg shadow-pixel-sm border-2 flex items-center" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-                    <span class="text-3xl mr-3">🤝</span>
+                <div class="p-3 sm:p-4 rounded-lg shadow-pixel-sm border-2 flex items-center" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+                    <span class="text-2xl sm:text-3xl mr-2 sm:mr-3">🤝</span>
                     <div>
-                        <p class="font-pixel text-base" style="color: var(--theme-text-color);">Collaborative & Social</p>
-                        <p class="text-sm" style="color: var(--secondary-text-color);">Learning Environment</p>
+                        <p class="font-pixel text-sm sm:text-base" style="color: var(--theme-text-color);">Collaborative & Social</p>
+                        <p class="text-xs sm:text-sm" style="color: var(--secondary-text-color);">Learning Environment</p>
                     </div>
                 </div>
-                <div class="p-4 rounded-lg shadow-pixel-sm border-2 flex items-center" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-                    <span class="text-3xl mr-3">📚</span>
+                <div class="p-3 sm:p-4 rounded-lg shadow-pixel-sm border-2 flex items-center" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+                    <span class="text-2xl sm:text-3xl mr-2 sm:mr-3">📚</span>
                     <div>
-                        <p class="font-pixel text-base" style="color: var(--theme-text-color);">Curriculum-Aligned</p>
-                        <p class="text-sm" style="color: var(--secondary-text-color);">Study Content</p>
+                        <p class="font-pixel text-sm sm:text-base" style="color: var(--theme-text-color);">Curriculum-Aligned</p>
+                        <p class="text-xs sm:text-sm" style="color: var(--secondary-text-color);">Study Content</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Market Size Section -->
-        <div class="p-6 rounded-lg shadow-pixel border-2 mb-4 colorful-section-dark" style="border-color: var(--card-border-color);">
-            <h2 class="text-2xl font-pixel font-bold text-center mb-4" style="color: var(--theme-text-color);">Market Size & Potential</h2>
-            <div class="space-y-4">
-                <div class="p-4 rounded-lg shadow-pixel-sm border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-                    <p class="font-pixel text-sm mb-1" style="color: var(--theme-text-color);">3.2M Students</p>
-                    <p class="text-sm" style="color: var(--secondary-text-color);">Rising demand for gamified, social e-learning tools.</p>
+        <div class="p-4 sm:p-6 rounded-lg shadow-pixel border-2 mb-3 sm:mb-4 colorful-section-dark" style="border-color: var(--card-border-color);">
+            <h2 class="text-xl sm:text-2xl font-pixel font-bold text-center mb-3 sm:mb-4" style="color: var(--theme-text-color);">Market Size & Potential</h2>
+            <div class="space-y-3 sm:space-y-4">
+                <div class="p-3 sm:p-4 rounded-lg shadow-pixel-sm border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+                    <p class="font-pixel text-xs sm:text-sm mb-1" style="color: var(--theme-text-color);">3.2M Students</p>
+                    <p class="text-xs sm:text-sm" style="color: var(--secondary-text-color);">Rising demand for gamified, social e-learning tools.</p>
                 </div>
-                <div class="p-4 rounded-lg shadow-pixel-sm border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-                    <p class="font-pixel text-sm mb-1" style="color: var(--theme-text-color);">Over 4.7M Students in Philippines</p>
-                    <p class="text-sm" style="color: var(--secondary-text-color);">Tech-ready and actively using digital learning platforms.</p>
+                <div class="p-3 sm:p-4 rounded-lg shadow-pixel-sm border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+                    <p class="font-pixel text-xs sm:text-sm mb-1" style="color: var(--theme-text-color);">Over 4.7M Students in Philippines</p>
+                    <p class="text-xs sm:text-sm" style="color: var(--secondary-text-color);">Tech-ready and actively using digital learning platforms.</p>
                 </div>
-                <div class="p-4 rounded-lg shadow-pixel-sm border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-                    <p class="font-pixel text-sm mb-1" style="color: var(--theme-text-color);">Target School (18,000 students)</p>
-                    <p class="text-sm" style="color: var(--secondary-text-color);">Ideal for pilot implementation and scaling within networks.</p>
+                <div class="p-3 sm:p-4 rounded-lg shadow-pixel-sm border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+                    <p class="font-pixel text-xs sm:text-sm mb-1" style="color: var(--theme-text-color);">Target School (18,000 students)</p>
+                    <p class="text-xs sm:text-sm" style="color: var(--secondary-text-color);">Ideal for pilot implementation and scaling within networks.</p>
                 </div>
-                <div class="p-4 rounded-lg shadow-pixel-sm border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-                    <p class="font-pixel text-sm mb-1" style="color: var(--theme-text-color);">Potential Revenue (5% of 3.5M students)</p>
-                    <p class="text-sm" style="color: var(--secondary-text-color);">Up to ₱2.05 Million/year with mixed subscriptions.</p>
+                <div class="p-3 sm:p-4 rounded-lg shadow-pixel-sm border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+                    <p class="font-pixel text-xs sm:text-sm mb-1" style="color: var(--theme-text-color);">Potential Revenue (5% of 3.5M students)</p>
+                    <p class="text-xs sm:text-sm" style="color: var(--secondary-text-color);">Up to ₱2.05 Million/year with mixed subscriptions.</p>
                 </div>
-                <div class="p-4 rounded-lg shadow-pixel-sm border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-                    <p class="font-pixel text-sm mb-1" style="color: var(--theme-text-color);">Potential Revenue (3% of 4.79M students)</p>
-                    <p class="text-sm" style="color: var(--secondary-text-color);">Around ₱257.6 Million/year with varied subscription plans.</p>
+                <div class="p-3 sm:p-4 rounded-lg shadow-pixel-sm border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+                    <p class="font-pixel text-xs sm:text-sm mb-1" style="color: var(--theme-text-color);">Potential Revenue (3% of 4.79M students)</p>
+                    <p class="text-xs sm:text-sm" style="color: var(--secondary-text-color);">Around ₱257.6 Million/year with varied subscription plans.</p>
                 </div>
-                <div class="p-4 rounded-lg shadow-pixel-sm border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-                    <p class="font-pixel text-sm mb-1" style="color: var(--theme-text-color);">Potential Revenue (10% of 18,000 students)</p>
-                    <p class="text-sm" style="color: var(--secondary-text-color);">Estimated ₱3.36 Million/year from a single school.</p>
+                <div class="p-3 sm:p-4 rounded-lg shadow-pixel-sm border-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+                    <p class="font-pixel text-xs sm:text-sm mb-1" style="color: var(--theme-text-color);">Potential Revenue (10% of 18,000 students)</p>
+                    <p class="text-xs sm:text-sm" style="color: var(--secondary-text-color);">Estimated ₱3.36 Million/year from a single school.</p>
                 </div>
             </div>
         </div>
 
         <!-- Meet Our Team Section -->
-        <div class="p-6 rounded-lg shadow-pixel border-2 colorful-section-light" style="border-color: var(--card-border-color);">
-            <h2 class="text-2xl font-pixel font-bold text-center mb-6" style="color: var(--theme-text-color);">MEET OUR TEAM!</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="p-4 sm:p-6 rounded-lg shadow-pixel border-2 colorful-section-light" style="border-color: var(--card-border-color);">
+            <h2 class="text-xl sm:text-2xl font-pixel font-bold text-center mb-4 sm:mb-6" style="color: var(--theme-text-color);">MEET OUR TEAM!</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
                 <div class="flex flex-col items-center text-center">
-                    <img src="https://placehold.co/100x100/facc15/white?text=PC" 
+                    <img src="https://placehold.co/80x80/facc15/white?text=PC" 
                          alt="Pamela Carlotta" 
-                         class="w-24 h-24 rounded-full border-2 border-black shadow-pixel-sm mb-2 pixel-art">
-                    <p class="font-pixel text-base font-bold" style="color: var(--theme-text-color);">Pamela Carlotta</p>
-                    <p class="text-sm" style="color: var(--secondary-text-color);">CEO</p>
+                         class="w-16 h-16 sm:w-24 sm:h-24 rounded-full border-2 border-black shadow-pixel-sm mb-2 pixel-art">
+                    <p class="font-pixel text-xs sm:text-base font-bold" style="color: var(--theme-text-color);">Pamela Carlotta</p>
+                    <p class="text-xxs sm:text-sm" style="color: var(--secondary-text-color);">CEO</p>
                 </div>
                 <div class="flex flex-col items-center text-center">
-                    <img src="https://placehold.co/100x100/22c55e/white?text=KF" 
+                    <img src="https://placehold.co/80x80/22c55e/white?text=KF" 
                          alt="Keith Jasper Flores" 
-                         class="w-24 h-24 rounded-full border-2 border-black shadow-pixel-sm mb-2 pixel-art">
-                    <p class="font-pixel text-base font-bold" style="color: var(--theme-text-color);">Keith Jasper Flores</p>
-                    <p class="text-sm" style="color: var(--secondary-text-color);">CFO</p>
+                         class="w-16 h-16 sm:w-24 sm:h-24 rounded-full border-2 border-black shadow-pixel-sm mb-2 pixel-art">
+                    <p class="font-pixel text-xs sm:text-base font-bold" style="color: var(--theme-text-color);">Keith Jasper Flores</p>
+                    <p class="text-xxs sm:text-sm" style="color: var(--secondary-text-color);">CFO</p>
                 </div>
                 <div class="flex flex-col items-center text-center">
-                    <img src="https://placehold.co/100x100/a855f7/white?text=VY" 
+                    <img src="https://placehold.co/80x80/a855f7/white?text=VY" 
                          alt="Veronica Yoon Mei Ting" 
-                         class="w-24 h-24 rounded-full border-2 border-black shadow-pixel-sm mb-2 pixel-art">
-                    <p class="font-pixel text-base font-bold" style="color: var(--theme-text-color);">Veronica Yoon Mei Ting</p>
-                    <p class="text-sm" style="color: var(--secondary-text-color);">Business Development and Brand</p>
+                         class="w-16 h-16 sm:w-24 sm:h-24 rounded-full border-2 border-black shadow-pixel-sm mb-2 pixel-art">
+                    <p class="font-pixel text-xs sm:text-base font-bold" style="color: var(--theme-text-color);">Veronica Yoon Mei Ting</p>
+                    <p class="text-xxs sm:text-sm" style="color: var(--secondary-text-color);">Business Development and Brand</p>
                 </div>
                 <div class="flex flex-col items-center text-center">
-                    <img src="https://placehold.co/100x100/3b82f6/white?text=RT" 
+                    <img src="https://placehold.co/80x80/3b82f6/white?text=RT" 
                          alt="Regan Tic-Chap" 
-                         class="w-24 h-24 rounded-full border-2 border-black shadow-pixel-sm mb-2 pixel-art">
-                    <p class="font-pixel text-base font-bold" style="color: var(--theme-text-color);">Regan Tic-Chap</p>
-                    <p class="text-sm" style="color: var(--secondary-text-color);">Web App Developer</p>
+                         class="w-16 h-16 sm:w-24 sm:h-24 rounded-full border-2 border-black shadow-pixel-sm mb-2 pixel-art">
+                    <p class="font-pixel text-xs sm:text-base font-bold" style="color: var(--theme-text-color);">Regan Tic-Chap</p>
+                    <p class="text-xxs sm:text-sm" style="color: var(--secondary-text-color);">Web App Developer</p>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Bottom Navigation Bar, consistent across all pages -->
-    <nav class="border-t-2 shadow-pixel flex justify-around p-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+    <!-- Bottom Navigation - Mobile Optimized -->
+    <nav class="border-t-2 shadow-pixel flex justify-around p-1 sm:p-2" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
         <a href="dashboard.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🏠</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Home</span>
+            <span class="text-xl sm:text-2xl" style="color: var(--secondary-text-color);">🏠</span>
+            <span class="text-xxs sm:text-xs" style="color: var(--secondary-text-color);">Home</span>
         </a>
         <a href="music.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🎵</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Music</span>
+            <span class="text-xl sm:text-2xl" style="color: var(--secondary-text-color);">🎵</span>
+            <span class="text-xxs sm:text-xs" style="color: var(--secondary-text-color);">Music</span>
         </a>
         <a href="explore.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🗺️</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Explore</span>
+            <span class="text-xl sm:text-2xl" style="color: var(--secondary-text-color);">🗺️</span>
+            <span class="text-xxs sm:text-xs" style="color: var(--secondary-text-color);">Explore</span>
         </a>
         <a href="tools.html" class="flex flex-col items-center">
-            <span class="text-2xl" style="color: var(--secondary-text-color);">🛠️</span>
-            <span class="text-xs" style="color: var(--secondary-text-color);">Tools</span>
+            <span class="text-xl sm:text-2xl" style="color: var(--secondary-text-color);">🛠️</span>
+            <span class="text-xxs sm:text-xs" style="color: var(--secondary-text-color);">Tools</span>
         </a>
         <a href="profile.html" class="flex flex-col items-center text-pixel-blue">
-            <span class="text-2xl">👤</span>
-            <span class="text-xs">Profile</span>
+            <span class="text-xl sm:text-2xl">👤</span>
+            <span class="text-xxs sm:text-xs">Profile</span>
         </a>
     </nav>
 
-    <!-- Coming Soon Modal: Reusable modal for unimplemented features -->
+    <!-- Coming Soon Modal - Mobile Optimized -->
     <div id="comingSoonModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="p-6 rounded-lg shadow-pixel border-2 max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
-            <h3 class="text-lg font-pixel font-bold mb-2" style="color: var(--theme-text-color);">Coming Soon!</h3>
-            <p class="mb-4" style="color: var(--secondary-text-color);">This feature is under development.</p>
+        <div class="p-4 sm:p-6 rounded-lg shadow-pixel border-2 max-w-xs sm:max-w-sm w-full" style="background-color: var(--card-bg-color); border-color: var(--card-border-color);">
+            <h3 class="text-base sm:text-lg font-bold mb-2 sm:mb-3" style="color: var(--theme-text-color);">Coming Soon!</h3>
+            <p class="mb-3 sm:mb-4 text-sm" style="color: var(--secondary-text-color);">This feature is under development.</p>
             <button onclick="document.getElementById('comingSoonModal').classList.add('hidden')"
-                class="bg-pixel-blue text-white py-2 px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600 font-pixel">
+                class="bg-pixel-blue text-white py-1.5 sm:py-2 px-3 sm:px-4 rounded font-bold shadow-pixel border-2 border-black btn-pixel hover:bg-blue-600 text-sm sm:text-base">
                 OK
             </button>
         </div>
     </div>
 
     <script>
-        // Apply saved theme on page load for consistency across pages
         document.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('theme') || 'day';
             document.body.setAttribute('data-theme', savedTheme);
         });
 
-        // Function to show the "Coming Soon" modal (for consistency, though not used here directly)
         function showComingSoonModal() {
             document.getElementById('comingSoonModal').classList.remove('hidden');
         }
